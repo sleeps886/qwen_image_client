@@ -12,7 +12,7 @@ import urllib.parse
 import urllib.request
 import uuid
 
-from config import DEFAULT_BASE_URL, DEFAULT_MODEL
+from config import DEFAULT_BASE_URL, DEFAULT_MODEL, model_settings
 from trajectory import TRAJECTORY_PROMPT
 DEFAULT_PROMPT = TRAJECTORY_PROMPT
 MAX_FILE_BYTES = 10 * 1024 * 1024  # Conservative application limit, not vendor limit.
@@ -21,6 +21,14 @@ MAX_IMAGES = 8
 
 
 class ClientError(Exception):
+    pass
+
+
+class UpstreamTimeout(ClientError):
+    pass
+
+
+class UpstreamConnectionError(ClientError):
     pass
 
 
@@ -125,15 +133,15 @@ def answer_text(response):
 
 
 def send_images(images, prompt=DEFAULT_PROMPT, model=DEFAULT_MODEL,
-                base_url=DEFAULT_BASE_URL, api_key=None, output_dir=None, timeout=120):
-    key=(api_key or os.environ.get('DASHSCOPE_API_KEY','')).strip()
+                base_url=DEFAULT_BASE_URL, api_key=None, output_dir=None, timeout=None):
+    key=(api_key or model_settings().api_key).strip()
     if not key:
-        raise ClientError('请填写API Key或配置DASHSCOPE_API_KEY环境变量。')
+        raise ClientError('请在后端.env配置MODEL_API_KEY。')
     if '\r' in key or '\n' in key:
         raise ClientError('API Key格式无效。')
     url=endpoint(base_url)
-    if not 1<=timeout<=600:
-        raise ClientError('超时时间应在1～600秒之间。')
+    if timeout is not None and (type(timeout) not in (int,float) or not 1<=timeout<=600):
+        raise ClientError('显式网络超时参数应为None或1～600秒。')
     body,metadata=build_request(images,prompt,model)
     # Check local output access before spending on inference.
     out=Path(output_dir or Path(__file__).parent/'outputs')
@@ -150,12 +158,16 @@ def send_images(images, prompt=DEFAULT_PROMPT, model=DEFAULT_MODEL,
         text=answer_text(response)
     except urllib.error.HTTPError as exc:
         # Do not echo server bodies: they could contain credentials/image data.
-        hints={400:'请求格式、图片或模型参数不被支持',401:'API Key无效或地域不匹配',
-               403:'账号无模型调用权限',404:'模型名称或接口地址不存在',
+        hints={400:'请求格式、图片或模型参数不被支持',401:'API Key无效或不属于当前模型服务',
+               403:'服务拒绝访问，请检查中转站密钥、模型ID、调用权限或额度',404:'模型名称或接口地址不存在',
                413:'图片请求过大',429:'请求受限或额度不足'}
         raise ClientError(f'模型服务HTTP {exc.code}：{hints.get(exc.code,"服务请求失败")}。未自动重试。') from None
     except (urllib.error.URLError,TimeoutError,OSError) as exc:
-        raise ClientError('网络连接失败或请求超时；请求可能已被计费，请先核对控制台，工具不会自动重试。') from None
+        timed_out=isinstance(exc,TimeoutError) or isinstance(getattr(exc,'reason',None),TimeoutError)
+        if timed_out:
+            reason=f'网络等待超过显式设定的{timeout}秒。' if timeout is not None else '本地未设置等待时限，但上游或网络报告了超时。'
+            raise UpstreamTimeout(reason+'请查看中转站调用记录；请求可能已计费，不会自动重试。') from None
+        raise UpstreamConnectionError('无法连接模型服务或连接中断。请求可能已被处理，请核对中转站调用记录，不会自动重试。') from None
     except (json.JSONDecodeError,UnicodeDecodeError):
         raise ClientError('服务未返回有效JSON。请核对官方接口地址；未自动重试。') from None
     record=dict(created_at=datetime.now(timezone.utc).isoformat(),endpoint=url,model=model,
@@ -175,8 +187,8 @@ def main():
     group=parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--images',nargs='+')
     group.add_argument('--sample',help='仿真sample目录，只读取input下图片')
-    parser.add_argument('--model',default=os.environ.get('QWEN_MODEL',DEFAULT_MODEL))
-    parser.add_argument('--base-url',default=os.environ.get('QWEN_BASE_URL',DEFAULT_BASE_URL))
+    parser.add_argument('--model',default=model_settings().model)
+    parser.add_argument('--base-url',default=model_settings().base_url)
     parser.add_argument('--prompt',default=DEFAULT_PROMPT)
     parser.add_argument('--output')
     parser.add_argument('--dry-run',action='store_true',help='仅校验并显示文件信息，不联网')

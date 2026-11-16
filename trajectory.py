@@ -89,6 +89,11 @@ def parse_tracks(answer,context=None):
 
 def render_tracks(answer,directory,context=None):
     doc=parse_tracks(answer,context)
+    if context and doc['coordinate_system']!='bearing_time':
+        plat=context['platforms'][0]
+        doc['coordinate_reference']={'platform_id':plat.get('name','A'),
+            'origin_lat':plat['start_ll'][0],'origin_lon':plat['start_ll'][1],
+            'earth_radius_m':6371000.0,'projection_lat':plat['start_ll'][0]}
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     frame=doc['coordinate_system']

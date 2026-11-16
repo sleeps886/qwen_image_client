@@ -18,9 +18,9 @@ class App:
         ttk.Label(frame,text='图片 → 阿里云百炼千问',font=('Microsoft YaHei',18,'bold')).pack(anchor='w')
         ttk.Label(frame,text='只传输选定图片和提示词，不读取真值，不做轨迹反演或参数调控。').pack(anchor='w',pady=(3,12))
         config=ttk.LabelFrame(frame,text='连接配置（API Key仅在当前进程内使用）',padding=10);config.pack(fill='x')
-        self.key=tk.StringVar(value=os.environ.get('DASHSCOPE_API_KEY',''))
-        self.base=tk.StringVar(value=os.environ.get('QWEN_BASE_URL',DEFAULT_BASE_URL))
-        self.model=tk.StringVar(value=os.environ.get('QWEN_MODEL',DEFAULT_MODEL))
+        self.key=tk.StringVar(value=os.environ.get('MODEL_API_KEY',''))
+        self.base=tk.StringVar(value=os.environ.get('MODEL_BASE_URL',DEFAULT_BASE_URL))
+        self.model=tk.StringVar(value=os.environ.get('MODEL_NAME',DEFAULT_MODEL))
         for row,(label,var,secret) in enumerate([('API Key',self.key,True),('Base URL',self.base,False),('视觉模型名称',self.model,False)]):
             ttk.Label(config,text=label).grid(row=row,column=0,sticky='w',padx=(0,12),pady=4)
             ttk.Entry(config,textvariable=var,show='*' if secret else '').grid(row=row,column=1,sticky='ew',pady=4)
@@ -72,11 +72,11 @@ class App:
         model=self.model.get().strip();base=self.base.get().strip();key=self.key.get().strip()
         try:
             endpoint(base);build_request(images,prompt,model)
-            if not key:raise ClientError('请填写API Key或配置DASHSCOPE_API_KEY。')
+            if not key:raise ClientError('请填写API Key或配置MODEL_API_KEY。')
         except (ClientError,OSError,ValueError) as exc:
             messagebox.showerror('参数错误',str(exc));return
         self.busy=True;self.send_button.configure(state='disabled')
-        self.status.set('正在发送并等待模型，最多等待120秒；不会自动重试。')
+        self.status.set('正在发送并等待模型，本地不设等待时限；不会自动重试。')
         def worker():
             try:self.events.put(('ok',send_images(images,prompt,model,base,key)))
             except Exception as exc:

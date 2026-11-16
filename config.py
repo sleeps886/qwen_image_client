@@ -23,9 +23,18 @@ class ModelSettings:
 
 
 def model_settings():
-    return ModelSettings(model=os.environ.get('QWEN_MODEL','').strip() or DEFAULT_MODEL,
-        base_url=os.environ.get('QWEN_BASE_URL','').strip() or DEFAULT_BASE_URL,
-        api_key=os.environ.get('DASHSCOPE_API_KEY','').strip())
+    def value(name,legacy):
+        # A deliberately empty new key must not revive an old credential.
+        return os.environ.get(name,os.environ.get(legacy,'')).strip()
+    return ModelSettings(model=value('MODEL_NAME','QWEN_MODEL') or DEFAULT_MODEL,
+        base_url=value('MODEL_BASE_URL','QWEN_BASE_URL') or DEFAULT_BASE_URL,
+        api_key=value('MODEL_API_KEY','DASHSCOPE_API_KEY'))
+
+
+def model_timeout():
+    # Model requests intentionally have no local socket deadline. Ignore the
+    # obsolete setting even if it remains in the process environment.
+    return None
 
 
 load_environment()

@@ -56,7 +56,7 @@ class ClientTests(unittest.TestCase):
         class Opener:
             def open(inner,request,timeout):
                 self.assertEqual(request.get_header('Authorization'),'Bearer '+secret)
-                self.assertEqual(timeout,120)
+                self.assertIsNone(timeout)
                 self.assertEqual(json.loads(request.data)['model'],client.DEFAULT_MODEL)
                 return Reply(json.dumps(response).encode())
         with patch('client.urllib.request.build_opener',return_value=Opener()):
@@ -79,6 +79,14 @@ class ClientTests(unittest.TestCase):
             self.assertNotIn('private body',str(caught.exception))
             self.assertEqual(opener.return_value.open.call_count,1)
         self.assertIsNone(client.NoRedirect().redirect_request(None,None,302,'',{},'https://example.com'))
+
+    def test_timeout_distinguished_without_retry(self):
+        with patch('client.urllib.request.build_opener') as opener:
+            opener.return_value.open.side_effect=TimeoutError()
+            with self.assertRaises(client.UpstreamTimeout) as caught:
+                client.send_images([self.image],api_key='fake-key',output_dir=self.root/'timeouts',timeout=300)
+            self.assertIn('300',str(caught.exception))
+            self.assertEqual(opener.return_value.open.call_count,1)
 
 
 if __name__=='__main__':unittest.main()

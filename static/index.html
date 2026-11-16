@@ -51,11 +51,31 @@
                 <figure id="trackFigure" hidden><img id="trackImage" alt="模型估计轨迹图"><figcaption id="trackCaption"></figcaption></figure><div id="trackWarnings" role="status"></div><details open><summary>查看模型原始输出</summary><pre id="answer">模型回复将显示在这里。当前尚未发送任何图片。</pre></details>
                 <div id="usage" class="note"></div>
                 <nav id="downloads"></nav>
-                <div class="boundary"><strong>当前功能边界</strong>
+                <section class="runtime-logs" aria-labelledby="logHeading">
+                    <div class="heading"><h2 id="logHeading">运行日志</h2><div><button id="clearLogs" type="button">清空显示</button> <a id="downloadLogs" hidden>下载日志</a></div></div>
+                    <p class="note">实时显示本次请求阶段；不记录密钥、图片内容或完整提示词。</p>
+                    <pre id="logOutput" role="log" aria-live="polite">等待请求。启动日志连接后将显示处理进度。</pre>
+                </section><div class="boundary"><strong>当前功能边界</strong>
                     <p>模型输出轨迹点，程序校验格式并绘图；不是模型直接返回图片。无法定位时只展示方位—时间图，不能替代地理轨迹。不会读取目标真值或执行模型生成的代码。</p><code>POST /api/recognize</code>
                 </div>
             </section>
         </div>
+        <section class="card comparison" aria-labelledby="comparisonHeading">
+            <div class="heading"><h2 id="comparisonHeading"><b>04</b> 轨迹图对比</h2><span>仅本地评测 · 参考图不会发送给模型</span></div>
+            <p class="note">选择同一样本 truth/btr_A_track.png。相似度只比较彩色轨迹轮廓，不代表定位准确率；不能将方位—时间图与地理轨迹图比较。</p>
+            <div class="comparison-controls"><label>仿真工具生成的参考轨迹图<input id="referenceTrack" type="file" accept="image/png,image/jpeg,image/webp"></label><button id="compareButton" type="button">计算轮廓相似度</button></div>
+            <div class="compare-pair"><figure><figcaption>仿真工具 · 参考轨迹</figcaption><img id="referencePreview" alt="待选择仿真参考图" hidden><p id="referenceEmpty" class="note">尚未选择参考图</p></figure><figure><figcaption>AI · 估计轨迹</figcaption><img id="aiComparePreview" alt="待生成AI估计轨迹" hidden><p id="aiCompareEmpty" class="note">先在上方生成AI位置轨迹图</p></figure></div>
+            <div class="comparison-score"><div><small>归一化轮廓相似度</small><strong id="similarityScore">—</strong><span> / 100</span></div><p id="comparisonStatus" role="status">等待AI轨迹和参考图。参考数据仅用于比较，不参与模型生成。</p></div>
+            <div id="comparisonDetails" hidden><p id="comparisonMetrics" class="note"></p><p id="comparisonWarnings" class="note"></p><details><summary>查看归一化轮廓叠加图（青：参考，粉：AI，白：直接重叠）</summary><img id="comparisonOverlay" alt="归一化轮廓叠加图"></details><a id="comparisonReport">下载对比报告 JSON</a></div>
+            <section class="structured-eval" aria-labelledby="evalHeading">
+                <h2 id="evalHeading">结构化评测 · 真值核对</h2>
+                <p class="note">semantic.json用于核对目标数量、展示场景参考；逐时刻truth.jsonl用于计算位置误差。无需上传参考图片，两类评测彼此独立；文件仅本地使用，不发给模型。</p>
+                <div class="evaluation-fields"><label>语义参考（可选）<input id="semanticReference" type="file" accept=".json,application/json"></label><label>逐时刻真值（可选）<input id="truthReference" type="file" accept=".jsonl,.txt"></label><label>目标匹配门限（米）<input id="matchGate" type="number" min="1" max="100000" value="1000"></label><label>最大插值间隔（秒）<input id="interpolationGap" type="number" min="0.1" max="600" step="0.1" value="10"></label></div>
+                <button id="evaluateButton" type="button">开始结构化评测</button>
+                <p id="evaluationStatus" class="note" role="status">至少选择一种参考文件。位置评测会先匹配目标，不按T1/T2编号直接比较。</p>
+                <div id="evaluationDetails" hidden><div id="evaluationSummary" class="evaluation-summary"></div><p id="evaluationPositionStatus" class="note"></p><div class="table-scroll"><table><thead><tr><th>真值目标</th><th>AI目标</th><th>RMSE（米）</th><th>P95（米）</th><th>时间覆盖率</th></tr></thead><tbody id="evaluationPairs"></tbody></table></div><p id="evaluationUnmatched" class="note"></p><p id="evaluationWarnings" class="note"></p><details><summary>场景参考及完整评测数据</summary><pre id="evaluationRaw"></pre></details><a id="evaluationDownload">下载结构化评测报告</a></div>
+            </section>
+        </section>
     </main>
     <footer>小怪 · 本地 FastAPI 服务 <span>127.0.0.1 / 数据由你决定发送</span></footer>
 </body>

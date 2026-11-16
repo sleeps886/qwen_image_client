@@ -34,9 +34,9 @@ python app.py
 
 ## 配置
 
-- DASHSCOPE_API_KEY：百炼API Key，真实调用必填。
-- QWEN_MODEL：默认模型名称，可选。
-- QWEN_BASE_URL：默认接口地址，可选。
+- MODEL_API_KEY：百炼API Key，真实调用必填。
+- MODEL_NAME：默认模型名称，可选。
+- MODEL_BASE_URL：默认接口地址，可选。
 
 默认北京兼容地址：https://dashscope.aliyuncs.com/compatible-mode/v1
 也支持对应地域业务空间地址。API Key地域必须匹配；模型是否可用以账号控制台为准。
@@ -61,7 +61,7 @@ python app.py
 curl.exe -X POST "http://127.0.0.1:8870/api/recognize" -F "files=@C:/完整路径/btr_A_hull.png" -F "files=@C:/完整路径/btr_A_tow.png" -F "dry_run=true"
 ```
 
-智能体真实调用示例（服务端已经配置DASHSCOPE_API_KEY）：
+智能体真实调用示例（服务端已经配置MODEL_API_KEY）：
 
 ```python
 from pathlib import Path
@@ -159,12 +159,12 @@ python -m unittest -v
 已提供.env（密钥为空）和.env.example模板，均位于本项目目录。
 
 ```dotenv
-DASHSCOPE_API_KEY=
-QWEN_MODEL=qwen3-vl-plus
-QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+MODEL_API_KEY=
+MODEL_NAME=qwen3-vl-plus
+MODEL_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
 ```
 
-仅在本机.env的DASHSCOPE_API_KEY等号后填写真实密钥，示例文件不得放真实密钥。
+仅在本机.env的MODEL_API_KEY等号后填写真实密钥，示例文件不得放真实密钥。
 .env及其变体已被Git忽略，.env.example可提交。不要截图或分享填好后的.env。
 若系统已配置同名环境变量，其值优先，.env不会覆盖（包括系统中的空值）。
 网页与识别API不再接受model、base_url、api_key或X-Dashscope-Key覆盖，旧调用方式返回400，智能体只需上传图片及任务字段。
@@ -175,8 +175,79 @@ CLI保留显式参数用于本机开发；旧desktop_app.py保留兼容，不是
 
 ## DMXAPI第三方兼容服务
 
-本机.env可设置QWEN_BASE_URL=https://www.dmxapi.cn/v1；程序自动请求/v1/chat/completions。
+本机.env可设置MODEL_BASE_URL=https://www.dmxapi.cn/v1；程序自动请求/v1/chat/completions。
 这不是智谱或阿里云官方域名；使用时图片、平台参数、提示词和认证密钥会发送给DMXAPI服务。
-DASHSCOPE_API_KEY沿用旧变量名，此时必须填写DMXAPI签发的密钥，不是百炼密钥。
-QWEN_MODEL也沿用旧变量名，但值须为DMXAPI实际支持且可接收图片的模型ID；供应商显示名Zhipu GLM不是模型ID。
+MODEL_API_KEY必须填写DMXAPI签发的密钥，不是百炼密钥。
+MODEL_NAME须为DMXAPI实际支持且可接收图片的模型ID；供应商显示名Zhipu GLM不是模型ID。
 本次只修改配置与兼容路径，没有向该服务发送真实请求，也未验证其模型可用性。
+
+
+## 实时运行日志
+
+页面右侧新增“运行日志”，按请求显示上传接收、参数检查、密钥是否配置、图片数量/大小、模型等待、轨迹解析、绘图与错误阶段。
+日志不会记录密钥、图片Base64、文件内容、完整提示词或模型回复原文；错误文本会对当前密钥和常见密钥形式脱敏。
+前端通过X-Request-ID（UUID）关联请求，GET /api/logs/{request_id}?after=<seq>增量轮询；同编号不能重复提交。
+GET /api/logs/{request_id}/download下载本次文本日志。清空显示不删除后端日志。
+日志只保存在内存，最多128个请求、每请求200条，重启后清空；不是完整持久化审计系统。
+本地服务没有用户登录隔离，拥有本机访问权限且知道请求ID者可查看对应日志。请勿暴露到公网。
+日志显示“调用模型”只代表已开始请求；HTTP200不保证成功绘制轨迹，应同时查看轨迹状态和WARN。
+
+
+## 本地轨迹图相似度对比
+
+页面底部“04 轨迹图对比”：先生成AI位置轨迹，再选择同一样本truth/btr_A_track.png，点击计算。
+两张图并排显示，并显示归一化彩色轮廓相似度（0～100）、AI轮廓匹配率和参考轮廓覆盖率；可查看青/粉/白叠加图及下载JSON报告。
+参考图仅提交到本地/api/compare，代码不会调用send_images或将其加入模型输入；相似度由本地算法计算，不由大模型自评分。
+
+算法：提取高饱和彩色前景，尽量去除黑色背景与灰色文字/坐标；按前景包围盒分别缩放为256×256，再以3像素（方形邻域）容差计算双向覆盖率的调和平均。
+该处理忽略绝对位置、尺度及纵横比例差异，不评测米级误差、目标编号对应、时间或运动方向。图例、标记、线宽、裁剪会干扰。
+仅支持黑底彩色轨迹图，不保证适用于灰度图、热力图或复杂截图；比较前务必人工确认同一样本。
+这不是定位准确率、置信度或物理真实性评估；形状相近的错误地理轨迹仍可能得到高分。真正位置评测应另用truth.jsonl与tracks.json作时空匹配。
+AI仅输出bearing_time时拒绝与空间轨迹图评分；没有AI位置图也不评分。刷新页面后须重新生成/选择本次AI结果，暂不提供历史结果选择器。
+
+POST /api/compare：multipart字段result_id（已生成的AI结果编号）、reference（参考轨迹图≤10MiB）。
+返回similarity_percent、ai_outline_match_percent、reference_coverage_percent、warnings及叠加图和报告链接。
+输出保存到outputs/<result_id>/comparisons/<comparison_id>/，含comparison_overlay.png、report.json；多次比较不会覆盖前次结果，不保存参考原图。
+GET /api/comparisons/{result_id}/{comparison_id}/{filename}查看或下载本地结果。
+
+
+## 结构化评测（替代只看图形分数的局限）
+
+页面“轨迹图对比”下面新增“结构化评测 · 真值核对”。不需要参考图片：
+- 上传同一样本semantic.json：按选定平台targets清单核对AI独立目标ID数量，显示计数绝对误差。场景字段仅供参考，当前AI轨迹响应没有六项场景预测，不能伪称六项已评测。
+- 上传同平台truth/btr_A_truth.jsonl：计算真实空间位置误差；可只提供此文件，目标数量从时序真值ID去重得到。
+- 两者一起上传会检查参考目标清单一致性；多平台真值须拆为单个平台。
+
+AI轨迹不按T1/T2编号直接对齐：在共同时间点计算各候选轨迹对的位置RMSE，按门限过滤后做全局一对一最小代价匹配（优先匹配数量，再降低误差）。
+默认匹配门限1000米，可修改；超出门限的对象列为未匹配，绝不会静默删除后声称准确。
+输出每目标/汇总RMSE、平均误差、P95误差、参考时刻覆盖率，以及双方未匹配清单。
+聚合误差只覆盖匹配的可评测点，不惩罚未匹配点；必须结合漏检/多检与总体覆盖率解读，不能只挑RMSE。
+预测精确时间点直接评测；相邻点间隔≤最大插值间隔（默认10秒）才线性插值，超过时仅评测实际给出的点。不外推、不跨断续分段补线。
+
+local_xy_m转换使用生成时保存在tracks.json的coordinate_reference（首平台原点，东/北方向米，球半径6371000米）。
+新生成结果会自动保存参考；旧结果缺原点时只给计数，不猜原点，需重新生成。lon_lat直接使用经纬度，位置误差采用球面大圆距离（米），不做图形缩放平移对齐。
+若AI输出bearing_time则只核对计数，不计算空间误差。若同一ID有多个候选分支，暂不按真值择优，须先消歧后评测。
+
+POST /api/evaluate：multipart字段result_id、semantic（可选≤2MiB）、truth（可选≤16MiB）、gate_m（默认1000）、max_gap_s（默认10）。参考至少一项必填，最大12个真值目标。
+本地保存outputs/<result_id>/comparisons/<evaluation_id>/evaluation.json，支持报告下载。
+上传的参考不写入模型请求；也不利用真值修改或重新生成AI轨迹。框内图片形状分数与本结构化指标分开，不合成含义不明的“准确率”。
+用户必须确认参考文件与生成输入同源；当前只能检查平台/目标清单等有限一致性，不能自动证明所有文件来自同次实验。
+
+
+## 通用中转配置名称
+
+.env文件名不变，连接字段统一为MODEL_API_KEY、MODEL_NAME、MODEL_BASE_URL。现有值迁移保留；.env.example的密钥必须为空。
+进程环境中的通用名称优先于.env相同字段。为兼容旧部署，代码仍支持旧DASHSCOPE_API_KEY/QWEN_MODEL/QWEN_BASE_URL作为通用变量不存在时的回退；新变量明确为空时不恢复旧密钥。
+403与变量名称无关：需由中转站确认密钥权限、额度及准确的视觉模型ID。Zhipu GLM不是已经核实的API模型ID，工具不会擅自替换成猜测名称。
+
+
+## 长请求与等待（最新设置）
+
+模型请求不再设置本地等待时限，urllib显式传入timeout=None，网页也不会按120/300秒中止识别。
+.env中旧MODEL_TIMEOUT_SECONDS已移除，进程内遗留的同名变量也不再生效。
+等待期间每15秒记录“仍在等待”，不代表模型生成进度，也不会触发自动重试。
+中转站、模型服务、系统网络或反向代理仍可能自行超时或断开，本工具无法取消这些外部限制。
+连接中断与上游超时仍显示明确错误；关闭网页不能撤回已发送请求，可能仍会计费。
+无响应的请求可能持续占用处理槽位（同进程最多两个），不要重复点击发送。
+CLI和旧桌面入口默认同样不设本地等待时限；调用client.send_images的开发者仍可显式传入超时用于独立测试。
+更改代码后请停止旧服务并重新启动，不能只刷新网页。
