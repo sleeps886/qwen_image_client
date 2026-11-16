@@ -4,10 +4,17 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from config import load_environment,model_settings,model_timeout
+from config import load_environment,model_settings,model_timeout,model_request_options
 
 
 class ConfigTests(unittest.TestCase):
+    def test_reasoning_effort(self):
+        with patch.dict(os.environ,{'MODEL_REASONING_EFFORT':'low'}):
+            self.assertEqual(model_request_options(),{'reasoning_effort':'low'})
+        with patch.dict(os.environ,{'MODEL_REASONING_EFFORT':''}):
+            self.assertEqual(model_request_options(),{})
+        with patch.dict(os.environ,{'MODEL_REASONING_EFFORT':'disabled'}):
+            with self.assertRaises(ValueError):model_request_options()
     def test_timeout_config(self):
         for value in ('0','300','601','bad'):
             with patch.dict(os.environ,{'MODEL_TIMEOUT_SECONDS':value}):

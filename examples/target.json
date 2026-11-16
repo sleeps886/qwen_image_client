@@ -1,0 +1,13 @@
+{
+  "coordinate_system": "lon_lat",
+  "tracks": [
+    {
+      "id": "A",
+      "branch": "main",
+      "points": [
+        {"t": 0, "x": 122.0, "y": 30.0},
+        {"t": 600, "x": 122.0, "y": 30.0}
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -14,6 +15,8 @@ PNG=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42m
 
 class ClientTests(unittest.TestCase):
     def setUp(self):
+        protocol=patch.dict(os.environ,{'MODEL_API_FORMAT':'openai','MODEL_AUTH_MODE':'bearer'})
+        protocol.start();self.addCleanup(protocol.stop)
         self.temp=tempfile.TemporaryDirectory(dir=Path(__file__).parent)
         self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name)
@@ -21,7 +24,9 @@ class ClientTests(unittest.TestCase):
 
     def test_request_images_and_endpoint(self):
         body,meta=client.build_request([self.image],'识别亮带','qwen3-vl-plus')
-        encoded=body['messages'][0]['content'][1]['image_url']['url']
+        encoded=next(m for m in body['messages'] if m['role']=='user')['content'][1]['image_url']['url']
+        self.assertEqual(body['messages'][0]['role'],'system')
+        self.assertIn('简体中文',body['messages'][0]['content'])
         self.assertEqual(base64.b64decode(encoded.split(',')[1]),PNG)
         self.assertEqual(meta[0]['bytes'],len(PNG))
         self.assertFalse(body['stream'])
@@ -38,6 +43,18 @@ class ClientTests(unittest.TestCase):
             with self.assertRaises(client.ClientError):client.endpoint(url)
         self.image.write_text('not an image')
         with self.assertRaises(client.ClientError):client.build_request([self.image],'x','y')
+
+    def test_reasoning_effort_in_request(self):
+        with patch('client.model_request_options',return_value={'reasoning_effort':'low'}):
+            body,_=client.build_request([self.image],'仅返回中文说明的JSON','glm-5.3-flash')
+        self.assertEqual(body['reasoning_effort'],'low')
+        self.assertNotIn('thinking',body)
+
+    def test_chinese_instruction_even_with_custom_prompt(self):
+        body,_=client.build_request([self.image],'Analyze these images.','test-model')
+        self.assertIn('自然语言',body['messages'][0]['content'])
+        self.assertIn('简体中文',body['messages'][0]['content'])
+        self.assertEqual(body['messages'][-1]['content'][-1]['text'],'Analyze these images.')
 
     def test_only_sample_input(self):
         input_dir=self.root/'input';input_dir.mkdir()

@@ -21,6 +21,64 @@ python app.py
 
 ## 网页操作
 
+### 新增：只上传一份目标数据文件（不传图片）
+
+重启后端并刷新网页，在“输入模式”选择“单文件绘图（无需图片）”，在原来的平台文件入口
+选择一份 JSON／JSONL／简单 JS 文件，先点“仅预检数据”。预检通过后勾选传输与费用确认，
+点击“发送数据并生成轨迹图”。切换到该模式后，即使之前选过图片，也不会发送这些图片。
+仍走真实模型接口（支持流式输出）；模型返回轨迹JSON后，由本地程序生成PNG，可下载、导入历史结果。
+只选数据文件而没有图片时，页面会自动切换到单文件模式；点击发送时也会再次检测，不会被“请先选择图片”拦住。
+测试使用模拟上游，尚未进行本次功能的真实付费调用。
+
+支持以下格式：
+
+- **`meta.json` 完整轨迹重建（新增）**：读取`params.targets`中的`start`、`speed_kn`、
+  `path_type`与`waypoints`或`curve_func`，根据`T_MAX`与`DT`从全局t=0采样。
+  `params.platforms`提供平台位置，无需另传`platform.json`。也接受没有外层`params`的同结构参数JSON。
+  航点路径按球面距离计算各段时间、经纬度分段线性插值，到达最后航点后停留；
+  曲线公式用独立的白名单数学AST解释器逐时刻计算，不使用eval/exec、不暴露numpy模块，
+  不执行脚本、不跟随`OUT_DIR`或`files`读取／写入任意路径。
+  支持常见sin/cos等np/math标量数学函数；未知语法、越界坐标、未完成样本等会明确拒绝。
+  与原仿真轨迹图一致，绘制全仿真时段，不按`t_on/t_off`裁剪或改变曲线相位。
+  时间不超过`T_MAX`；DT不整除时与仿真采样一致，不强行补出终点。
+  每目标2～2000个采样点，合计最多20000点，超限提示调整DT或拆分，不静默减损完整轨迹。
+  **完整采样保留本地出图，仅少量核对点发给模型**（通常每目标9点，目标多时减少）。
+  模型核对点通过一致性校验后，`tracks.json`和PNG使用本地完整采样，而不是稀疏核对点。
+  图中明确标注meta重建：不是模型从声呐图独立推断的结果，也不是盲测。
+  示例样本T_MAX=600、DT=1、4个目标可生成2404个完整采样点；不会因模型输入长度限制只剩起终点。
+- `semantic.json` 仿真参考摘要：`platforms[].self`是观测平台，
+  `platforms[].targets[].kinematics`才包含T1等目标的起终点。该文件本身已含平台信息，
+  单独选择这一份即可，不需要再上传 `platform.json`。程序按目标ID去重，绘制每个目标
+  在全仿真t=0和t=T_MAX时的位置；圆点为起点、叉号为终点、方块为平台。
+  这些端点不在 `observation_window_s` 的起止时刻，不能混用时间。
+  摘要不含逐时刻轨迹，因此只画点、不连线，不会凭摘要声称还原完整运动路径。
+  如需完整曲线，请手动提供真实逐时刻JSON/JSONL点位；绝不会自动跟随摘要中的磁盘路径读取文件。
+- 本项目的 `platform.json` 格式：将 `platforms` 中的 A 等对象作为用户指定的绘图目标，
+  使用 `start_ll`、`heading_deg`、`speed_kn` 和 `T_MAX` 按恒定航向、恒定航速推算首尾点；
+  当前使用局部平面近似。速度为0时首尾位置相同，图片显示静止点，不会凭空补出运动轨迹。
+  这是对象参数绘图，不是由声呐图反演目标，也不是独立盲测。
+- 点位JSON：`{"coordinate_system":"lon_lat","tracks":[{"id":"A","points":[{"t":0,"x":122,"y":30}]}]}`。
+  每个对象可以有1～2000点；多点时间必须严格递增。也可用顶层 `points` 表示单个对象。
+  `lon_lat` 的x为经度、y为纬度；`local_xy_m` 的x/y为用户提供的局部东/北坐标（米）；
+  `bearing_time` 的x为0～180度折叠舷角、y和t均为秒，不能当作地理轨迹。
+- JSON点位数组／JSONL：每条记录含 `target_id`（可选，默认T1）、`time_s`（或t）、`lon`、`lat`。
+  手动上传的目标真值也可用于数据绘图，但不再属于盲测；不会自动读取配套真值文件。
+- 简单JS：`const points = <严格JSON>;`、`export default <严格JSON>;` 或
+  `module.exports = <严格JSON>;`。不支持函数、计算表达式、单引号对象或任意脚本；绝不执行JS。
+
+文件上限1MiB，发送模型的有效点位上限40000字符，提示词与数据合计最多50000字符。
+meta的完整采样不受这个模型文本字符上限影响（保留本地，只发送核对点），仍受上述采样点数上限约束。
+超限会提示拆分，不会静默删点。只将白名单内的绘图数据作为文本发送给模型，不上传原始脚本或自动读取其他文件。
+模型改变目标、点数、坐标系或点位时拒绝绘图，保存回复并提示问题，不自动重试付费请求。
+页面提供示例下载，示例文件位于本项目的 `examples/target.json`。
+
+接口沿用 `/api/recognize`（同步／预检）和 `/api/recognize/stream`（SSE）：
+`input_mode=data`、`platform=<数据文件>`，不传 `files`；真实调用仍需 `consent=true`。
+同步预检使用 `dry_run=true`，不调用模型。`input_mode=images` 保留原来的图片功能；
+API省略模式时，有图片按图片模式，无图片且有数据文件时按单文件模式处理。
+
+### 图片识别（原有模式）
+
 1. 选择或拖入1～8张PNG/JPEG/WebP图片，建议选择样本input下的hull/tow图片。
 2. 在项目根目录.env中配置API Key、模型与Base URL，修改后重启服务。
 3. 网页不再展示或接收API Key、模型名称、Base URL；只显示后端是否已配置密钥。
@@ -33,6 +91,43 @@ python app.py
 临时图片不会自动读取配套文件。只有用户主动选择的platform.json会作为已知平台信息发送；服务拒绝含params或targets的元数据格式。选择真值图片仍会发送，请自行确认。
 
 ## 配置
+
+### Anthropic Messages 与 OpenAI 兼容协议
+
+如果同一模型在Claude Code的Anthropic格式下正常，而项目用OpenAI接口收到403，
+不能只依据该403判断模型在所有接口上都无权限。需核对协议、地址和令牌。
+项目现支持两套独立协议，真实发送时只调用配置的协议一次，不自动切换或重试。
+
+当前项目已保持原有 `MODEL_NAME`、`MODEL_BASE_URL` 与密钥，只增加：
+
+```dotenv
+MODEL_API_FORMAT=anthropic
+MODEL_AUTH_MODE=bearer
+MODEL_MAX_TOKENS=8192
+```
+
+修改后必须停止旧服务、重新启动，再刷新页面。“后端配置已就绪”旁会显示
+`Anthropic Messages` 或 `OpenAI兼容`，运行日志及 `request_meta.json` 也记录协议。
+只显示“已配置”不代表密钥已通过服务端权限验证。
+
+- Anthropic模式：调用 `/v1/messages`，独立顶层 `system`、必填 `max_tokens`，图片使用
+  `image/source/base64`；支持 `message_start`、`content_block_delta`、`message_delta`、
+  `message_stop` 和错误事件。`text_delta`进入正文，服务公开的`thinking_delta`单独显示。
+  必须收到结束事件才能标记流完成。`MODEL_REASONING_EFFORT`不会传到Anthropic接口。
+- `MODEL_AUTH_MODE=bearer`：使用`Authorization: Bearer ...`，适用于使用Auth Token的中转入口。
+  `MODEL_AUTH_MODE=x-api-key`：使用`x-api-key`，适用于Anthropic API Key。
+  两种模式都带 `anthropic-version: 2023-06-01`。仅采用明确配置的一种鉴权头，不探测重试。
+- 支持原有DMXAPI域名及Anthropic官方`https://api.anthropic.com`。Anthropic地址可配置服务根地址、
+  `/v1`或`/v1/messages`，不会追加出`/v1/v1/messages`。
+- 兼容 `ANTHROPIC_BASE_URL`、`ANTHROPIC_MODEL`、`ANTHROPIC_AUTH_TOKEN`／`ANTHROPIC_API_KEY`
+  环境变量；显式的 `MODEL_*` 优先。显式空的`MODEL_API_KEY`不会从其他变量恢复密钥。
+  不会自动读取Claude Code的凭据文件，也不能据命令行成功就假设两边一定是同一令牌。
+- 切回OpenAI格式：`MODEL_API_FORMAT=openai`、`MODEL_AUTH_MODE=bearer`；原`/chat/completions`
+  请求与SSE处理保留。单文件数据和图片模式都可走任一协议，但模型自身是否支持图片需服务端确认。
+
+适配依据：[Messages接口](https://platform.claude.com/docs/en/api/messages/create)、
+[流式事件](https://platform.claude.com/docs/en/build-with-claude/streaming)。
+示例文件只应放占位符；如果之前曾把真实密钥放入示例或提交仓库，建议在服务商处轮换。
 
 - MODEL_API_KEY：百炼API Key，真实调用必填。
 - MODEL_NAME：默认模型名称，可选。
@@ -251,3 +346,48 @@ POST /api/evaluate：multipart字段result_id、semantic（可选≤2MiB）、tr
 无响应的请求可能持续占用处理槽位（同进程最多两个），不要重复点击发送。
 CLI和旧桌面入口默认同样不设本地等待时限；调用client.send_images的开发者仍可显式传入超时用于独立测试。
 更改代码后请停止旧服务并重新启动，不能只刷新网页。
+
+
+## 真正的模型流式输出（最新）
+
+网页真实识别改为POST /api/recognize/stream，向中转站发出stream=true请求；不再等待整包回复后假装逐字显示。
+使用HTTPX异步读取SSE，浏览器fetch流式解析。旧POST /api/recognize保留给兼容调用和预检。
+同样的multipart字段files/prompt/consent/platform；连接配置仍只读.env，模型请求timeout=None，不设置本地等待时限。
+阶段：本地accepted → connecting等待上游响应头 → headers HTTP状态 → connected SSE已建立 → delta正文/reasoning服务端推理文本 → rendering → result最终结果。
+等待时每15秒发heartbeat，明确不是生成进度。事件包含event字段，外层SSE也有event名称；data是单个JSON对象。
+若中转站缓冲或模型自身没有输出，客户端无法凭空显示文本；连接阶段能帮助区分卡在响应头前还是首片段前。
+
+正文与上游reasoning_content分别显示，推理文本不是本工具的内部思考，也不是已验证结论。为保证显示性能正文预览最多400万字符、推理预览最多100万字符，完整结果可下载。
+上游返回application/json而非text/event-stream时明确显示buffered提示，只能一次展示整包，不伪称实时流。
+检测到无结束标记的断流时不生成成功结果；显示的片段可能不完整。上游finish_reason非stop会在结果中提示可能截断。
+中转站错误仅提取限长、脱敏后的error.code/message，不显示原始响应体、认证头或图片Base64。
+
+模型正文完整后保存answer.txt、组装response.json及stream_state.json；有推理文本时另保存provider_reasoning.txt。
+轨迹绘制、自动显示、图片对比及结构化评测继续使用最终tracks.json，不对半截JSON绘图。
+失败时尽可能保存answer.partial.txt与失败状态，不能将其视为完整结果。停止本地接收会取消本地网络读取；不保证上游取消处理或费用。
+流式HTTP响应头发出后不能改状态码；因此HTTP200仅表示SSE连接建立，真正成功看result事件，失败看error事件。
+
+服务端使用有界事件队列和两个处理槽位，断开后清理临时上传与释放槽位；没有自动重试、隐式重新发送或付费连通性测试。
+页面已改成流式按钮，旧成功日志轮询不再用于真实识别；阶段日志仍可通过原日志接口下载。
+重新启动后端并刷新网页才能启用。若前面还有Nginx等反向代理，需要关闭SSE缓冲并调整代理自身超时；本应用返回X-Accel-Buffering:no，不能保证第三方中转也遵守。
+
+
+## GLM长推理与中文正文
+
+当前.env增加MODEL_REASONING_EFFORT=low，build_request将其作为reasoning_effort透传至服务端。该参数影响推理强度，不是超时或token截断，仍然不设置本地等待时限。
+GLM-5.3/Flash官方文档说明不支持thinking.type=disabled，支持low/high/max；因此本工具没有盲目发送disabled。
+中转站的自定义模型别名是否支持/遵守此字段尚未验证，不保证立即结束思考；更换不支持此参数的模型时应将配置留空。
+默认提示词要求最终JSON说明使用简体中文、信息不足立即降级bearing_time；模型的reasoning_content语言由上游决定，提示词不能保证推理文本为中文。
+仅重启后的新请求采用这些配置。正在运行的请求无法事后修改推理强度或提示词，停止本地接收也不保证撤销云端计费。
+官方依据：https://docs.bigmodel.cn/cn/guide/capabilities/thinking
+
+
+## 生成图自动导入与历史结果
+
+AI返回estimated_track.png后，无论是位置轨迹还是bearing_time，都会自动显示在对比区，方位—时间图显著标注“非地理轨迹”。
+为避免刷新后丢失已付费生成的结果，新增GET /api/history（最近30个本地有图结果）与GET /api/history/{result_id}。
+对比框选择已有结果，点击“导入已生成轨迹图”，直接恢复生成图、正文与轨迹类型，不重新调用模型。
+参考图新增reference_kind：position（默认）或bearing_time。后端按真实tracks.json核对AI坐标类型，不接受不同类型混评。
+方位—时间图可以与同一样本的方位—时间轨迹图做视觉轮廓比较；不能使用声呐热力图或地理轨迹当参考。
+类型选择由用户声明，不能自动证明参考图的坐标类型和样本来源；仍需人工核对。
+这只放开同类型图形展示与轮廓评分，不代表恢复了地理位置；结构化评测中的bearing_time仍不计算空间位置误差。
