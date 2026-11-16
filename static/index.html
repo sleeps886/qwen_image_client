@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>模型接入台</title>
+    <link rel="stylesheet" href="/assets/style.css">
+    <script src="/assets/app.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="brand"><span class="logo">Q</span>
+            <div><strong>千问视觉接入台</strong><small>图片上传 · 模型调用 · Agent API</small></div>
+        </div><a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a>
+    </header>
+    <main>
+        <section class="intro"><span class="eyebrow">BAILIAN / VISION WORKSPACE</span>
+            <h1>从声呐图，估计目标轨迹。</h1>
+            <p>千问提取并估计轨迹点，程序生成轨迹图。模型预测与仿真真值保持分离。</p>
+        </section>
+        <div class="layout">
+            <div>
+                <section class="card">
+                    <div class="heading">
+                        <h2><b>01</b> 图片输入</h2><span id="fileCount">0 / 8 张</span>
+                    </div><label class="drop" id="dropZone" tabindex="0"><input id="files" type="file"
+                            accept="image/png,image/jpeg,image/webp" multiple><span
+                            class="upload-icon">＋</span><strong>点击选择，或拖入声呐图片</strong><small>PNG / JPEG / WebP · 单张 ≤ 10
+                            MiB · 合计 ≤ 20 MiB</small></label>
+                    <div id="previews" class="previews"></div>
+                    <p class="note">建议选择 input 下的 hull / tow 图片。不要上传 truth、meta.json 或 semantic.json。</p>
+                </section>
+                <section class="card">
+                    <div class="heading">
+                        <h2><b>02</b> 识别任务</h2><span id="keyState">检测服务中…</span>
+                    </div><p class="note">模型、接口地址与API Key统一由后端 .env 管理，无需在网页填写。</p><label>已知平台参数（可选，建议提供）<input id="platform" type="file" accept=".json,application/json"><small>请选择同一样本 input/platform.json；用于定位，不是目标真值。</small></label><label>轨迹生成提示词<textarea id="prompt" rows="5"
+                            placeholder="描述需要模型执行的识别任务"></textarea></label><label class="check"><input id="consent"
+                            type="checkbox"><span id="consentText">同意将所选图片、已选平台参数与提示词发送至后端配置的模型服务，可能产生 API 费用。</span></label>
+                    <div class="actions"><button id="send" class="primary" type="button">发送给千问 ↗</button><button
+                            id="inspect" type="button">仅预检图片</button></div>
+                    <p class="note">预检仅上传到本地服务，不调用云端模型。请求不自动重试；超时不代表未计费。</p>
+                </section>
+            </div>
+            <section class="card result">
+                <div class="heading">
+                    <h2><b>03</b> 返回结果</h2><span id="badge" class="badge">等待输入</span>
+                </div>
+                <div id="status" role="status" aria-live="polite">选择图片后，可先预检，再发送。</div>
+                <figure id="trackFigure" hidden><img id="trackImage" alt="模型估计轨迹图"><figcaption id="trackCaption"></figcaption></figure><div id="trackWarnings" role="status"></div><details open><summary>查看模型原始输出</summary><pre id="answer">模型回复将显示在这里。当前尚未发送任何图片。</pre></details>
+                <div id="usage" class="note"></div>
+                <nav id="downloads"></nav>
+                <div class="boundary"><strong>当前功能边界</strong>
+                    <p>模型输出轨迹点，程序校验格式并绘图；不是模型直接返回图片。无法定位时只展示方位—时间图，不能替代地理轨迹。不会读取目标真值或执行模型生成的代码。</p><code>POST /api/recognize</code>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>小怪 · 本地 FastAPI 服务 <span>127.0.0.1 / 数据由你决定发送</span></footer>
+</body>
+
+</html>
