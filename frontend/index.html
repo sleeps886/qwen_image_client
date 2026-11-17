@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>模型接入台</title>
+    <link rel="stylesheet" href="/assets/style.css">
+    <script src="/assets/app.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="brand"><span class="logo">Q</span>
+            <div><strong>千问视觉接入台</strong><small>图片上传 · 模型调用 · Agent API</small></div>
+        </div><a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a>
+    </header>
+    <main>
+        <section class="intro"><span class="eyebrow">BAILIAN / VISION WORKSPACE</span>
+            <h1>图片或目标数据，一键生成轨迹图。</h1>
+            <p>支持声呐图片识别，或单份数据文件绘图。模型整理轨迹点，程序校验并生成图片。</p>
+        </section>
+        <div class="layout">
+            <div>
+                <section class="card">
+                    <div class="heading">
+                        <h2><b>01</b> 输入来源</h2><span id="fileCount">0 / 8 张</span>
+                    </div><label>输入模式<select id="inputMode"><option value="images">图片识别（原有模式）</option><option value="data">单文件绘图（无需图片）</option></select></label>
+                    <p id="dataInputNote" class="note" hidden>无需上传图片。完整轨迹请选 meta.json：按目标航点／曲线公式和DT重建，保留波浪线等中间路径，无需另传platform.json。semantic.json只能画起终点，platform.json仅有平台参数。也支持逐时刻点位JSON/JSONL。<a href="/api/data-example" download>下载点位格式示例</a></p>
+                    <div id="imageInputs"><label class="drop" id="dropZone" tabindex="0"><input id="files" type="file"
+                            accept="image/png,image/jpeg,image/webp" multiple><span
+                            class="upload-icon">＋</span><strong>点击选择，或拖入声呐图片</strong><small>PNG / JPEG / WebP · 单张 ≤ 10
+                            MiB · 合计 ≤ 20 MiB</small></label>
+                    <div id="previews" class="previews"></div>
+                    <p class="note">建议选择 input 下的 hull / tow 图片。无刻度原图按工具默认标定识别：横轴0～180°、时间0～600秒（从下到上）；非默认范围请附同样本的 input/platform.json。空间定位请附同一样本的input/platform.json；大模型提取同步双阵方位，程序求解空间候选轨迹，定位不足不生成替代图。不要上传 truth、meta.json 或 semantic.json。</p></div>
+                </section>
+                <section class="card">
+                    <div class="heading">
+                        <h2><b>02</b> 识别任务</h2><span id="keyState">检测服务中…</span>
+                    </div><p class="note">模型、接口地址与API Key统一由后端 .env 管理，无需在网页填写。</p><div class="data-file-field"><label for="platform" id="dataFileLabel">平台参数／目标数据文件（只选文件时自动切换为数据绘图）</label><div class="file-picker-row"><input id="platform" type="file" accept=".json,.jsonl,.js,application/json,application/javascript" aria-describedby="dataFileHint"><button id="removePlatform" type="button" class="remove-file" hidden title="仅清空当前选择，不删除磁盘文件">移除文件 ×</button></div><small id="dataFileHint">有图片时作为平台参数；无图片时作为绘图对象数据，无需手动切换模式。</small></div><label>轨迹生成提示词<textarea id="prompt" rows="5"
+                            placeholder="描述需要模型执行的识别任务"></textarea></label><label class="check"><input id="consent"
+                            type="checkbox"><span id="consentText">同意将所选图片、已选平台参数与提示词发送至后端配置的模型服务，可能产生 API 费用。</span></label>
+                    <div class="actions"><button id="send" class="primary" type="button">流式识别并生成轨迹 ↗</button><button
+                            id="inspect" type="button">仅预检图片</button></div>
+                    <p class="note">预检仅上传到本地服务，不调用云端模型。请求不自动重试；超时不代表未计费。</p>
+                </section>
+            </div>
+            <section class="card result" id="resultPanel" data-state="idle">
+                <div class="heading">
+                    <h2><b>03</b> 返回结果</h2><div class="result-controls"><span id="badge" class="badge">等待输入</span><button id="stopStream" class="stop-generation" type="button" hidden disabled title="停止本地接收；不保证中转站停止计费">■ 停止生成</button></div>
+                </div>
+                <div id="status" role="status" aria-live="polite">选择图片，或切换到单文件绘图；可先预检，再发送。</div>
+                <section id="nodePanel" class="node-panel" hidden aria-labelledby="nodePanelTitle"><h3 id="nodePanelTitle">程序／模型流程执行记录</h3><p class="note">仅“模型清单与双阵关联”调用大模型；其余为内置规则、启发式或数值程序。记录执行不等于验证正确，重投影不是独立准确性评测；未自动付费重试。</p><ol id="nodeList" aria-live="polite"></ol></section>
+                <section id="targetCountPanel" class="target-count-panel" hidden aria-labelledby="targetCountTitle"><h3 id="targetCountTitle">数量判定与定位覆盖</h3><div id="targetCountMetrics" class="usage-grid"></div><p id="targetCountExplanation" class="note"></p></section>
+                <section id="completionSummary" class="completion-summary" tabindex="-1" hidden role="status" aria-live="polite" aria-labelledby="completionTitle">
+                    <div class="completion-icon" id="completionIcon" aria-hidden="true">✓</div><div><h3 id="completionTitle">轨迹图已生成</h3><p id="completionSubtitle"></p><small id="completionMeta"></small></div>
+                </section>
+                <figure id="trackFigure" hidden><img id="trackImage" alt="模型估计轨迹图"><figcaption id="trackCaption"></figcaption></figure>
+                <nav id="downloads" class="result-downloads" aria-label="常用结果下载"></nav>
+                <details id="evidenceSection" class="result-detail" hidden open><summary>像素候选、Agent选择与重投影 · 原图核对</summary><p class="note">白框为自动绘图区，粉点为程序候选，绿圈为Agent选点；reprojection图的青圈为重投影点、红叉为未通过观测。已加入局部窗口连续估计，不补缺测。镜像与错误关联仍可能通过一致性检查，不代表定位正确。下方可下载跟踪、重投影报告与知识来源。</p><div id="evidenceImages" class="compare-pair"></div></details>
+                <div id="usage" class="usage-grid" aria-label="本次调用用量"></div>
+                <details id="warningsDetails" class="result-detail" hidden><summary>结果说明与告警 <span id="warningCount"></span></summary><div id="trackWarnings" role="status"></div></details>
+                <div class="result-debug">
+                <details id="providerReasoningSection" class="result-detail" hidden><summary>模型服务返回的推理文本 <span>原文保留，未经验证</span></summary><pre id="providerReasoning"></pre></details>
+                <details id="bodyDetails" class="result-detail" open><summary id="bodySummary">模型正文 · 实时输出</summary><p id="bodyOutputHint" class="note">等待模型正文；推理文本不作为轨迹数据。</p><pre id="answer">模型回复将显示在这里。当前尚未发送任何图片。</pre></details>
+                <details id="downloadDetails" class="result-detail" hidden><summary>原始与调试文件</summary><nav id="debugDownloads" aria-label="原始与调试文件下载"></nav><details id="usageDetails" hidden><summary>原始用量数据</summary><pre id="usageRaw"></pre></details></details>
+                </div>
+                <details id="runLogsDetails" class="runtime-logs" open>
+                    <summary id="logHeading">运行日志 <span id="logPhase">等待任务</span></summary><div class="log-actions"><button id="clearLogs" type="button">清空显示</button> <a id="downloadLogs" hidden>下载日志</a></div>
+                    <p class="note">实时显示本次请求阶段；不记录密钥、图片内容或完整提示词。</p>
+                    <pre id="logOutput" role="log" aria-live="polite">等待请求。启动日志连接后将显示处理进度。</pre>
+                </details><details class="boundary"><summary>当前功能边界</summary>
+                    <p>图片模式由大模型提取同目标同步双阵方位，程序结合platform.json求解空间候选轨迹并生成PNG；镜像分支不是多个目标。定位不足时明确报告，不以方位—时间图替代。单文件模式保持原有数据绘图；不会自动读取真值或执行JS、模型代码。</p><code>POST /api/recognize</code>
+                </details>
+            </section>
+        </div>
+        <section class="card comparison" aria-labelledby="comparisonHeading">
+            <div class="heading"><h2 id="comparisonHeading"><b>04</b> 轨迹图对比</h2><span>仅本地评测 · 参考图不会发送给模型</span></div>
+            <p class="note">选择同一样本 truth/btr_A_track.png。相似度只比较彩色轨迹轮廓，不代表定位准确率；不能将方位—时间图与地理轨迹图比较。</p>
+            <div class="comparison-controls"><label>已生成结果（可直接导入，无需重跑模型）<select id="historyResults"><option value="">选择历史结果</option></select></label><button id="loadHistory" type="button">导入已生成轨迹图</button></div><div class="comparison-controls"><label>仿真工具生成的参考轨迹图<input id="referenceTrack" type="file" accept="image/png,image/jpeg,image/webp"></label><label>参考图类型<select id="referenceKind"><option value="position">地理／平面位置轨迹</option><option value="bearing_time">方位—时间轨迹（非声呐热力图）</option></select></label><button id="compareButton" type="button">计算轮廓相似度</button></div>
+            <div class="compare-pair"><figure><figcaption>仿真工具 · 参考轨迹</figcaption><img id="referencePreview" alt="待选择仿真参考图" hidden><p id="referenceEmpty" class="note">尚未选择参考图</p></figure><figure><figcaption>AI · 估计轨迹 <span id="aiCoordinateLabel"></span></figcaption><img id="aiComparePreview" alt="待生成AI估计轨迹" hidden><p id="aiCompareEmpty" class="note">在上方生成，或导入已有轨迹图</p></figure></div>
+            <div class="comparison-score"><div><small>归一化轮廓相似度</small><strong id="similarityScore">—</strong><span> / 100</span></div><p id="comparisonStatus" role="status">等待AI轨迹和参考图。参考数据仅用于比较，不参与模型生成。</p></div>
+            <div id="comparisonDetails" hidden><p id="comparisonMetrics" class="note"></p><p id="comparisonWarnings" class="note"></p><details><summary>查看归一化轮廓叠加图（青：参考，粉：AI，白：直接重叠）</summary><img id="comparisonOverlay" alt="归一化轮廓叠加图"></details><a id="comparisonReport">下载对比报告 JSON</a></div>
+            <section class="structured-eval" aria-labelledby="evalHeading">
+                <h2 id="evalHeading">结构化评测 · 真值核对</h2>
+                <p class="note">semantic.json用于核对目标数量、展示场景参考；逐时刻truth.jsonl用于计算位置误差。无需上传参考图片，两类评测彼此独立；文件仅本地使用，不发给模型。</p>
+                <div class="evaluation-fields"><label>语义参考（可选）<input id="semanticReference" type="file" accept=".json,application/json"></label><label>逐时刻真值（可选）<input id="truthReference" type="file" accept=".jsonl,.txt"></label><label>目标匹配门限（米）<input id="matchGate" type="number" min="1" max="100000" value="1000"></label><label>最大插值间隔（秒）<input id="interpolationGap" type="number" min="0.1" max="600" step="0.1" value="10"></label></div>
+                <button id="evaluateButton" type="button">开始结构化评测</button>
+                <p id="evaluationStatus" class="note" role="status">至少选择一种参考文件。位置评测会先匹配目标，不按T1/T2编号直接比较。</p>
+                <div id="evaluationDetails" hidden><div id="evaluationSummary" class="evaluation-summary"></div><p id="evaluationPositionStatus" class="note"></p><div class="table-scroll"><table><thead><tr><th>真值目标</th><th>AI目标</th><th>RMSE（米）</th><th>P95（米）</th><th>时间覆盖率</th></tr></thead><tbody id="evaluationPairs"></tbody></table></div><p id="evaluationUnmatched" class="note"></p><p id="evaluationWarnings" class="note"></p><details><summary>场景参考及完整评测数据</summary><pre id="evaluationRaw"></pre></details><a id="evaluationDownload">下载结构化评测报告</a></div>
+            </section>
+        </section>
+    </main>
+    <footer>小怪 · 本地 FastAPI 服务 <span>127.0.0.1 / 数据由你决定发送</span></footer>
+    <dialog id="evidenceDialog" class="evidence-dialog" aria-labelledby="evidenceDialogTitle">
+        <header class="evidence-toolbar"><strong id="evidenceDialogTitle">声呐点迹叠加预览</strong><button id="closeEvidence" type="button" aria-label="关闭图片预览">关闭 ×</button></header>
+        <div class="evidence-toolbar evidence-tools"><button id="evidenceZoomOut" type="button" aria-label="缩小图片">−</button><span id="evidenceZoomLabel" aria-live="polite">100%</span><button id="evidenceZoomIn" type="button" aria-label="放大图片">＋</button><button id="evidenceFit" type="button">适应窗口</button><button id="evidenceActual" type="button">原始尺寸</button><a id="evidenceOriginal" target="_blank" rel="noopener">新窗口查看原图 ↗</a><a id="evidenceDownload" download>下载图片</a></div>
+        <div id="evidenceViewport" class="evidence-viewport" tabindex="0" aria-label="图片查看区域，放大后可滚动查看"><img id="evidenceFullImage" alt="声呐原图点迹叠加放大预览"></div>
+        <p class="note">点击缩略图可放大；支持 + / − 缩放、0 适应窗口、Esc 关闭。放大后滚动查看。候选点不是已验证的目标位置。</p>
+    </dialog>
+</body>
+
+</html>

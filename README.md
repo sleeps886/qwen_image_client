@@ -2,14 +2,18 @@
 
 独立项目：`C:\Users\LENOVO\Desktop\btr_gens\qwen_image_client`。
 网页上传hull/tow图片与可选已知平台参数 → FastAPI → 千问返回轨迹点JSON → 程序绘制估计轨迹PNG。
-不改原BTR仿真器。当前由模型估计轨迹点，不接传统数值反演，不做微调、调参或智能体调度。模型位置估计尚未用真值验证。
+不改原BTR仿真器。图片+平台参数模式已接入LangGraph、本地规则检索、像素候选与模型编号关联，然后进行双阵空间求交。已加入持续亮带数量线索、目标清单/定位覆盖复核、局部窗口连续估计与重投影检查；前端显示真实节点状态。真实模型准确率待验证。详见[Agent阶段说明](docs/agent-evidence.md)。
 
 ## 启动
+
+项目已按前后端划分：`backend/`存放Python后端、Agent、工作流、脚本和测试，`frontend/`存放HTML、JS、CSS。
+目录见[前后端架构说明](docs/architecture.md)，Agent位于`backend/app/agents/sonar_agent.py`。
+当前图片空间流程运行LangGraph证据图；单文件绘图保持直接执行。暂不支持跨请求断点恢复。
 
 ```powershell
 cd "C:\Users\LENOVO\Desktop\btr_gens\qwen_image_client"
 python -m pip install -r requirements.txt
-python app.py
+python -m backend.app.main
 ```
 
 也可以双击 `启动工具.cmd`（需要先安装上述依赖）。
@@ -17,9 +21,18 @@ python app.py
 - Swagger交互API文档：http://127.0.0.1:8870/docs
 - OpenAPI契约：http://127.0.0.1:8870/openapi.json
 
-默认只绑定127.0.0.1，不要直接暴露到公网。旧桌面版保留在desktop_app.py；app.py现在启动网页服务。
+默认只绑定127.0.0.1，不要直接暴露到公网。旧命令`python app.py`作为薄兼容入口保留。
+旧桌面版改用`python -m backend.app.legacy.desktop_app`；图片CLI改用`python -m backend.scripts.send_images`。
 
 ## 网页操作
+
+### 运行完成后的结果区
+
+成功绘图后优先展示结果摘要、轨迹图、PNG/轨迹点JSON下载和可读用量卡片。
+推理文本、原始正文、告警详情、调试文件和日志自动折叠，但内容不删除，仍可展开或下载。
+运行中保留实时正文、服务端推理文本、日志与停止按钮；完成后隐藏停止按钮。
+没有有效轨迹图时会显示“模型已返回，未生成轨迹图”，并展开正文与告警，不冒充出图成功。
+历史结果会从已保存的响应恢复用量（如存在），不为展示新界面重新调用模型。
 
 ### 新增：只上传一份目标数据文件（不传图片）
 
@@ -213,7 +226,8 @@ Swagger页面依赖其默认CDN资源，离线网络可能无法加载；/openap
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-python -m unittest -v
+python -B -m unittest discover -s backend/tests -t . -v
+node frontend/tests/test_frontend_stream.cjs
 ```
 
 测试使用FastAPI TestClient和模拟云端响应，不调用百炼、不计费。
@@ -393,3 +407,7 @@ AI返回estimated_track.png后，无论是位置轨迹还是bearing_time，都�
 方位—时间图可以与同一样本的方位—时间轨迹图做视觉轮廓比较；不能使用声呐热力图或地理轨迹当参考。
 类型选择由用户声明，不能自动证明参考图的坐标类型和样本来源；仍需人工核对。
 这只放开同类型图形展示与轮廓评分，不代表恢复了地理位置；结构化评测中的bearing_time仍不计算空间位置误差。
+
+数量与节点过程实现边界见 [说明](docs/target-count-progress.md)。
+
+跨时段ID合并、串线隔离及无费用本地重处理见 [身份复核说明](docs/identity-association.md)。
