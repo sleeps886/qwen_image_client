@@ -61,6 +61,17 @@ class WebTests(unittest.TestCase):
             send.assert_not_called()
         self.assertEqual(list((self.root/'uploads').iterdir()),[])
 
+    def test_image_mode_with_meta_has_actionable_mode_error(self):
+        from test_meta_tracks import meta_fixture
+        with patch.object(web,'send_images') as send,patch.object(web,'stream_images') as stream:
+            for route,params in (('/api/recognize',{'dry_run':'true'}),('/api/recognize/stream',{'consent':'true'})):
+                response=self.api.post(route,data={**params,'input_mode':'images'},files=[
+                    ('files',('hull.png',PNG,'image/png')),
+                    ('platform',('meta.json',json.dumps(meta_fixture()).encode(),'application/json'))])
+                self.assertEqual(response.status_code,400,response.text)
+                self.assertIn('单文件绘图',response.json()['detail'])
+            send.assert_not_called();stream.assert_not_called()
+
     def test_single_file_preflight_auto_mode_without_images(self):
         from test_trajectory import CONTEXT
         with patch.object(web,'send_images') as send:

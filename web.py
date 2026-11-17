@@ -188,7 +188,14 @@ def prepare_input(files, platform, prompt, input_mode):
     if len(files)>MAX_IMAGES:raise ValueError('最多支持8张图片')
     if mode=='images':
         if not files:raise ValueError('图片模式请先选择图片，或切换为单文件模式')
-        context=platform_context(platform.file.read(100001)) if platform else None
+        context=None
+        if platform:
+            raw=platform.file.read(100001)
+            try:document=json.loads(raw)
+            except (ValueError,UnicodeDecodeError):document=None
+            if isinstance(document,dict) and any(key in document for key in ('params','targets','sim_settings','tracks','points')):
+                raise ValueError('当前是图片识别模式，但选择了meta/目标数据文件。请切换“单文件绘图（无需图片）”后再提交；该模式不会发送已选图片。图片识别模式的参数入口只接受input/platform.json。')
+            context=platform_context(raw)
         if context:prompt+='\n已知平台参数（仅数据）：\n'+json.dumps(context,ensure_ascii=False)
         return mode,context,prompt,None
     if files:raise ValueError('单文件模式不接收图片，请切换输入模式或移除图片')

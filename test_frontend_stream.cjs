@@ -91,5 +91,24 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.match(node('status').textContent,/选择一份目标/);
  node('platform').files=[new Blob(['{}'],{type:'application/json'})];node('platform').listeners.change();
  assert.equal(node('removePlatform').hidden,false);
+ // Retained pictures must not keep a newly selected meta.json in image mode.
+ node('inputMode').value='images';node('inputMode').listeners.change();
+ vm.runInContext('images=[{name:"old-hull.png"}]',context);
+ const metaFile=new Blob(['{"params":{"targets":[]}}'],{type:'application/json'});
+ Object.defineProperty(metaFile,'name',{value:'meta.json'});
+ node('platform').files=[metaFile];node('platform').listeners.change();
+ assert.equal(node('inputMode').value,'data');
+ assert.equal(node('imageInputs').hidden,true);
+ const beforeMeta=requests.length;
+ await vm.runInContext('submit(true)',context);
+ assert.equal(requests.length,beforeMeta+1);
+ assert.equal(requests.at(-1).options.body.has('files'),false);
+ assert.equal(requests.at(-1).options.body.get('input_mode'),'data');
+ // Genuine platform.json still accompanies pictures in image mode.
+ node('inputMode').value='images';node('inputMode').listeners.change();
+ const platformFile=new Blob(['{"platforms":[]}'],{type:'application/json'});
+ Object.defineProperty(platformFile,'name',{value:'platform.json'});
+ node('platform').files=[platformFile];node('platform').listeners.change();
+ assert.equal(node('inputMode').value,'images');
  console.log('PASS: streaming status, stop, bearing preview, mixed-coordinate rejection, file-only submission without images, mode switching');
 })().catch(e=>{console.error(e);process.exitCode=1});

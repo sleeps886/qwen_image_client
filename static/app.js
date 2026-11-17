@@ -28,12 +28,14 @@ function updateInputMode(){
 }
 $('inputMode').addEventListener('change',updateInputMode);
 function autoSelectDataMode(keepConsent=false){
-  if(dataMode() || images.length || !$('platform').files[0])return;
+  const file=$('platform').files[0];
+  const targetData=!!file && (/^(meta|semantic)\.json$/i.test(file.name||'') || /\.jsonl$/i.test(file.name||''));
+  if(dataMode() || !file || (images.length && !targetData))return;
   const consent=$('consent').checked,currentPrompt=$('prompt').value;
   $('inputMode').value='data';updateInputMode();
   if(currentPrompt.trim() && currentPrompt!==defaultImagePrompt)$('prompt').value=currentPrompt;
   if(keepConsent)$('consent').checked=consent;
-  status('已检测到仅选择数据文件，自动切换为单文件绘图，无需上传图片。');
+  status(targetData?'已检测到目标数据文件，自动切换为单文件绘图；之前选择的图片不会发送。':'已检测到仅选择数据文件，自动切换为单文件绘图，无需上传图片。');
 }
 function status(text,kind=''){ $('status').textContent=text;$('badge').textContent=kind==='ok'?'已完成':kind==='error'?'需要处理':kind==='stopped'?'已停止':busy?'处理中':'等待输入';$('badge').className='badge '+kind; }
 let requestLogId='',logCursor=0,logTimer=null;
