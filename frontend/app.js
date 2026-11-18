@@ -6,26 +6,37 @@ let activeMode='images',promptDrafts={images:'',data:''};
 let defaultImagePrompt='';
 const nodeDefinitions=[['knowledge_retrieval','知识规则检索'],['pixel_candidates','绘图区与候选提取'],['tracklet_linking','亮带连续性分析'],['count_hypothesis','数量线索判定'],['association_context','关联上下文组装'],['model_association','模型清单与双阵关联'],['pair_validation','配对归属与同步校验'],['count_audit','数量与覆盖复核'],['identity_reconciliation','跨时段身份与串线复核'],['spatial_localization','双阵空间定位'],['continuous_trajectory_estimation','连续轨迹估计'],['reprojection_quality_check','重投影质检'],['result_summary','数量与定位汇总'],['render','空间候选绘图']];
 let executionNodes=new Map();
+const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与交叉假设'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
 function drawNodes(){
   $('nodePanel').hidden=!executionNodes.size;$('nodeList').replaceChildren();
   const statusNames={pending:'待执行',running:'执行中',completed:'已执行',failed:'失败',skipped:'已跳过',stopped:'已停止'};
-  for(const [id,label] of nodeDefinitions){const event=executionNodes.get(id)||{status:'pending'},row=document.createElement('li'),title=document.createElement('strong'),state=document.createElement('span'),time=document.createElement('small'),detail=document.createElement('p');row.className='node-row '+event.status;title.textContent=label;state.textContent=statusNames[event.status]||'未知';time.textContent=Number.isFinite(event.elapsed_ms)?(event.elapsed_ms<10?(event.elapsed_ms===0?'＜1毫秒（旧记录取整）':event.elapsed_ms.toFixed(3)+'毫秒'):(event.elapsed_ms/1000).toFixed(2)+'秒'):'';detail.textContent=(id==='model_association'?'[模型网关] ':['knowledge_retrieval'].includes(id)?'[内置规则] ':['pixel_candidates','tracklet_linking','count_hypothesis','identity_reconciliation'].includes(id)?'[本地启发式] ':'[本地程序] ')+(event.summary||'');row.append(title,state,time,detail);$('nodeList').append(row);}
+  const definitions=[...executionNodes.keys()].some(id=>id.startsWith('inverse_'))?inverseNodeDefinitions:nodeDefinitions;
+  $('nodeHelp').textContent=definitions===inverseNodeDefinitions?'完整正向反演由本地程序执行；只有明确申请的“可选模型假设复核”可能调用一次云端模型，跳过表示没有调用。节点完成和BTR一致性不代表独立位置精度合格。':'仅“模型清单与双阵关联”调用大模型；其余为内置规则、启发式或数值程序。记录执行不等于验证正确，重投影不是独立准确性评测；未自动付费重试。';
+  for(const [id,label] of definitions){const event=executionNodes.get(id)||{status:'pending'},row=document.createElement('li'),title=document.createElement('strong'),state=document.createElement('span'),time=document.createElement('small'),detail=document.createElement('p');row.className='node-row '+event.status;title.textContent=label;state.textContent=statusNames[event.status]||'未知';time.textContent=Number.isFinite(event.elapsed_ms)?(event.elapsed_ms<10?(event.elapsed_ms===0?'＜1毫秒（旧记录取整）':event.elapsed_ms.toFixed(3)+'毫秒'):(event.elapsed_ms/1000).toFixed(2)+'秒'):'';detail.textContent=(['model_association','inverse_review'].includes(id)?'[模型网关] ':['knowledge_retrieval'].includes(id)?'[内置规则] ':['pixel_candidates','tracklet_linking','count_hypothesis','identity_reconciliation'].includes(id)?'[本地启发式] ':'[本地程序] ')+(event.summary||'');row.append(title,state,time,detail);$('nodeList').append(row);}
 }
 function receiveNode(event){
-  if(!nodeDefinitions.some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
+  if(![...nodeDefinitions,...inverseNodeDefinitions].some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
   executionNodes.set(event.node,{status:event.status,elapsed_ms:typeof event.elapsed_ms==='number'?event.elapsed_ms:undefined,summary:typeof event.summary==='string'?event.summary.slice(0,300):''});drawNodes();
 }
 function showExecution(events){executionNodes=new Map();for(const event of events||[])receiveNode(event);drawNodes();}
 function showTargetCount(report){
   $('targetCountPanel').hidden=!report;$('targetCountMetrics').replaceChildren();if(!report)return;
   const range=report.image_hypothesis,number=v=>Number.isInteger(v)?String(v):'—';
-  for(const [label,value] of [['亮带数量线索（未确认）',range?number(range.min)+'～'+number(range.max):'—'],['清单疑似目标（含未配对）',number(report.inventory_target_count)],['模型原始关联ID',number(report.associated_target_count)],['连续身份假设H（非真实目标数）',number(report.continuous_identity_count)],['可定位身份假设（不含镜像重复）',number(report.localized_target_count)]]){const card=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');small.textContent=label;strong.textContent=value;card.append(small,strong);$('targetCountMetrics').append(card);}
+  for(const [label,value] of [['亮带数量线索（未确认）',range?number(range.min)+'～'+number(range.max):'—'],['清单疑似目标（含未配对）',number(report.inventory_target_count)],[report.count_origin==='numeric_hypotheses'?'程序关联假设（非模型判断）':'模型原始关联ID',number(report.associated_target_count)],['连续身份假设（非真实目标数）',number(report.continuous_identity_count)],['可定位身份假设（不含镜像重复）',number(report.localized_target_count)]]){const card=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');small.textContent=label;strong.textContent=value;card.append(small,strong);$('targetCountMetrics').append(card);}
   $('targetCountExplanation').textContent=(report.warnings||[]).join('；')||'数量与关联暂一致，但未经过独立真值确认，不能将镜像或碎片计为新增目标。';
   if(report.identity_association?.identities?.length)$('targetCountExplanation').textContent+=' 身份映射：'+report.identity_association.identities.map(x=>x.id+' ← 模型 '+x.model_ids.join('/')).join('；');
   if(report.clutter_classification_reviews?.length)$('targetCountExplanation').textContent+=' 杂波判定待复核：'+report.clutter_classification_reviews.map(x=>x.id+'（模型原判杂波，程序未确认，不据此排除）').join('；')+'。保留清单不代表已完成配对或空间定位。';
   if(report.shared_inventory_evidence?.length)$('targetCountExplanation').textContent+=' 共享数量证据已隔离：'+report.shared_inventory_evidence.map(x=>x.candidate_id+'（'+x.target_ids.join('/')+'）').join('；')+'。不能据这些点重复确认目标数。';
 }
 const dataMode=()=>$('inputMode').value==='data';
+const forwardMode=()=>!dataMode()&&$('processingPipeline').value==='forward_v1';
+function updatePipeline(){
+  if(forwardMode()){$('rendererProfile').value='btr_gui_v1';$('send').textContent='执行完整正向反演 ↗';}
+  else $('send').textContent=dataMode()?'发送数据并生成轨迹图 ↗':'流式识别并生成轨迹 ↗';
+  $('consent').checked=false;
+}
+$('processingPipeline').addEventListener('change',updatePipeline);
+$('reviewHypotheses').addEventListener('change',()=>{$('consent').checked=false;});
 function syncPlatformRemoval(){
   const selected=!!$('platform').files[0];
   $('removePlatform').hidden=!selected;
@@ -45,6 +56,7 @@ function updateInputMode(){
   $('inspect').textContent=mode==='data'?'仅预检数据':'仅预检图片';
   $('consent').checked=false;
   syncPlatformRemoval();
+  updatePipeline();
   status(mode==='data'?'请选择下方目标数据文件；本模式不会发送已选图片。':'图片模式：请选择声呐图片，可先预检。');
 }
 $('inputMode').addEventListener('change',updateInputMode);
@@ -138,9 +150,9 @@ function resetResultPresentation(){
 function showEvidence(data){
   $('evidenceImages').replaceChildren();
   const evidenceFiles=Object.entries(data.downloads||{}).filter(([name])=>/^selected_\d\.png$/.test(name));
-  const displayEvidence=[...(evidenceFiles.length?evidenceFiles:Object.entries(data.downloads||{}).filter(([name])=>/^evidence_\d\.png$/.test(name))),...Object.entries(data.downloads||{}).filter(([name])=>/^reprojection_\d\.png$/.test(name))];
+  const displayEvidence=[...(evidenceFiles.length?evidenceFiles:Object.entries(data.downloads||{}).filter(([name])=>/^evidence_\d\.png$/.test(name))),...Object.entries(data.downloads||{}).filter(([name])=>/^(reprojection|gaussian|inverse_overlay|expected_btr)_\d\.png$/.test(name))];
   $('evidenceSection').hidden=!displayEvidence.length;
-  for(const [name,url] of displayEvidence){const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption'),button=document.createElement('button');img.src=url;img.alt='声呐原图候选点叠加，点击放大';caption.textContent=name+' · 点击放大';button.type='button';button.className='evidence-open';button.ariaLabel='放大查看 '+name;button.addEventListener('click',()=>openEvidencePreview(url,name));button.append(img);figure.append(caption,button);$('evidenceImages').append(figure);}
+  for(const [name,url] of displayEvidence){const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption'),button=document.createElement('button');img.src=url;img.alt='声呐测量诊断叠加，点击放大';caption.textContent=name+(name.startsWith('gaussian_')?' · 实验拟合，非目标结论':'')+' · 点击放大';button.type='button';button.className='evidence-open';button.ariaLabel='放大查看 '+name;button.addEventListener('click',()=>openEvidencePreview(url,name));button.append(img);figure.append(caption,button);$('evidenceImages').append(figure);}
 }
 
 let evidenceZoom=1,evidenceFitWidth=1,evidenceReturnFocus=null,evidenceBodyOverflow='';
@@ -180,7 +192,8 @@ $('evidenceDialog').addEventListener('keydown',event=>{
 function showModelResult(data,{fromHistory=false}={}){
   showExecution(data.node_events);showTargetCount(data.target_count);
   showEvidence(data);
-  const candidateResult=data.input_mode!=='data' && !!data.trajectory_image && !!data.downloads?.['quality_report.json'];
+  const forwardResult=data.pipeline==='forward_inverse_v1';
+  const candidateResult=data.input_mode!=='data' && !!data.trajectory_image && (!!data.downloads?.['quality_report.json']||forwardResult);
   $('bodyOutputHint').textContent='模型正文已接收完毕，绘图状态见结果和告警。';
   status('已保存结果，编号：'+data.result_id,data.trajectory_image?'ok':'warning');$('answer').textContent=data.answer.slice(0,4000000);
   if(candidateResult){status('已生成空间候选，尚未验证完整性与准确率；请核对原图叠加和质量报告。','warning');$('badge').textContent='候选待核验';}
@@ -203,11 +216,12 @@ function showModelResult(data,{fromHistory=false}={}){
   }
   renderUsage(data.usage);
   $('downloads').replaceChildren();$('debugDownloads').replaceChildren();
-  const primaryNames={'estimated_track.png':'下载轨迹图 PNG','tracks.json':'下载轨迹点 JSON','answer.txt':'下载模型正文'};
+  const primaryNames={'estimated_track.png':forwardResult?'下载主模型假设 PNG（未消歧）':'下载轨迹图 PNG','mirror_candidates.png':'查看全部镜像候选 PNG','tracks.json':'下载轨迹点 JSON','answer.txt':forwardResult?'下载本地反演报告':'下载模型正文'};
   let debugFiles=0;
   const rank=name=>name==='estimated_track.png'?0:name==='tracks.json'?1:name==='answer.txt'?2:3;
   for(const [name,path] of Object.entries(data.downloads||{}).sort((a,b)=>rank(a[0])-rank(b[0]))){
     const a=document.createElement('a');a.textContent=primaryNames[name]||name;a.href=path;a.download=name;
+    if(name==='mirror_candidates.png'){a.removeAttribute('download');a.target='_blank';a.rel='noopener';}
     a.className=name==='estimated_track.png'?'download-link download-primary':'download-link';
     (primaryNames[name]?$('downloads'):$('debugDownloads')).append(a);if(!primaryNames[name])debugFiles++;
   }
@@ -226,6 +240,19 @@ function showModelResult(data,{fromHistory=false}={}){
   $('providerReasoningSection').open=false;$('bodyDetails').open=!hasImage;$('warningsDetails').open=!hasImage;
   if(candidateResult)$('warningsDetails').open=true;
   $('bodySummary').textContent='模型原始正文 · 查看 JSON';
+  if(forwardResult){
+    $('bodySummary').textContent='程序反演报告 · 查看 JSON';
+    $('bodyOutputHint').textContent='完整正向反演已结束；坐标为模型估计，不是当前模型凭图生成。';
+    $('completionTitle').textContent='正向反演候选已生成 · 待独立核验';
+    $('completionSubtitle').textContent='完整剖面、全局归属、运动模型及BTR回投已执行；新增模型调用 '+(data.new_model_calls||0)+' 次。镜像和身份仍可能有歧义。';
+    $('badge').textContent='待核验';$('trackCaption').textContent=data.downloads?.['mirror_candidates.png']?'主运动模型代表假设，不是唯一空间解；全部镜像请点“查看全部镜像候选PNG”，JSON保留所有分支。未通过独立位置精度验收。':'整段折叠方位的数值反演候选；同色为同一身份，镜像不计为新增目标，未通过独立位置精度验收。';
+    $('aiCoordinateLabel').textContent=data.downloads?.['mirror_candidates.png']?'（主模型代表假设，未验证唯一侧别）':'（本地正向反演候选，镜像未唯一消歧）';
+    if(data.optimization_status==='budget_limited'){
+      $('completionTitle').textContent='已生成部分优化候选 · 细化预算已到';
+      $('completionSubtitle').textContent='保留了已完成的更新，其余沿用粗估，已继续执行质检与绘图；不是完整细化或可靠定位结果。';
+      $('badge').textContent='部分优化';
+    }
+  }
   $('runLogsDetails').open=false;$('logPhase').textContent=fromHistory?'历史结果，未发起新请求':'已结束';
   $('stopStream').hidden=true;$('stopStream').disabled=true;
   if(fromHistory){$('providerReasoningSection').hidden=true;$('providerReasoning').textContent='';}
@@ -241,12 +268,20 @@ async function readModelStream(response){
     const event=JSON.parse(payload);
     if(event.event==='node'){
       receiveNode(event);
+      if(phase==='local_inverse' && event.node==='inverse_refine' && event.status==='running' && event.summary){
+        status('本地细化：'+event.summary);logLine('[本地进度] '+event.summary);
+      }
     }else if(event.event==='phase'){
       phase=event.phase;
       logLine('[流式] '+event.message);status(event.message);
+      if(phase==='local_inverse'){
+        $('bodySummary').textContent='本地数值报告 · 生成中';
+        $('bodyOutputHint').textContent='正在本地计算，不等待大模型正文；完成后显示数值报告和空间候选。';
+      }
       if(event.phase==='buffered'){$('trackWarnings').textContent='中转站未提供真正SSE，当前只能整包返回，非逐片输出。';$('warningsDetails').hidden=false;$('warningsDetails').open=true;}
     }else if(event.event==='heartbeat'){
       logLine('[连接心跳] 已等待 '+event.elapsed_s+' 秒；尚未收到新的可显示事件。');
+      if(phase==='local_inverse'){status('本地数值反演仍在计算；可查看真实节点状态，耗时不代表准确率。');return;}
       if(!completed && phase!=='rendering'){
         if(reasonChars>0 && bodyChars===0)status('已收到 '+reasonChars+' 字符模型推理文本，但尚未收到最终正文；还不能生成轨迹图。已等待 '+event.elapsed_s+' 秒。');
         else if(bodyChars===0)status((phase==='connecting'?'等待中转站HTTP响应头':'上游连接已建立，尚未收到正文')+'；已等待 '+event.elapsed_s+' 秒。');
@@ -271,7 +306,7 @@ async function readModelStream(response){
         $('bodyOutputHint').textContent='当前只有推理文本，尚未返回可用于绘图的正文JSON。';
       }
     }else if(event.event==='error'){
-      throw new Error(event.message+' 已显示文本可能不完整，未自动重试。');
+      throw new Error(event.message+(phase==='local_inverse'?' 本地诊断保留，未自动重试。':' 已显示文本可能不完整，未自动重试。'));
     }else if(event.event==='result'){
       completed=true;showModelResult(event.data);logLine('[流式] 已接收最终结果并完成本地处理。');
     }
@@ -296,13 +331,17 @@ $('stopStream').addEventListener('click',()=>{
 async function submit(dryRun){
   if(busy || comparing)return;
   autoSelectDataMode(true);
-  const isData=dataMode(),platform=$('platform').files[0];
+  const isData=dataMode(),platform=$('platform').files[0],forward=forwardMode()&&!dryRun;
   if(isData && !platform){status('请先选择一份目标数据文件。','error');return;}
   if(!isData && !images.length){status('请先选择图片，或切换到单文件绘图模式。','error');return;}
-  if(!$('prompt').value.trim()){status('提示词不能为空。','error');return;}
-  if(!dryRun && !$('consent').checked){status('请先勾选云端传输与费用确认。','error');return;}
+  if(forward && !platform){status('完整正向反演需要同一样本的platform.json。','error');return;}
+  if(!forward && !$('prompt').value.trim()){status('提示词不能为空。','error');return;}
+  const needsCloud=!dryRun&&(!forward||$('reviewHypotheses').checked);
+  if(needsCloud && !$('consent').checked){status('请先勾选云端传输与费用确认。','error');return;}
   const form=new FormData();if(!isData)images.forEach(file=>form.append('files',file));
   form.append('input_mode',isData?'data':'images');
+  form.append('renderer_profile',isData?'none':($('rendererProfile').value||'none'));
+  if(forward)form.append('review_model',String(!!$('reviewHypotheses').checked));
   form.append('prompt',$('prompt').value);
   form.append('dry_run',String(dryRun));form.append('consent',String($('consent').checked));
   if(platform){if(platform.size>(isData?1024*1024:100000)){status(isData?'数据文件超过1MiB限制。':'平台JSON超过100KB限制。','error');return;} form.append('platform',platform);}
@@ -310,14 +349,14 @@ async function submit(dryRun){
   resetResultPresentation();
   resetEvaluation();currentResultId='';currentTrajectoryStatus='';$('aiComparePreview').hidden=true;$('aiComparePreview').removeAttribute('src');$('aiCompareEmpty').hidden=false;resetComparison();
   $('trackFigure').hidden=true;$('trackImage').removeAttribute('src');$('trackWarnings').textContent='';
-  $('downloads').replaceChildren();$('usage').textContent='';status(dryRun?'正在本地预检，不会调用模型服务…':'请求已提交本地服务，等待模型服务返回；请勿重复发送或关闭页面…');
+  $('downloads').replaceChildren();$('usage').textContent='';status(dryRun?'正在本地预检，不会调用模型服务…':forward?'正在执行完整正向反演；默认本地计算，不调用模型…':'请求已提交本地服务，等待模型服务返回；请勿重复发送或关闭页面…');
   const correlationId=beginLogs();
   if(dryRun)logTimer=setTimeout(()=>pollLogs(correlationId),300);
   $('bodyOutputHint').textContent='等待模型正文；推理文本不作为轨迹数据。';
   $('answer').textContent='';$('providerReasoning').textContent='';$('providerReasoningSection').hidden=true;
   streamAbort=new AbortController();$('stopStream').disabled=dryRun;$('stopStream').hidden=dryRun;
   try{
-    const response=await fetch(dryRun?'/api/recognize':'/api/recognize/stream',{method:'POST',body:form,headers:{'X-Request-ID':correlationId},signal:streamAbort.signal});
+    const response=await fetch(dryRun?'/api/recognize':forward?'/api/invert/stream':'/api/recognize/stream',{method:'POST',body:form,headers:{'X-Request-ID':correlationId},signal:streamAbort.signal});
     if(!response.ok){
       let message='请求失败（HTTP '+response.status+'）';
       try{const data=await response.json();if(typeof data.detail==='string')message=data.detail;}catch{}
@@ -333,9 +372,9 @@ async function submit(dryRun){
       for(const [id,event] of executionNodes)if(event.status==='running')executionNodes.set(id,{...event,status:'stopped',summary:'本地接收已停止，不保证上游停止计费'});drawNodes();
       logLine('[浏览器] 用户已停止本地接收，保留已收到的文本。');
       $('bodyOutputHint').textContent='已停止接收。以下为不完整输出，不作为完整轨迹结果。';
-      status('已停止本地接收，已收到的内容保留；不保证上游停止处理或计费。','stopped');
+      status(forward&&!needsCloud?'已停止接收并请求取消本地求解；计算在下一个预算检查处退出。':'已停止本地接收，已收到的内容保留；不保证上游停止处理或计费。','stopped');
     }else{
-      logLine('[浏览器] 请求失败：'+error.message);status(error.message==='Failed to fetch'?'连接中断。云端请求可能仍在执行，请核对调用记录后再决定是否重试。':error.message,'error');
+      logLine('[浏览器] 请求失败：'+error.message);status(error.message==='Failed to fetch'?(forward&&!needsCloud?'本地连接中断；未发起云端模型请求，请查看本地诊断。':'连接中断。云端请求可能仍在执行，请核对调用记录后再决定是否重试。'):error.message,'error');
     }
   }
   finally{clearTimeout(logTimer);busy=false;streamAbort=null;document.querySelectorAll('input,textarea,button,select').forEach(x=>x.disabled=false);$('stopStream').disabled=true;$('stopStream').hidden=true;$('stopStream').textContent='■ 停止生成';syncPlatformRemoval();}

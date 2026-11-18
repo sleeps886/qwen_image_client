@@ -32,6 +32,8 @@ def build_association_prompt(evidence, rules, tracklets=None, count_hypothesis=N
     prompt+='\n局部连续亮带与数量线索（启发式，须看图核对）：\n'+json.dumps({'count':count_hypothesis,'tracklets':tracklets},ensure_ascii=False,separators=(',',':'))
     if crossing_report is not None:
         prompt+='\n双侧切线交叉分析（局部连续性假设，不是目标真值；links两组各自延续，交点未分配）：\n'+json.dumps(crossing_report,ensure_ascii=False,separators=(',',':'))
+    if evidence.get('measurement_diagnostics'):
+        prompt+='\n工具配色高斯测量诊断（实验；不替换下方候选角度，不是目标数或杂波结论。仅作为需复核区域的提示）：\n'+json.dumps(evidence['measurement_diagnostics'],ensure_ascii=False,separators=(',',':'))
     prompt+='\n像素候选（角度为度、时间为秒）：\n'+json.dumps(compact,ensure_ascii=False,separators=(',',':'))
     if len(prompt)>50000:raise ValueError('候选上下文超过50000字符，请减少图片或分平台处理')
     return prompt

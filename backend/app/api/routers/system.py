@@ -27,21 +27,25 @@ def data_example():
 
 @router.get('/api/health')
 def health():
-    settings=model_settings()
+    try:settings=model_settings()
+    except ValueError:settings=None  # Invalid optional cloud config cannot hide local inversion.
     return {'status':'ok','service':'qwen-image-client','version':'1.0.0',
             'architecture':'layered-v1','workflow_engine':'langgraph-evidence-v1','langgraph_enabled':True,
             'project_layout':'backend_frontend_v1',
             'knowledge_backend':'sqlite-reviewed-rules','candidate_extraction_supported':True,
+            'experimental_measurement_profiles':['btr_gui_v1'],'measurement_default':'legacy',
+            'forward_inverse_supported':True,'forward_inverse_default_model_calls':0,
             'automatic_paid_retry':False,'full_tracking_implemented':False,
             'continuous_estimation_supported':True,'reprojection_check_supported':True,
             'target_count_audit_supported':True,'node_progress_supported':True,
             'identity_reconciliation_supported':True,
             'candidate_error_method':'pixel_resolution_and_local_ridge_proxy_uncalibrated',
             'streaming_supported':True,
-            'key_configured':bool(settings.api_key),
-            'api_format':settings.api_format,
+            'key_configured':bool(settings and settings.api_key),
+            'api_format':settings.api_format if settings else 'invalid',
+            'model_configuration_valid':settings is not None,
             'request_timeout_s':model_timeout(),
-            'provider_label':'DMXAPI（第三方服务）' if urlsplit(settings.base_url).hostname in ('www.dmxapi.cn','dmxapi.cn') else 'Anthropic' if settings.api_format=='anthropic' else '阿里云百炼',
+            'provider_label':('DMXAPI（第三方服务）' if urlsplit(settings.base_url).hostname in ('www.dmxapi.cn','dmxapi.cn') else 'Anthropic' if settings.api_format=='anthropic' else '阿里云百炼') if settings else '云端配置无效；本地反演仍可使用',
             'default_prompt':SPATIAL_OBSERVATION_PROMPT,
             'spatial_localization_supported':True,'image_output_goal':'spatial_candidates',
             'data_prompt':DATA_PROMPT,'data_file_bytes':MAX_DATA_BYTES,

@@ -7,7 +7,8 @@ from backend.app.services.trajectory import platform_context
 from backend.app.services.data_input import DATA_PROMPT,prepare_data
 from backend.app.models.recognition import PreparedInput
 
-def prepare_input(image_count, platform_raw, prompt, input_mode, filename='data.json'):
+def prepare_input(image_count, platform_raw, prompt, input_mode, filename='data.json',*,renderer_profile='none'):
+    if renderer_profile not in ('none','btr_gui_v1'):raise ValueError('不支持的渲染配置')
     if input_mode not in ('auto','images','data'):
         raise ValueError('输入模式必须为images或data')
     mode=('images' if image_count else 'data') if input_mode=='auto' else input_mode
@@ -29,11 +30,13 @@ def prepare_input(image_count, platform_raw, prompt, input_mode, filename='data.
                 raise ValueError('当前是图片识别模式，但选择了meta/目标数据文件。请切换“单文件绘图（无需图片）”后再提交；该模式不会发送已选图片。图片识别模式的参数入口只接受input/platform.json。')
             context=platform_context(raw)
         context['require_spatial']=True
+        if renderer_profile!='none':context['renderer_profile']=renderer_profile
         # Replace the old default (including cached browser text), not append two conflicting contracts.
         custom='' if prompt.strip() in (DEFAULT_PROMPT.strip(),SPATIAL_OBSERVATION_PROMPT.strip()) else '\n用户附加要求（不能改变双阵观测输出契约）：\n'+prompt
         calibration=IMAGE_CALIBRATION_PROMPT.split('缺少可见刻度')[0]
         prompt=SPATIAL_OBSERVATION_PROMPT+'\n'+calibration+'\n已知标定与平台参数（仅数据）：\n'+json.dumps(context,ensure_ascii=False)+custom
         return PreparedInput(mode,context,prompt,None)
+    if renderer_profile!='none':raise ValueError('高斯测量预览只支持图片模式')
     if image_count:raise ValueError('单文件模式不接收图片，请切换输入模式或移除图片')
     if platform_raw is None:raise ValueError('请选择一份目标数据文件（JSON、JSONL或简单JS），或上传图片')
     context,text,info=prepare_data(platform_raw,filename)

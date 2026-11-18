@@ -32,6 +32,13 @@ def platform_context(raw):
         raise ValueError('当前仅支持恒航向恒航速平台运动模型')
     if data.get('bearing_convention','relative_heading_folded_0_180')!='relative_heading_folded_0_180':
         raise ValueError('当前仅支持相对船首0～180度折叠方位')
+    georeference={}
+    for key,lo,hi in (('REF_LAT',-84.999,84.999),('REF_LON',-180,180),('EARTH_R',1000000,10000000)):
+        if key in data:
+            value=data[key]
+            if type(value) not in (int,float) or not math.isfinite(value) or not lo<=value<=hi:
+                raise ValueError('投影参考字段无效：'+key)
+            georeference[key]=value
     for p in data['platforms']:
         if not isinstance(p,dict) or set(p)-{'name','start_ll','heading_deg','speed_kn','hull_m','tow_m','bounds','color'}:
             raise ValueError('平台字段不符合input/platform.json格式')
@@ -42,7 +49,7 @@ def platform_context(raw):
         for field in ('heading_deg','speed_kn'):
             if type(p.get(field)) not in (int,float) or not math.isfinite(p[field]):raise ValueError('平台航向或航速无效')
     # Drop non-essential fields rather than sending arbitrary strings to the model.
-    return {'T_MAX':duration,'DT':dt,'B_MIN':bmin,'B_MAX':bmax,
+    return {'T_MAX':duration,'DT':dt,'B_MIN':bmin,'B_MAX':bmax,**georeference,
             'image_time_axis':direction,'calibration_source':'input/platform.json（缺省字段按本项目工具约定）',
             'bearing_convention':'relative_heading_folded_0_180',
             'platforms':[{k:p[k] for k in ('name','start_ll','heading_deg','speed_kn','hull_m','tow_m') if k in p} for p in data['platforms']]}
@@ -119,13 +126,13 @@ def render_tracks(answer,directory,context=None):
     return render_document(doc,directory,context)
 
 
-def render_document(doc,directory,context=None):
+def render_document(doc,directory,context=None,*,filename='estimated_track.png',persist=True):
     """Draw an already validated local result; never re-solve its observations."""
     if context and context.get('platforms') and doc['coordinate_system']!='bearing_time':
         plat=context['platforms'][0]
         doc['coordinate_reference']={'platform_id':plat.get('name','A'),
             'origin_lat':plat['start_ll'][0],'origin_lon':plat['start_ll'][1],
-            'earth_radius_m':6371000.0,'projection_lat':plat['start_ll'][0]}
+            'earth_radius_m':context.get('EARTH_R',6371000.0),'projection_lat':context.get('REF_LAT',plat['start_ll'][0])}
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     frame=doc['coordinate_system']
@@ -149,10 +156,15 @@ def render_document(doc,directory,context=None):
             label=f'Target {i+1} endpoints' if endpoints else f'Track {i+1}'
             if spatial:
                 side=tuple(track.get('handedness',()))
-                linestyle={(1,1):'-',(-1,-1):'--',(1,-1):':',(-1,1):'-.'}.get(side,'-')
+                if 'mirror_variant' in track:
+                    alternative=track['mirror_variant'];side=('alternative',alternative)
+                    linestyle=['-','--',':','-.'][alternative%4]
+                    sides=f'alternative {alternative+1}'
+                else:
+                    linestyle={(1,1):'-',(-1,-1):'--',(1,-1):':',(-1,1):'-.'}.get(side,'-')
+                    sides='side '+('/'.join(f'{sign:+d}' for sign in side) if side else 'unspecified')
                 key=(track['id'],side)
-                sides='/'.join(f'{sign:+d}' for sign in side) if side else 'unspecified'
-                label='_nolegend_' if key in seen_labels else f"{track['id']} | side {sides} (candidate)"
+                label='_nolegend_' if key in seen_labels else f"{track['id']} | {sides} (candidate)"
                 seen_labels.add(key)
             ax.plot([p['x'] for p in pts],[p['y'] for p in pts],color=color,lw=1.4,
                     linestyle=linestyle,marker='o' if endpoints else None,label=label)
@@ -183,11 +195,13 @@ def render_document(doc,directory,context=None):
         if doc.get('plot_kind')=='endpoints':title='REFERENCE ENDPOINTS ONLY - NOT COMPLETE TRACKS'
         if doc.get('plot_kind')=='meta_reconstruction':title='META RECONSTRUCTION - FULL SIMULATION TRACKS'
         if doc.get('plot_kind')=='spatial_candidates':title='DUAL-ARRAY SPATIAL CANDIDATES - MIRROR AMBIGUITY'
+        if doc.get('display_view')=='primary_motion_hypotheses':title='PRIMARY MOTION HYPOTHESES - SIDE NOT VERIFIED'
         if spatial:title+=f"\n{len(identity_colors)} identity hypotheses / {len(doc['tracks'])} fragments - NOT confirmed targets"
         ax.set_title(title+(' / BEARING-TIME ONLY' if frame=='bearing_time' else ''),color='#dce3ee',fontsize=11)
         ax.legend(facecolor='#101828',labelcolor='#dce3ee',fontsize=8)
         directory=Path(directory)
-        fig.savefig(directory/'estimated_track.png',bbox_inches='tight',facecolor=fig.get_facecolor())
-        (directory/'tracks.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
+        if filename not in ('estimated_track.png','mirror_candidates.png'):raise ValueError('轨迹视图文件名无效')
+        fig.savefig(directory/filename,bbox_inches='tight',facecolor=fig.get_facecolor())
+        if persist:(directory/'tracks.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
         fig.clear()
     return doc

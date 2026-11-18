@@ -12,6 +12,7 @@ from backend.app.workflows.tracking_graph import build_tracking_graph
 from backend.app.infrastructure.llm.gateway import ConfiguredModelGateway,ModelGateway
 from backend.app.workflows.nodes import invoke_model_node,stream_model_node,render_node
 from backend.app.services.trajectory import render_tracks,render_document
+from backend.app.services.btr_measurements import save_measurement_previews
 
 
 class RecognitionWorkflow:
@@ -52,6 +53,9 @@ class RecognitionWorkflow:
         if not self.evidence_state:return
         state=self.evidence_state;root=Path(directory)
         save_evidence(state['evidence'],state['images'],root)
+        if state.get('measurement_report'):
+            (root/'measurement_report.json').write_text(json.dumps(state['measurement_report'],ensure_ascii=False,indent=2),encoding='utf-8')
+            save_measurement_previews(state['measurement_report'],state['evidence'],state['images'],root,state['context'])
         (root/'calibration_context.json').write_text(json.dumps(state['context'],ensure_ascii=False,indent=2),encoding='utf-8')
         (root/'knowledge_sources.json').write_text(json.dumps(state['rules'],ensure_ascii=False,indent=2),encoding='utf-8')
         (root/'tracklets.json').write_text(json.dumps({'tracklets':state.get('tracklets'),

@@ -6,6 +6,16 @@
 
 ## 启动
 
+### 新增：完整正向反演（实验，本地零模型调用）
+
+若此前在“全局归属与有界迭代”遇到120秒预算错误，已加入不变模板/矩阵缓存、细化阶段预算和明确的部分结果状态；本机真实浏览器复测约25秒完成，详见[超时修复记录](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/docs/inverse-timeout-fix.md)。总预算仍有限，部分优化不等于精度验收通过。
+
+2026-11-18：按指定162346批次sample_0005反复对照后的更新见[11轮优化与实际误差记录](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/docs/sample005-iteration-results.md)。新增实际图像联合拟合、有符号周期背景及锁定身份内的运动族比较；主图为明确标记的代表假设，`tracks.json`与`mirror_candidates.png`仍保留全部镜像，不能把主图视为唯一已确认解。
+
+上传同一样本的原始hull/tow两图和`input/platform.json`，在“识别流程”选择“完整正向反演（工具原图，实验）”，点击执行。默认不需要勾选云端费用同意、不需要模型Key；可选云端假设复核必须另行授权，最多一次，不覆盖程序坐标。支持真实九节点进度、BTR回投、诊断下载、历史和停止。接口为`POST /api/invert`及`POST /api/invert/stream`。
+
+**尚未通过完整精度验收**：三个同批次工具样本的数值身份数为3/3/4，标签均有4个目标；镜像和部分公里级偏差仍存在。旧流程保留默认，不自动推广。详情见[完整链路实现与实测](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/docs/forward-inverse-completion.md)。案例知识库仍是独立设计，不属于已上线功能。
+
 项目已按前后端划分：`backend/`存放Python后端、Agent、工作流、脚本和测试，`frontend/`存放HTML、JS、CSS。
 目录见[前后端架构说明](docs/architecture.md)，Agent位于`backend/app/agents/sonar_agent.py`。
 当前图片空间流程运行LangGraph证据图；单文件绘图保持直接执行。暂不支持跨请求断点恢复。

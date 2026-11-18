@@ -14,6 +14,7 @@ from backend.app.services.target_count import link_tracklets,count_hypothesis,au
 from backend.app.workflows.progress import observed
 from backend.app.services.identity_association import reconcile_identities
 from backend.app.services.crossing_tracks import crossing_continuity
+from backend.app.services.btr_measurements import measure_pack
 
 
 class EvidenceState(TypedDict,total=False):
@@ -31,6 +32,7 @@ class EvidenceState(TypedDict,total=False):
     model_observations:dict
     identity_report:dict
     crossing_report:dict
+    measurement_report:dict
 
 
 def retrieve(state):
@@ -57,7 +59,17 @@ def extract(state):
     arrays={(im['platform_id'],im['array']) for im in evidence['images']}
     if any((pid,'hull') not in arrays or (pid,'tow') not in arrays for pid,_ in arrays):
         raise ValueError('每个平台需要同时提供hull和tow图片')
-    return {'evidence':evidence,'trace':state['trace']+['extract_pixel_candidates']}
+    update={'evidence':evidence,'trace':state['trace']+['extract_pixel_candidates']}
+    if state['context'].get('renderer_profile')=='btr_gui_v1':
+        report=measure_pack(state['images'],evidence,state['context'])
+        update['measurement_report']=report
+        evidence['measurement_diagnostics']={'mode':'diagnostic_only','observations_modified':False,
+            'images':[{'image_index':im['image_index'],'fitted_groups':im['fitted_groups'],
+                       'unavailable_reason':im.get('reason'),
+                       'review_groups':[{'candidate_ids':g['candidate_ids'],'status':g['status'],
+                                         'normalized_rmse':g.get('normalized_rmse')} for g in im['groups'] if g['status']!='fitted'][:6]}
+                      for im in report['images']]}
+    return update
 
 
 def assemble(state):

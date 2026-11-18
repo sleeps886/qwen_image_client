@@ -37,8 +37,8 @@ async def local_origin(request:Request,call_next):
         if parsed.scheme not in ('http','https') or parsed.netloc!=request.headers.get('host'):
             return JSONResponse(status_code=403,content={'detail':'不允许跨站调用本地服务。'})
     rid=None
-    is_stream=request.url.path=='/api/recognize/stream'
-    if request.method=='POST' and request.url.path in ('/api/recognize','/api/recognize/stream'):
+    is_stream=request.url.path in ('/api/recognize/stream','/api/invert/stream')
+    if request.method=='POST' and request.url.path in ('/api/recognize','/api/recognize/stream','/api/invert','/api/invert/stream'):
         try:
             rid=LOGS.start(request.headers.get('x-request-id'))
             request.state.request_id=rid

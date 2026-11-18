@@ -68,6 +68,7 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.equal(requests.length,1);
  const form=requests[0].options.body;
  assert.equal(form.get('input_mode'),'data');assert.equal(form.has('files'),false);assert.equal(form.has('platform'),true);
+ assert.equal(form.get('renderer_profile'),'none');
  assert.match(node('answer').textContent,/objects/);
  vm.runInContext('showModelResult({result_id:"file",answer:"{}",trajectory_status:"position_estimate",input_mode:"data",trajectory_image:"/file.png",warnings:[],downloads:{}})',context);
  assert.match(node('trackCaption').textContent,/用户文件数据图/);
@@ -173,5 +174,34 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  vm.runInContext('showModelResult({result_id:"unreliable",answer:"{}",input_mode:"images",trajectory_image:"/test.png",trajectory_status:"position_estimate",warnings:[],downloads:{"quality_report.json":"/quality.json"},target_count:{status:"needs_review"}})',context);
  assert.match(node('completionTitle').textContent,/未达到完整目标识别要求/);assert.equal(node('badge').textContent,'未达验收');
  vm.runInContext('resetResultPresentation()',context);assert.equal(node('nodePanel').hidden,true);assert.equal(node('targetCountPanel').hidden,true);
+ const inverseRequests=[];
+ context.fetch=async(url,options)=>{
+   inverseRequests.push({url,options});
+   const result={ok:true,result_id:'inverse-test',answer:'{}',input_mode:'images',pipeline:'forward_inverse_v1',new_model_calls:0,
+     trajectory_status:'position_estimate',trajectory_image:'/inverse.png',warnings:[],downloads:{'inverse_quality.json':'/inverse-quality.json'},
+     target_count:{status:'needs_review',count_origin:'numeric_hypotheses',inventory_target_count:2,associated_target_count:2,continuous_identity_count:2,localized_target_count:2},
+     node_events:[{node:'inverse_field',status:'completed',elapsed_ms:25,summary:'完整测量'},{node:'inverse_review',status:'skipped',elapsed_ms:0,summary:'未申请模型复核'}]};
+   return new Response('data: '+JSON.stringify({event:'phase',phase:'local_inverse',message:'本地计算'})+'\n\ndata: '+JSON.stringify({event:'result',data:result})+'\n\n',
+     {headers:{'content-type':'text/event-stream'}});
+ };
+ context.inverseImage=new Blob(['image'],{type:'image/png'});
+ node('inputMode').value='images';node('inputMode').listeners.change();
+ node('processingPipeline').value='forward_v1';node('processingPipeline').listeners.change();
+ node('reviewHypotheses').checked=false;node('consent').checked=false;
+ node('platform').files=[new Blob(['{"platforms":[]}'],{type:'application/json'})];
+ vm.runInContext('images=[inverseImage,inverseImage]',context);
+ await vm.runInContext('submit(false)',context);
+ assert.equal(inverseRequests.length,1);assert.equal(inverseRequests[0].url,'/api/invert/stream');
+ assert.equal(inverseRequests[0].options.body.get('consent'),'false');
+ assert.equal(inverseRequests[0].options.body.get('review_model'),'false');
+ assert.equal(inverseRequests[0].options.body.get('renderer_profile'),'btr_gui_v1');
+ assert.match(node('bodySummary').textContent,/程序反演报告/);assert.match(node('completionSubtitle').textContent,/调用 0 次/);
+ assert.match(node('targetCountMetrics').textContent,/程序关联假设/);assert.equal(node('nodeList').children.length,9);
+ vm.runInContext('showModelResult({result_id:"budget-test",answer:"{}",pipeline:"forward_inverse_v1",optimization_status:"budget_limited",new_model_calls:0,trajectory_status:"position_estimate",trajectory_image:"/limited.png",warnings:["部分优化"],downloads:{"mirror_candidates.png":"/mirrors.png"}})',context);
+ assert.match(node('completionTitle').textContent,/部分优化候选/);
+ assert.equal(node('badge').textContent,'部分优化');
+ node('reviewHypotheses').checked=true;node('consent').checked=false;
+ await vm.runInContext('submit(false)',context);
+ assert.equal(inverseRequests.length,1);assert.match(node('status').textContent,/云端传输与费用确认/);
  console.log('PASS: streaming status, stop, bearing preview, mixed-coordinate rejection, file-only submission without images, mode switching');
 })().catch(e=>{console.error(e);process.exitCode=1});

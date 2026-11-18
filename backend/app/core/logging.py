@@ -6,8 +6,7 @@ import threading
 import time
 import uuid
 import logging
-
-from backend.app.core.config import model_settings
+import os
 
 
 class RunLogs:
@@ -29,8 +28,11 @@ class RunLogs:
 
     def add(self,key,level,message):
         message=str(message)
-        secret=model_settings().api_key
-        if secret:message=message.replace(secret,'[REDACTED]')
+        # Local numerical requests must not depend on valid cloud settings.
+        # Redact all supported credential sources without parsing model config.
+        for name in ('MODEL_API_KEY','DASHSCOPE_API_KEY','ANTHROPIC_API_KEY','ANTHROPIC_AUTH_TOKEN'):
+            secret=os.environ.get(name,'').strip()
+            if secret:message=message.replace(secret,'[REDACTED]')
         message=re.sub(r'sk-[A-Za-z0-9_-]{8,}','[REDACTED]',message)
         message=message.replace('\r',' ').replace('\n',' ')[:1200]
         with self.lock:

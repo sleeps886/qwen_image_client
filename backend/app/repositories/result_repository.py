@@ -7,12 +7,17 @@ import uuid
 
 from backend.app.core.exceptions import ResultNotFound,InvalidStoredResult
 
-RESULT_FILES=('answer.txt','response.json','request_meta.json','estimated_track.png','tracks.json',
+RESULT_FILES=('answer.txt','response.json','request_meta.json','estimated_track.png','mirror_candidates.png','tracks.json',
               'provider_reasoning.txt','stream_state.json','candidate_evidence.json','knowledge_sources.json',
               'agent_trace.json','quality_report.json','resolved_observations.json',
               'spatial_raw.json','tracking_report.json','reprojection_report.json','calibration_context.json',
               'tracklets.json','target_count_report.json','execution_report.json',
-              'model_observations.json','identity_report.json',
+              'model_observations.json','identity_report.json','measurement_report.json',
+              'inverse_fields.json','inverse_ridges.json','inverse_proposals.json','inverse_fit.json',
+              'inverse_selection.json','inverse_iterations.json','inverse_quality.json','inverse_profile_fit.json',
+              'hypothesis_review.json','hypothesis_review_answer.txt',
+              *(f'inverse_overlay_{i}.png' for i in range(2)),*(f'expected_btr_{i}.png' for i in range(2)),
+              *(f'gaussian_{i}.png' for i in range(8)),
               *(f'evidence_{i}.png' for i in range(8)),*(f'selected_{i}.png' for i in range(8)),
               *(f'reprojection_{i}.png' for i in range(8)))
 COMPARISON_FILES=('comparison_overlay.png','report.json','evaluation.json')

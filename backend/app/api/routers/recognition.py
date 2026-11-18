@@ -26,7 +26,7 @@ router=APIRouter(tags=["recognition"])
 
 def add_evidence_downloads(downloads,result_id,directory):
     for name in RESULT_FILES:
-        if name in ('candidate_evidence.json','knowledge_sources.json','agent_trace.json','quality_report.json','resolved_observations.json','spatial_raw.json','tracking_report.json','reprojection_report.json','calibration_context.json','tracklets.json','target_count_report.json','execution_report.json','model_observations.json','identity_report.json') or name.startswith(('evidence_','selected_','reprojection_')):
+        if name in ('candidate_evidence.json','knowledge_sources.json','agent_trace.json','quality_report.json','resolved_observations.json','spatial_raw.json','tracking_report.json','reprojection_report.json','calibration_context.json','tracklets.json','target_count_report.json','execution_report.json','model_observations.json','identity_report.json','measurement_report.json') or name.startswith(('evidence_','selected_','reprojection_','gaussian_')):
             if (Path(directory)/name).is_file():downloads[name]=f'/api/results/{result_id}/{name}'
 
 
@@ -40,6 +40,7 @@ def recognize_stream(
     consent:Annotated[bool,Form()]=False,
     platform:Annotated[UploadFile|None,File()]=None,
     input_mode:Annotated[str,Form()]='auto',
+    renderer_profile:Annotated[str,Form()]='none',
 ):
     rid=request.state.request_id
     files=files or []
@@ -49,7 +50,7 @@ def recognize_stream(
     try:
         settings=model_settings();endpoint(settings.base_url,settings.api_format)
         if not settings.api_key:raise ClientError('请在后端.env配置MODEL_API_KEY并重启')
-        mode,context,prompt,input_data=prepare_selected_input(files,platform,prompt,input_mode)
+        mode,context,prompt,input_data=prepare_selected_input(files,platform,prompt,input_mode,renderer_profile)
         UPLOADS.mkdir(parents=True,exist_ok=True)
         temporary=tempfile.TemporaryDirectory(prefix='stream_',dir=UPLOADS)
         paths=[];total=0
@@ -182,6 +183,7 @@ def recognize(
     dry_run: Annotated[bool,Form()]=False,
     platform: Annotated[UploadFile|None,File(description='图片模式为已知平台参数；数据模式为单份JSON/JSONL/JS目标数据')]=None,
     input_mode: Annotated[str,Form()]='auto',
+    renderer_profile:Annotated[str,Form()]='none',
 ):
     rid=request.state.request_id
     files=files or []
@@ -194,7 +196,7 @@ def recognize(
         model,base_url=settings.model,settings.base_url
         endpoint(base_url,settings.api_format)
         log('后端连接配置已加载；密钥状态：'+('已配置' if settings.api_key else '未配置')+'。')
-        mode,context,prompt,input_data=prepare_selected_input(files,platform,prompt,input_mode)
+        mode,context,prompt,input_data=prepare_selected_input(files,platform,prompt,input_mode,renderer_profile)
         if platform:log('已知平台JSON校验通过。' if mode=='images' else '单文件点位数据校验通过；不是声呐反演。')
         UPLOADS.mkdir(parents=True,exist_ok=True)
         with tempfile.TemporaryDirectory(prefix='upload_',dir=UPLOADS) as temp:

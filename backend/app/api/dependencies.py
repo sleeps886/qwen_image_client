@@ -9,12 +9,12 @@ def get_recognition_workflow()->RecognitionWorkflow:
     return RecognitionWorkflow()
 
 
-def prepare_selected_input(files,platform,prompt,input_mode):
+def prepare_selected_input(files,platform,prompt,input_mode,renderer_profile='none'):
     """Translate multipart uploads to plain bytes before entering the service."""
     limit=MAX_DATA_BYTES if input_mode=='data' or not files else 100000
     raw=platform.file.read(limit+1) if platform is not None else None
     filename=(platform.filename or 'data.json') if platform is not None else 'data.json'
-    return prepare_input(len(files),raw,prompt,input_mode,filename)
+    return prepare_input(len(files),raw,prompt,input_mode,filename,renderer_profile=renderer_profile)
 
 
 async def server_config_only(request:Request):

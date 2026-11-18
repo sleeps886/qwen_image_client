@@ -14,9 +14,11 @@ class ModelGateway(Protocol):
 
 
 class ConfiguredModelGateway:
+    def __init__(self,timeout_override=None):self.timeout_override=timeout_override
+
     def invoke(self,images,prompt,settings,output_root,mode):
         return client.send_images(images,prompt,settings.model,settings.base_url,settings.api_key,
-            output_dir=output_root,timeout=model_timeout(),api_format=settings.api_format,
+            output_dir=output_root,timeout=self.timeout_override if self.timeout_override is not None else model_timeout(),api_format=settings.api_format,
             **({'allow_text_only':True} if mode=='data' else {}))
 
     async def stream(self,images,prompt,settings,output_root,mode):

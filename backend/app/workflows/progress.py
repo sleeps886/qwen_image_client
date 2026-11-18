@@ -68,6 +68,9 @@ def observed(name,node,emit=None):
         if update.get('failure'):status='failed'
         elif state.get('failure'):status='skipped'
         detail=summary({**state,**update})
+        if name=='pixel_candidates' and update.get('measurement_report'):
+            r=update['measurement_report']
+            detail+=f"；实验高斯测量{sum(im['fitted_groups'] for im in r['images'])}组，未替换观测"
         if name=='tracklet_linking' and 'tracklets' in update:
             detail=f"连接出{len(update['tracklets'])}条持续亮带片段；双侧走向复核{len(update.get('crossing_report',{}).get('events',[]))}处X交叉延续假设；两阵不相加算目标"
         elif name=='association_context' and 'prompt' in update:
