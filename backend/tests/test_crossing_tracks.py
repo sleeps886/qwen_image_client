@@ -1,12 +1,12 @@
 import copy
 import unittest
 
-from backend.app.services.crossing_tracks import crossing_continuity
-from backend.app.services.identity_association import reconcile_identities
-from backend.app.services.target_count import link_tracklets
+from backend.app.services.association.crossing_tracks import crossing_continuity
+from backend.app.services.association.identity_association import reconcile_identities
+from backend.app.services.association.target_count import link_tracklets
 from backend.app.agents.sonar_agent import build_association_prompt
-from backend.app.workflows.evidence_graph import link,assemble
-from backend.app.workflows.progress import observed
+from backend.app.agents.sonar_agent import link,assemble
+from backend.app.agents.sonar_agent import observed
 
 
 def crossing_fixture():

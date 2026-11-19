@@ -2,7 +2,7 @@ import copy
 import json
 import unittest
 
-from backend.app.services.sonar_evidence import resolve_pairs
+from backend.app.services.measurements.sonar_evidence import resolve_pairs
 from backend.tests.test_target_count import count_fixture
 
 

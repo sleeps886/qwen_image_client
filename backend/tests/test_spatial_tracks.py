@@ -5,9 +5,9 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from backend.app.services.spatial_tracks import array_position,solve_spatial
-from backend.app.services.input_service import prepare_input
-from backend.app.services.trajectory import render_tracks
+from backend.app.services.localization.spatial_tracks import array_position,solve_spatial
+from backend.app.services.inputs.input_service import prepare_input
+from backend.app.services.rendering.trajectory import render_tracks
 
 
 def spatial_fixture():

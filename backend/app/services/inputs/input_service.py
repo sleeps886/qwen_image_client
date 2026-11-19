@@ -3,10 +3,11 @@ import json
 from backend.app.core.constants import MAX_IMAGES
 from backend.app.core.prompts import TRAJECTORY_PROMPT as DEFAULT_PROMPT
 from backend.app.core.prompts import IMAGE_CALIBRATION_PROMPT, SPATIAL_OBSERVATION_PROMPT
-from backend.app.services.trajectory import platform_context
-from backend.app.services.data_input import DATA_PROMPT,prepare_data
+from backend.app.services.inputs.platform_input import platform_context
+from backend.app.services.inputs.data_input import DATA_PROMPT,prepare_data
 from backend.app.models.recognition import PreparedInput
 
+#输入总入口。区分图片识别、单文件绘图，校验输入组合，组织平台参数和模型提示词
 def prepare_input(image_count, platform_raw, prompt, input_mode, filename='data.json',*,renderer_profile='none'):
     if renderer_profile not in ('none','btr_gui_v1'):raise ValueError('不支持的渲染配置')
     if input_mode not in ('auto','images','data'):

@@ -17,7 +17,9 @@
 **尚未通过完整精度验收**：三个同批次工具样本的数值身份数为3/3/4，标签均有4个目标；镜像和部分公里级偏差仍存在。旧流程保留默认，不自动推广。详情见[完整链路实现与实测](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/docs/forward-inverse-completion.md)。案例知识库仍是独立设计，不属于已上线功能。
 
 项目已按前后端划分：`backend/`存放Python后端、Agent、工作流、脚本和测试，`frontend/`存放HTML、JS、CSS。
+`services/`已按输入、任务、测量、关联、定位、质量、绘图、评测和知识规则分包，见[Service职责与目录](docs/service-packages.md)。
 目录见[前后端架构说明](docs/architecture.md)，Agent位于`backend/app/agents/sonar_agent.py`。
+完整Agent及LangGraph编排集中在`backend/app/agents/sonar_agent.py`，不再单独保留`workflows/`；右侧整栏为Agent运行面板。
 当前图片空间流程运行LangGraph证据图；单文件绘图保持直接执行。暂不支持跨请求断点恢复。
 
 ```powershell
@@ -32,6 +34,19 @@ python -m backend.app.main
 - OpenAPI契约：http://127.0.0.1:8870/openapi.json
 
 默认只绑定127.0.0.1，不要直接暴露到公网。旧命令`python app.py`作为薄兼容入口保留。
+监听地址、端口和可信主机在项目根目录`.env`中配置，修改后重启后端：
+
+```dotenv
+APP_HOST=127.0.0.1
+APP_PORT=8870
+APP_ALLOWED_HOSTS=127.0.0.1,localhost,[::1]
+```
+
+`backend/app/core/config.py`统一读取，其他模块使用`from backend.app.core.config import settings`，
+通过`settings.host`、`settings.port`、`settings.allowed_hosts`访问。进程环境变量优先于`.env`。
+`APP_HOST`是监听地址；`APP_ALLOWED_HOSTS`是请求Host白名单（逗号分隔，不含协议或端口、不支持通配符），
+两者不是一回事。修改为局域网访问时需明确加入访问IP/域名；同源POST限制仍保留，未增加公网认证。
+
 旧桌面版改用`python -m backend.app.legacy.desktop_app`；图片CLI改用`python -m backend.scripts.send_images`。
 
 ## 网页操作

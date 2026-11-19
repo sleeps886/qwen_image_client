@@ -6,9 +6,9 @@ from unittest.mock import patch
 
 import numpy as np
 
-from backend.app.services.continuous_tracks import estimate_continuous,reproject_tracks,to_xy,tracking_options
-from backend.app.services.spatial_tracks import array_position,solve_spatial
-from backend.app.workflows.tracking_graph import build_tracking_graph
+from backend.app.services.localization.continuous_tracks import estimate_continuous,reproject_tracks,to_xy,tracking_options
+from backend.app.services.localization.spatial_tracks import array_position,solve_spatial
+from backend.app.agents.sonar_agent import build_tracking_graph
 
 
 def tracking_fixture(noise=0.,count=20):

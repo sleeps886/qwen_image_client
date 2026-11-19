@@ -1,8 +1,8 @@
 import copy
 import unittest
 
-from backend.app.services.identity_association import reconcile_identities
-from backend.app.services.target_count import link_tracklets,audit_count,count_hypothesis,finalize_count
+from backend.app.services.association.identity_association import reconcile_identities
+from backend.app.services.association.target_count import link_tracklets,audit_count,count_hypothesis,finalize_count
 from backend.tests.test_target_count import count_fixture
 
 

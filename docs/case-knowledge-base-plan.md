@@ -24,7 +24,7 @@
 | 现有模块 | 已有职责 | 拟接入变化 |
 |---|---|---|
 | `Knowledge`规则服务 | 内置审核规则检索 | 保留，与案例库分开管理 |
-| `RecognitionWorkflow` | 包围模型网关的识别与后处理 | 模型调用前增加案例分流 |
+| `SonarAgent` | 包围模型网关的识别与后处理 | 模型调用前增加案例分流 |
 | `EvidenceState`／预处理图 | 当前图片候选、亮带、关联上下文 | 增加检索上下文，不替换当前观测 |
 | `SonarAssociationAgent` | 当前候选选择、模型调用 | 加入明确标记的案例参考 |
 | `ModelGateway` | 同步和SSE外部模型边界 | 保持精确路径零调用、普通任务最多一次调用 |
@@ -33,9 +33,9 @@
 
 关键现有代码：
 
-- [规则检索](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/knowledge.py)
+- [规则检索](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/knowledge/rules.py)
 - [识别入口](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/api/routers/recognition.py)
-- [证据工作流](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/workflows/evidence_graph.py)
+- [证据工作流](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)
 - [声呐Agent](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)
 - [结果仓储](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/repositories/result_repository.py)
 

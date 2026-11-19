@@ -32,12 +32,12 @@
 
 主要改造对象：
 
-- [候选提取](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/sonar_evidence.py)
-- [目标数量与亮带连接](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/target_count.py)
-- [交叉连续性](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/crossing_tracks.py)
-- [身份关联](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/identity_association.py)
-- [空间求解](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/spatial_tracks.py)
-- [连续估计](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/continuous_tracks.py)
+- [候选提取](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/measurements/sonar_evidence.py)
+- [目标数量与亮带连接](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/association/target_count.py)
+- [交叉连续性](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/association/crossing_tracks.py)
+- [身份关联](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/association/identity_association.py)
+- [空间求解](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/localization/spatial_tracks.py)
+- [连续估计](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/localization/continuous_tracks.py)
 - [Agent](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)
 
 ## 3. 统一正向观测模型

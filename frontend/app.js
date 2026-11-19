@@ -7,12 +7,32 @@ let defaultImagePrompt='';
 const nodeDefinitions=[['knowledge_retrieval','知识规则检索'],['pixel_candidates','绘图区与候选提取'],['tracklet_linking','亮带连续性分析'],['count_hypothesis','数量线索判定'],['association_context','关联上下文组装'],['model_association','模型清单与双阵关联'],['pair_validation','配对归属与同步校验'],['count_audit','数量与覆盖复核'],['identity_reconciliation','跨时段身份与串线复核'],['spatial_localization','双阵空间定位'],['continuous_trajectory_estimation','连续轨迹估计'],['reprojection_quality_check','重投影质检'],['result_summary','数量与定位汇总'],['render','空间候选绘图']];
 let executionNodes=new Map();
 const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与交叉假设'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
+let agentResultMetadata=null;
+function updateAgentOverview(){
+  const entries=[...executionNodes.entries()];
+  const inverse=entries.some(([id])=>id.startsWith('inverse_'))||(!entries.length&&forwardMode());
+  const definitions=inverse?inverseNodeDefinitions:nodeDefinitions;
+  const isData=agentResultMetadata?.input_mode==='data'||(!entries.length&&dataMode());
+  const finished=entries.filter(([,event])=>['completed','failed','skipped','stopped'].includes(event.status)).length;
+  const current=[...entries].reverse().find(([,event])=>event.status==='running')||[...entries].reverse().find(([,event])=>event.status==='failed'||event.status==='stopped');
+  const label=current?definitions.find(([id])=>id===current[0])?.[1]:null;
+  $('agentModeName').textContent=isData?'单文件绘图':inverse?'完整本地反演':'模型关联';
+  const state=$('resultPanel').dataset.state;
+  $('agentCurrentNode').textContent=state==='error'?'任务未完成 · 查看日志':label||(state==='completed'?'任务已结束 · 结果待核验':state==='preflight'?'本地预检已结束':entries.length?'等待后续事件':'尚未收到节点事件');
+  $('agentNodeCount').textContent=isData?finished+' 个记录 · 直接绘图':finished+' / '+definitions.length;
+  $('agentNodeProgress').max=isData?Math.max(entries.length,1):definitions.length;
+  $('agentNodeProgress').value=finished;
+  const model=executionNodes.get(inverse?'inverse_review':'model_association');
+  const calls=agentResultMetadata?.new_model_calls;
+  $('agentModelState').textContent=Number.isInteger(calls)?calls+' 次（本次记录）':model?({running:'调用中',completed:'调用已结束',failed:'调用失败',skipped:'未调用 · 已跳过',stopped:'本地接收已停止'}[model.status]||'等待事件'):inverse?'本地计算 · 复核可选':'尚未收到调用记录';
+}
 function drawNodes(){
   $('nodePanel').hidden=!executionNodes.size;$('nodeList').replaceChildren();
   const statusNames={pending:'待执行',running:'执行中',completed:'已执行',failed:'失败',skipped:'已跳过',stopped:'已停止'};
   const definitions=[...executionNodes.keys()].some(id=>id.startsWith('inverse_'))?inverseNodeDefinitions:nodeDefinitions;
   $('nodeHelp').textContent=definitions===inverseNodeDefinitions?'完整正向反演由本地程序执行；只有明确申请的“可选模型假设复核”可能调用一次云端模型，跳过表示没有调用。节点完成和BTR一致性不代表独立位置精度合格。':'仅“模型清单与双阵关联”调用大模型；其余为内置规则、启发式或数值程序。记录执行不等于验证正确，重投影不是独立准确性评测；未自动付费重试。';
   for(const [id,label] of definitions){const event=executionNodes.get(id)||{status:'pending'},row=document.createElement('li'),title=document.createElement('strong'),state=document.createElement('span'),time=document.createElement('small'),detail=document.createElement('p');row.className='node-row '+event.status;title.textContent=label;state.textContent=statusNames[event.status]||'未知';time.textContent=Number.isFinite(event.elapsed_ms)?(event.elapsed_ms<10?(event.elapsed_ms===0?'＜1毫秒（旧记录取整）':event.elapsed_ms.toFixed(3)+'毫秒'):(event.elapsed_ms/1000).toFixed(2)+'秒'):'';detail.textContent=(['model_association','inverse_review'].includes(id)?'[模型网关] ':['knowledge_retrieval'].includes(id)?'[内置规则] ':['pixel_candidates','tracklet_linking','count_hypothesis','identity_reconciliation'].includes(id)?'[本地启发式] ':'[本地程序] ')+(event.summary||'');row.append(title,state,time,detail);$('nodeList').append(row);}
+  updateAgentOverview();
 }
 function receiveNode(event){
   if(![...nodeDefinitions,...inverseNodeDefinitions].some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
@@ -138,14 +158,18 @@ function renderUsage(usage){
   }
 }
 function resetResultPresentation(){
+  agentResultMetadata=null;
   executionNodes=new Map();drawNodes();showTargetCount(null);
   $('evidenceSection').hidden=true;$('evidenceImages').replaceChildren();
   $('resultPanel').dataset.state='running';$('completionSummary').hidden=true;
+  $('agentConsoleBody').scrollTop=0;
+  $('resultPanel').scrollIntoView?.({behavior:'smooth',block:'start'});
   $('bodyDetails').open=true;$('bodySummary').textContent='模型正文 · 实时输出';
   $('providerReasoningSection').open=false;
   $('warningsDetails').hidden=true;$('warningsDetails').open=false;
   $('warningCount').textContent='';$('downloadDetails').hidden=true;$('downloadDetails').open=false;
   $('debugDownloads').replaceChildren();$('usageRaw').textContent='';$('usageDetails').hidden=true;
+  updateAgentOverview();
 }
 function showEvidence(data){
   $('evidenceImages').replaceChildren();
@@ -190,6 +214,7 @@ $('evidenceDialog').addEventListener('keydown',event=>{
   else if(event.key==='0'){event.preventDefault();fitEvidenceImage();}
 });
 function showModelResult(data,{fromHistory=false}={}){
+  agentResultMetadata=data;
   showExecution(data.node_events);showTargetCount(data.target_count);
   showEvidence(data);
   const forwardResult=data.pipeline==='forward_inverse_v1';
@@ -256,7 +281,9 @@ function showModelResult(data,{fromHistory=false}={}){
   $('runLogsDetails').open=false;$('logPhase').textContent=fromHistory?'历史结果，未发起新请求':'已结束';
   $('stopStream').hidden=true;$('stopStream').disabled=true;
   if(fromHistory){$('providerReasoningSection').hidden=true;$('providerReasoning').textContent='';}
+  updateAgentOverview();
   $('completionSummary').scrollIntoView?.({behavior:'smooth',block:'nearest'});
+  if(fromHistory)$('resultPanel').scrollIntoView?.({behavior:'smooth',block:'start'});
 }
 async function readModelStream(response){
   if(!response.body)throw new Error('浏览器未提供流式读取能力');
@@ -363,11 +390,11 @@ async function submit(dryRun){
       if(response.status===404 && !dryRun)message='当前后端尚未加载流式接口，请停止旧服务并重新启动。';
       throw new Error(message);
     }
-    if(dryRun){const data=await response.json();showEvidence(data);showExecution(data.node_events);showTargetCount(data.target_count);status(data.message,'ok');$('answer').textContent=JSON.stringify(data.input_data||data.images,null,2);$('resultPanel').dataset.state='preflight';$('bodySummary').textContent='本地预检结果';$('logPhase').textContent='预检完成';for(const [name,url] of Object.entries(data.downloads||{})){const a=document.createElement('a');a.href=url;a.textContent='下载 '+name;$('downloads').append(a);}}
+    if(dryRun){const data=await response.json();showEvidence(data);showExecution(data.node_events);showTargetCount(data.target_count);status(data.message,'ok');$('answer').textContent=JSON.stringify(data.input_data||data.images,null,2);$('resultPanel').dataset.state='preflight';updateAgentOverview();$('bodySummary').textContent='本地预检结果';$('logPhase').textContent='预检完成';for(const [name,url] of Object.entries(data.downloads||{})){const a=document.createElement('a');a.href=url;a.textContent='下载 '+name;$('downloads').append(a);}}
     else if(!(response.headers.get('content-type')||'').includes('text/event-stream'))throw new Error('本地服务未返回SSE，请确认已重启新版后端。');
     else await readModelStream(response);
   }catch(error){
-    $('resultPanel').dataset.state='error';$('runLogsDetails').open=true;$('logPhase').textContent='请求未完成';
+    $('resultPanel').dataset.state='error';updateAgentOverview();$('runLogsDetails').open=true;$('logPhase').textContent='请求未完成';
     if(error.name==='AbortError'){
       for(const [id,event] of executionNodes)if(event.status==='running')executionNodes.set(id,{...event,status:'stopped',summary:'本地接收已停止，不保证上游停止计费'});drawNodes();
       logLine('[浏览器] 用户已停止本地接收，保留已收到的文本。');

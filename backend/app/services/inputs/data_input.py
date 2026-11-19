@@ -3,8 +3,9 @@ import json
 import math
 import re
 
-from backend.app.services.trajectory import parse_tracks, platform_context
-from backend.app.services.meta_tracks import reconstruct_meta
+from backend.app.services.inputs.track_validation import parse_tracks
+from backend.app.services.inputs.platform_input import platform_context
+from backend.app.services.inputs.meta_tracks import reconstruct_meta
 
 MAX_DATA_BYTES = 1024 * 1024
 from backend.app.core.prompts import DATA_PROMPT

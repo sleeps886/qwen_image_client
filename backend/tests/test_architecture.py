@@ -11,14 +11,14 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from backend.app.main import create_app
-from backend.app.api.dependencies import get_recognition_workflow
+from backend.app.api.dependencies import get_sonar_agent
 from backend.app.api.routers import recognition
 from backend.app.core.paths import PROJECT_ROOT,STATIC_DIR,OUTPUTS_DIR,UPLOADS_DIR
 from backend.app.core.exceptions import ResultNotFound
 from backend.app.models.model_settings import ModelSettings
 from backend.app.repositories.result_repository import ResultRepository
-from backend.app.services.input_service import prepare_input
-from backend.app.workflows.recognition import RecognitionWorkflow
+from backend.app.services.inputs.input_service import prepare_input
+from backend.app.agents.sonar_agent import SonarAgent
 from backend.tests.test_meta_tracks import meta_fixture
 
 
@@ -46,6 +46,7 @@ class ArchitectureTests(unittest.TestCase):
         self.assertTrue((STATIC_DIR/'index.html').is_file())
         self.assertTrue((PROJECT_ROOT/'启动工具.cmd').is_file())
         self.assertTrue((PROJECT_ROOT/'backend/app/agents/sonar_agent.py').is_file())
+        self.assertFalse((PROJECT_ROOT/'backend/app/workflows').exists())
         self.assertFalse((PROJECT_ROOT/'app').is_dir())
         self.assertFalse((PROJECT_ROOT/'backend/app/static').exists())
         self.assertEqual((PROJECT_ROOT/'requirements.txt').read_text(encoding='utf-8').splitlines()[-1],'-r backend/requirements.txt')
@@ -55,11 +56,37 @@ class ArchitectureTests(unittest.TestCase):
         self.assertTrue(callable(launcher.main))
 
     def test_services_and_nodes_do_not_depend_on_fastapi(self):
-        for folder in ('services','workflows','repositories','models'):
-            for path in (PROJECT_ROOT/'backend/app'/folder).glob('*.py'):
+        for folder in ('services','agents','repositories','models'):
+            for path in (PROJECT_ROOT/'backend/app'/folder).rglob('*.py'):
                 for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
                     if isinstance(node,ast.ImportFrom):
                         self.assertFalse((node.module or '').startswith(('fastapi','starlette')),str(path))
+
+    def test_services_are_grouped_by_responsibility(self):
+        root=PROJECT_ROOT/'backend/app/services'
+        expected={'inputs','jobs','measurements','association','localization',
+                  'quality','rendering','evaluation','knowledge'}
+        packages={path.name for path in root.iterdir() if path.is_dir() and (path/'__init__.py').is_file()}
+        self.assertEqual(packages,expected)
+        self.assertEqual({path.name for path in root.glob('*.py')},{'__init__.py'})
+
+    def test_input_validation_does_not_depend_on_rendering_or_localization(self):
+        root=PROJECT_ROOT/'backend/app/services/inputs'
+        for path in root.glob('*.py'):
+            for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
+                if isinstance(node,ast.ImportFrom):
+                    self.assertFalse((node.module or '').startswith((
+                        'backend.app.services.rendering','backend.app.services.localization',
+                        'matplotlib','backend.app.api')),str(path))
+
+    def test_platform_and_track_validation_are_not_defined_in_renderer(self):
+        root=PROJECT_ROOT/'backend/app/services'
+        def functions(path):
+            return {node.name for node in ast.parse(path.read_text(encoding='utf-8')).body
+                    if isinstance(node,ast.FunctionDef)}
+        self.assertEqual(functions(root/'inputs/platform_input.py'),{'platform_context'})
+        self.assertEqual(functions(root/'inputs/track_validation.py'),{'parse_tracks'})
+        self.assertEqual(functions(root/'rendering/trajectory.py'),{'render_tracks','render_document'})
 
     def test_workflow_nodes_can_run_without_http_or_credentials_in_state(self):
         calls=[]
@@ -67,7 +94,7 @@ class ArchitectureTests(unittest.TestCase):
             def invoke(self,images,prompt,settings,output_root,mode):
                 calls.append((images,prompt,mode))
                 return {'answer':'{}','output_dir':str(output_root),'usage':None}
-        workflow=RecognitionWorkflow(gateway=FakeGateway(),renderer=lambda answer,directory,context:{'tracks':[]})
+        workflow=SonarAgent(gateway=FakeGateway(),renderer=lambda answer,directory,context:{'tracks':[]})
         settings=ModelSettings('mock-model','https://invalid.test','fake-private-key')
         state=workflow.input_state([Path('example.png')],'test','images')
         self.assertNotIn('fake-private-key',json.dumps(state))
@@ -106,7 +133,7 @@ class ArchitectureTests(unittest.TestCase):
     def test_fastapi_workflow_dependency_is_replaceable_and_preflight_never_invokes(self):
         class NoModelWorkflow:
             def invoke(self,*args,**kwargs):raise AssertionError('dry-run called a model')
-        application=create_app();application.dependency_overrides[get_recognition_workflow]=NoModelWorkflow
+        application=create_app();application.dependency_overrides[get_sonar_agent]=NoModelWorkflow
         with tempfile.TemporaryDirectory(dir=PROJECT_ROOT/'backend/tests') as folder,patch.object(recognition,'UPLOADS',Path(folder)),TestClient(application,base_url='http://127.0.0.1') as api:
             response=api.post('/api/recognize',data={'dry_run':'true','input_mode':'data'},
                 files={'platform':('meta.json',json.dumps(meta_fixture()).encode(),'application/json')})
@@ -121,6 +148,6 @@ class WorkflowStreamingTests(unittest.IsolatedAsyncioTestCase):
                 yield {'event':'delta','text':'test'}
                 await asyncio.sleep(0)
                 yield {'event':'model_complete','result':{'answer':'test'}}
-        workflow=RecognitionWorkflow(gateway=FakeGateway())
+        workflow=SonarAgent(gateway=FakeGateway())
         events=[event async for event in workflow.stream([],'test',ModelSettings('mock','unused','fake'),PROJECT_ROOT/'work','data')]
         self.assertEqual([e['event'] for e in events],['delta','model_complete'])

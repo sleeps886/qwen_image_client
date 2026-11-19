@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from fastapi.responses import FileResponse
+from backend.app.core.exceptions import NotFoundError
 from backend.app.core.paths import PROJECT_ROOT as ROOT, STATIC_DIR
 from backend.app.core.config import model_settings, model_timeout
 from backend.app.infrastructure.llm.client import DEFAULT_PROMPT, MAX_IMAGES, MAX_FILE_BYTES, MAX_TOTAL_BYTES
-from backend.app.services.data_input import DATA_PROMPT,MAX_DATA_BYTES
+from backend.app.services.inputs.data_input import DATA_PROMPT,MAX_DATA_BYTES
 from backend.app.core.prompts import SPATIAL_OBSERVATION_PROMPT
 from urllib.parse import urlsplit
 
@@ -16,7 +17,7 @@ def page():return FileResponse(STATIC_DIR/'index.html')
 
 @router.get('/assets/{filename}',include_in_schema=False)
 def asset(filename:str):
-    if filename not in ('app.js','style.css'):raise HTTPException(404,'文件不存在')
+    if filename not in ('app.js','style.css'):raise NotFoundError('文件不存在')
     return FileResponse(STATIC_DIR/filename)
 
 

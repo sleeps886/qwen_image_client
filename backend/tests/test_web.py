@@ -89,7 +89,7 @@ class WebTests(unittest.TestCase):
 
     def test_semantic_single_file_preflight_and_model_render(self):
         from backend.tests.test_data_input import semantic_fixture
-        from backend.app.services.data_input import prepare_data
+        from backend.app.services.inputs.data_input import prepare_data
         raw=json.dumps(semantic_fixture()).encode();_,answer,_=prepare_data(raw)
         file={'platform':('semantic.json',raw,'application/json')}
         with patch.object(llm_client,'send_images') as send:
@@ -107,7 +107,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(self.api.get('/api/history/'+rid).json()['input_data']['plot_kind'],'endpoints')
 
     def test_anthropic_stream_end_to_end_with_mock_transport(self):
-        from backend.app.services.data_input import prepare_data
+        from backend.app.services.inputs.data_input import prepare_data
         raw=(PROJECT_ROOT/'examples/target.json').read_bytes();_,answer,_=prepare_data(raw)
         real_client=httpx.AsyncClient
         calls=[]
@@ -137,7 +137,7 @@ class WebTests(unittest.TestCase):
         self.assertTrue(list((self.root/'outputs').glob('*/estimated_track.png')))
 
     def test_meta_preflight_and_both_render_routes_use_full_samples(self):
-        from backend.app.services.data_input import prepare_data
+        from backend.app.services.inputs.data_input import prepare_data
         from backend.tests.test_meta_tracks import meta_fixture
         raw=json.dumps(meta_fixture()).encode();_,answer,_=prepare_data(raw,'meta.json')
         file={'platform':('meta.json',raw,'application/json')}
@@ -167,7 +167,7 @@ class WebTests(unittest.TestCase):
 
     def test_single_file_sync_calls_text_model_and_renders(self):
         from backend.tests.test_trajectory import CONTEXT
-        from backend.app.services.data_input import prepare_data
+        from backend.app.services.inputs.data_input import prepare_data
         raw=json.dumps(CONTEXT).encode();_,answer,_=prepare_data(raw)
         rid='20261116_120000_1234dddd';root=self.root/'outputs'/rid;root.mkdir(parents=True)
         (root/'answer.txt').write_text(answer,encoding='utf-8')
@@ -185,7 +185,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(self.api.get('/api/history/'+rid).json()['input_mode'],'data')
 
     def test_single_file_stream_js_renders_without_images(self):
-        from backend.app.services.data_input import prepare_data
+        from backend.app.services.inputs.data_input import prepare_data
         raw=(PROJECT_ROOT/'examples/target.json').read_bytes();_,answer,_=prepare_data(raw)
         rid='20261116_120000_1111dddd';root=self.root/'outputs'/rid;root.mkdir(parents=True)
         async def fake_stream(paths,prompt,*args,**kwargs):

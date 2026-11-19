@@ -1,11 +1,16 @@
-# Agent 独立模块
+# 完整声呐 Agent
 
-`sonar_agent.py`集中放置实际声呐观测/关联Agent的提示词、输出契约和同步/流式调用入口。
+`sonar_agent.py` 是完整执行文件，包含任务状态、节点执行事件、提示词契约、
+LangGraph 图定义、原模型关联和完整本地反演；不再单独保留 `app/workflows`。
 
-- `build_association_prompt(...)`：注入已有规则、候选点、亮带片段与数量线索，不改原契约。
-- `SonarAssociationAgent.invoke_state/stream_state`：通过注入的ModelGateway发起原有单次图片调用，不重试，不保存密钥。
-- `backend/app/workflows`继续负责LangGraph图、节点状态、日志、调用顺序与结果落盘。
-- `backend/app/services`继续负责确定性图像处理、数量/身份复核、定位及绘图，它们不是大模型Agent。
-- `backend/app/infrastructure/llm`继续负责HTTP协议、认证与SSE解析；单文件模式不走声呐Agent。
+- `SonarAgent`：像素证据预检 → 单次模型关联 → 配对/身份复核 → 空间定位 → 绘图。
+- `ForwardInverseAgent`：本地九节点反演 → 可选单次云端假设复核 → 质检与绘图。
+- `SonarAssociationAgent`：内部的单次模型观测/关联调用适配器，不是独立重试循环。
+- `hypothesis_review.py`：可选模型复核的提示词和严格输出校验辅助，不负责流程编排。
 
-这次仅拆分代码职责，不新增Agent数量，不改变模型、识别算法、调用次数或费用策略，不代表识别准确度改善。
+算法仍按职责保留在 `services`，HTTP 请求与错误映射保留在 `api`。
+此整理没有新增模型调用、自动重试、持久化断点续跑或真值输入。
+
+前端右栏为整体 Agent 运行面板：运行策略、当前阶段、已返回节点、模型调用，
+以及节点记录、目标假设、轨迹、证据、原文和日志。状态来自实际事件/结果元数据；
+节点完成和重投影一致不代表精度通过。

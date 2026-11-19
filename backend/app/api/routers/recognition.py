@@ -6,19 +6,20 @@ from pathlib import Path
 import re
 import tempfile
 from typing import Annotated
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 from starlette.concurrency import run_in_threadpool
+from backend.app.core.exceptions import ApplicationError,BusyError,InputError,LocalStorageError,ModelServiceError,ModelTimeoutError,PayloadTooLargeError
 from backend.app.core.paths import OUTPUTS_DIR as OUTPUTS, UPLOADS_DIR as UPLOADS
 from backend.app.core.runtime import SLOTS
 from backend.app.core.logging import LOGS
 from backend.app.core.config import model_settings,model_timeout,model_request_options
 from backend.app.infrastructure.llm.client import ClientError, DEFAULT_PROMPT, MAX_FILE_BYTES, MAX_TOTAL_BYTES, build_request, endpoint, UpstreamTimeout, UpstreamConnectionError
 import threading
-from backend.app.api.dependencies import server_config_only,prepare_selected_input,get_recognition_workflow
+from backend.app.api.dependencies import server_config_only,prepare_selected_input,get_sonar_agent
 from backend.app.schemas.recognition import RecognitionResponse
-from backend.app.workflows.recognition import RecognitionWorkflow
+from backend.app.agents.sonar_agent import SonarAgent
 from backend.app.repositories.result_repository import RESULT_FILES,ResultRepository
 
 router=APIRouter(tags=["recognition"])
@@ -34,7 +35,7 @@ def add_evidence_downloads(downloads,result_id,directory):
     response_class=StreamingResponse,responses={200:{'content':{'text/event-stream':{'schema':{'type':'string'}}}}})
 def recognize_stream(
     request:Request,
-    workflow:Annotated[RecognitionWorkflow,Depends(get_recognition_workflow)],
+    workflow:Annotated[SonarAgent,Depends(get_sonar_agent)],
     files:Annotated[list[UploadFile]|None,File()]=None,
     prompt:Annotated[str,Form(max_length=50000)]=DEFAULT_PROMPT,
     consent:Annotated[bool,Form()]=False,
@@ -44,8 +45,8 @@ def recognize_stream(
 ):
     rid=request.state.request_id
     files=files or []
-    if not consent:raise HTTPException(400,'请确认云端传输与费用')
-    if not SLOTS.acquire(blocking=False):raise HTTPException(429,'已有两个请求处理中，请勿重复提交')
+    if not consent:raise InputError('请确认云端传输与费用')
+    if not SLOTS.acquire(blocking=False):raise BusyError('已有两个请求处理中，请勿重复提交')
     temporary=None;settings=None
     try:
         settings=model_settings();endpoint(settings.base_url,settings.api_format)
@@ -61,19 +62,19 @@ def recognize_stream(
             with path.open('wb') as out:
                 while chunk:=upload.file.read(256*1024):
                     size+=len(chunk);total+=len(chunk)
-                    if size>MAX_FILE_BYTES or total>MAX_TOTAL_BYTES:raise HTTPException(413,'图片大小超限')
+                    if size>MAX_FILE_BYTES or total>MAX_TOTAL_BYTES:raise PayloadTooLargeError('图片大小超限')
                     out.write(chunk)
             paths.append(path)
         build_request(paths,prompt,settings.model,allow_text_only=mode=='data',api_format=settings.api_format)
     except Exception as exc:
         if temporary:temporary.cleanup()
         SLOTS.release()
-        if isinstance(exc,HTTPException):raise
+        if isinstance(exc,ApplicationError) and not isinstance(exc,ClientError):raise
         if isinstance(exc,(ValueError,ClientError)):
             detail='数据文件JSON格式错误' if isinstance(exc,(json.JSONDecodeError,UnicodeDecodeError)) else str(exc)
             key=getattr(settings,'api_key','')
-            raise HTTPException(400,detail.replace(key,'[REDACTED]') if key else detail) from None
-        raise HTTPException(500,'无法准备本地上传文件') from None
+            raise InputError(detail.replace(key,'[REDACTED]') if key else detail) from None
+        raise LocalStorageError('无法准备本地上传文件') from None
     finally:
         for upload in files:upload.file.close()
         if platform:platform.file.close()
@@ -176,7 +177,7 @@ def recognize_stream(
           dependencies=[Depends(server_config_only)])
 def recognize(
     request:Request,
-    workflow:Annotated[RecognitionWorkflow,Depends(get_recognition_workflow)],
+    workflow:Annotated[SonarAgent,Depends(get_sonar_agent)],
     files: Annotated[list[UploadFile]|None,File(description='图片模式：PNG/JPEG/WebP，最多8张；数据模式无需图片')]=None,
     prompt: Annotated[str,Form(max_length=50000)]=DEFAULT_PROMPT,
     consent: Annotated[bool,Form(description='真实发送需明确同意')]=False,
@@ -189,8 +190,8 @@ def recognize(
     files=files or []
     log=lambda message,level='INFO':LOGS.add(rid,level,message)
     log('上传已接收，开始校验图片与任务参数。')
-    if not dry_run and not consent:raise HTTPException(400,'真实发送前请确认云端传输与费用。')
-    if not SLOTS.acquire(blocking=False):raise HTTPException(429,'已有两个请求处理中，请稍后再试；不要重复提交。')
+    if not dry_run and not consent:raise InputError('真实发送前请确认云端传输与费用。')
+    if not SLOTS.acquire(blocking=False):raise BusyError('已有两个请求处理中，请稍后再试；不要重复提交。')
     try:
         settings=model_settings()
         model,base_url=settings.model,settings.base_url
@@ -210,7 +211,7 @@ def recognize(
                     while chunk:=upload.file.read(256*1024):
                         size+=len(chunk);total+=len(chunk)
                         if size>MAX_FILE_BYTES or total>MAX_TOTAL_BYTES:
-                            raise HTTPException(413,'单图不得超过10MiB，合计不得超过20MiB。')
+                            raise PayloadTooLargeError('单图不得超过10MiB，合计不得超过20MiB。')
                         out.write(chunk)
                 paths.append(path)
             _,metadata=build_request(paths,prompt,model,allow_text_only=mode=='data',api_format=settings.api_format)
@@ -267,16 +268,16 @@ def recognize(
                     **getattr(workflow,'result_metadata',lambda:{})()}
     except (UpstreamTimeout,UpstreamConnectionError) as exc:
         log(str(exc),'ERROR')
-        raise HTTPException(504 if isinstance(exc,UpstreamTimeout) else 502,str(exc)) from None
+        raise (ModelTimeoutError if isinstance(exc,UpstreamTimeout) else ModelServiceError)(str(exc)) from None
     except (ClientError,ValueError) as exc:
         message=str(exc)
         key=model_settings().api_key
         if key:message=message.replace(key,'[REDACTED]')
         log(message,'ERROR')
-        raise HTTPException(400,message) from None
+        raise InputError(message) from None
     except OSError:
         log('本地文件操作失败，请检查权限与磁盘。','ERROR')
-        raise HTTPException(500,'本地文件操作失败，请检查权限与磁盘；不要盲目重复发送。') from None
+        raise LocalStorageError('本地文件操作失败，请检查权限与磁盘；不要盲目重复发送。') from None
     finally:
         SLOTS.release()
         for upload in files:upload.file.close()

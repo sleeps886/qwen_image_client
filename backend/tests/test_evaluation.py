@@ -1,7 +1,7 @@
 import json
 import unittest
 import numpy as np
-from backend.app.services.evaluation import assignment,evaluate
+from backend.app.services.evaluation.evaluation import assignment,evaluate
 
 
 def prediction():

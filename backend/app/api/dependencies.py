@@ -1,12 +1,13 @@
-from fastapi import Request, HTTPException
-from backend.app.services.input_service import prepare_input
-from backend.app.services.data_input import MAX_DATA_BYTES
-from backend.app.workflows.recognition import RecognitionWorkflow
+from fastapi import Request
+from backend.app.core.exceptions import InputError
+from backend.app.services.inputs.input_service import prepare_input
+from backend.app.services.inputs.data_input import MAX_DATA_BYTES
+from backend.app.agents.sonar_agent import SonarAgent
 
 
-def get_recognition_workflow()->RecognitionWorkflow:
-    """Override this dependency to install a future graph-backed executor."""
-    return RecognitionWorkflow()
+def get_sonar_agent()->SonarAgent:
+    """Create the complete sonar Agent; tests may override this dependency."""
+    return SonarAgent()
 
 
 def prepare_selected_input(files,platform,prompt,input_mode,renderer_profile='none'):
@@ -20,6 +21,6 @@ def prepare_selected_input(files,platform,prompt,input_mode,renderer_profile='no
 async def server_config_only(request:Request):
     form=await request.form()
     if any(key in form for key in ('model','base_url','api_key','x_dashscope_key','api_format','auth_mode')) or 'x-dashscope-key' in request.headers:
-        raise HTTPException(400,'模型连接配置已迁移至服务端.env，不接受请求覆盖。')
+        raise InputError('模型连接配置已迁移至服务端.env，不接受请求覆盖。')
 
 

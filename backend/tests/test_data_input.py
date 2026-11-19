@@ -4,8 +4,9 @@ import tempfile
 import unittest
 
 from backend.app.infrastructure.llm.client import build_request, ClientError
-from backend.app.services.data_input import prepare_data, read_document, MAX_DATA_BYTES
-from backend.app.services.trajectory import parse_tracks, render_tracks
+from backend.app.services.inputs.data_input import prepare_data, read_document, MAX_DATA_BYTES
+from backend.app.services.inputs.track_validation import parse_tracks
+from backend.app.services.rendering.trajectory import render_tracks
 from backend.tests.test_trajectory import CONTEXT
 
 

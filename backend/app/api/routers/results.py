@@ -1,6 +1,7 @@
-from fastapi import APIRouter,HTTPException
+from fastapi import APIRouter
 import json
 from fastapi.responses import FileResponse
+from backend.app.core.exceptions import InputError,NotFoundError
 from backend.app.core.paths import OUTPUTS_DIR as OUTPUTS
 from backend.app.core.exceptions import ResultNotFound,InvalidStoredResult
 from backend.app.repositories.result_repository import ResultRepository
@@ -11,7 +12,7 @@ router=APIRouter(tags=['results'])
 @router.get('/api/results/{result_id}/{filename}',summary='下载已保存的调用结果')
 def result_file(result_id:str,filename:str):
     try:path=ResultRepository(OUTPUTS).file(result_id,filename)
-    except ResultNotFound as exc:raise HTTPException(404,str(exc)) from None
+    except ResultNotFound as exc:raise NotFoundError(str(exc)) from None
     return FileResponse(path,filename=filename,content_disposition_type='inline' if filename.endswith('.png') else 'attachment')
 
 
@@ -36,12 +37,12 @@ def historical_result(result_id:str):
             'trajectory_status':'bearing_time' if doc['coordinate_system']=='bearing_time' else 'position_estimate',
             'trajectory_image':f'/api/results/{result_id}/estimated_track.png','warnings':doc.get('warnings',[]),
             'downloads':{n:f'/api/results/{result_id}/{n}' for n in stored['files']},'usage':None if metadata.get('offline_reprocessed') else stored.get('usage'),**metadata}
-    except ResultNotFound as exc:raise HTTPException(404,str(exc)) from None
-    except (InvalidStoredResult,KeyError,TypeError):raise HTTPException(400,'本地结果格式无效') from None
+    except ResultNotFound as exc:raise NotFoundError(str(exc)) from None
+    except (InvalidStoredResult,KeyError,TypeError):raise InputError('本地结果格式无效') from None
 
 
 @router.get('/api/comparisons/{result_id}/{comparison_id}/{filename}')
 def comparison_file(result_id:str,comparison_id:str,filename:str):
     try:path=ResultRepository(OUTPUTS).comparison_file(result_id,comparison_id,filename)
-    except ResultNotFound as exc:raise HTTPException(404,str(exc)) from None
+    except ResultNotFound as exc:raise NotFoundError(str(exc)) from None
     return FileResponse(path,filename=filename,content_disposition_type='inline' if filename.endswith('.png') else 'attachment')

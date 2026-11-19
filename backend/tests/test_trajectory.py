@@ -5,7 +5,9 @@ import unittest
 import copy
 from unittest.mock import patch
 
-from backend.app.services.trajectory import parse_tracks,platform_context,render_tracks,render_document
+from backend.app.services.inputs.track_validation import parse_tracks
+from backend.app.services.inputs.platform_input import platform_context
+from backend.app.services.rendering.trajectory import render_tracks,render_document
 
 CONTEXT={'T_MAX':600,'platforms':[{'name':'A','start_ll':[30,122],
     'heading_deg':30,'speed_kn':0,'hull_m':[0,0],'tow_m':[-150,0]}]}

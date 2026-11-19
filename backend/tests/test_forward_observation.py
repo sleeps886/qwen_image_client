@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from backend.app.services.forward_observation import GeoReference,array_location,fold_relative,initial_bearing,observe
+from backend.app.services.localization.forward_observation import GeoReference,array_location,fold_relative,initial_bearing,observe
 
 
 class ForwardObservationTests(unittest.TestCase):

@@ -7,9 +7,9 @@ import sys
 from backend.app.core.paths import OUTPUTS_DIR
 from backend.app.core.exceptions import ResultNotFound
 from backend.app.repositories.result_repository import ResultRepository
-from backend.app.services.target_count import link_tracklets,count_hypothesis
-from backend.app.workflows.recognition import RecognitionWorkflow
-from backend.app.workflows.progress import LABELS
+from backend.app.services.association.target_count import link_tracklets,count_hypothesis
+from backend.app.agents.sonar_agent import SonarAgent
+from backend.app.agents.sonar_agent import LABELS
 
 
 def reprocess(source_id,root=OUTPUTS_DIR):
@@ -35,7 +35,7 @@ def reprocess(source_id,root=OUTPUTS_DIR):
     for name,path in sources.items():shutil.copy2(path,run/name)
     fragments=link_tracklets(evidence);hypothesis=count_hypothesis(fragments)
     (run/'tracklets.json').write_text(json.dumps({'tracklets':fragments,'count_hypothesis':hypothesis},ensure_ascii=False,indent=2),encoding='utf-8')
-    workflow=RecognitionWorkflow()
+    workflow=SonarAgent()
     workflow.evidence_state={'context':context,'evidence':evidence,'rules':rules,'tracklets':fragments,
                              'count_hypothesis':hypothesis,'trace':['offline_reprocess_existing_model_answer']}
     for node in ('knowledge_retrieval','pixel_candidates','tracklet_linking','count_hypothesis','association_context','model_association'):

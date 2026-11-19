@@ -3,7 +3,7 @@
 ```text
 backend/
   backend/app/
-    agents/          # sonar_agent.py：独立Agent模块
+    agents/          # sonar_agent.py：完整Agent和LangGraph编排
     api/             # FastAPI路由和依赖
     core/            # 配置、路径、错误、中间件
     infrastructure/  # 模型网关与协议
@@ -11,7 +11,6 @@ backend/
     repositories/
     schemas/
     services/        # 数值/图像处理与本地复核
-    workflows/       # LangGraph与执行记录
     legacy/
     main.py
   scripts/           # 显式CLI与无费用本地重处理

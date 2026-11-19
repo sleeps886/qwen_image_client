@@ -3,9 +3,9 @@ import unittest
 
 import numpy as np
 
-from backend.app.services.batch_inverse import fit_pair,evaluate_path
-from backend.app.services.profile_inverse import refine_profiles
-from backend.app.services.inversion_control import InversionControl,InversionStopped
+from backend.app.services.localization.batch_inverse import fit_pair,evaluate_path
+from backend.app.services.localization.profile_inverse import refine_profiles
+from backend.app.services.jobs.inversion_control import InversionControl,InversionStopped
 from backend.tests.test_full_inverse import inverse_fixture
 
 

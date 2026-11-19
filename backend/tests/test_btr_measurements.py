@@ -8,10 +8,10 @@ import unittest
 import numpy as np
 from PIL import Image
 
-from backend.app.services.btr_measurements import PALETTE,PROFILE,decode_relative,fit_profile,measure_pack
-from backend.app.services.sonar_evidence import extract_candidates
-from backend.app.services.input_service import prepare_input
-from backend.app.workflows.recognition import RecognitionWorkflow
+from backend.app.services.measurements.btr_measurements import PALETTE,PROFILE,decode_relative,fit_profile,measure_pack
+from backend.app.services.measurements.sonar_evidence import extract_candidates
+from backend.app.services.inputs.input_service import prepare_input
+from backend.app.agents.sonar_agent import SonarAgent
 from backend.tests.test_evidence_agent import sonar_fixture
 from unittest.mock import patch
 
@@ -76,7 +76,7 @@ class MeasurementWorkflowTests(unittest.TestCase):
         def forbidden(*args,**kwargs):raise AssertionError('No cloud call allowed')
         class Gateway:
             invoke=forbidden
-        workflow=RecognitionWorkflow(gateway=Gateway())
+        workflow=SonarAgent(gateway=Gateway())
         old=[extract_candidates(p,i,self.context) for i,p in enumerate(self.paths)]
         frozen=copy.deepcopy(old)
         prompt=workflow.prepare(self.paths,'test','images',self.context)

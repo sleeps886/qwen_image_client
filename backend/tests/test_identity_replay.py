@@ -8,7 +8,7 @@ from backend.scripts.reprocess_identity import reprocess
 from backend.app.core.exceptions import ResultNotFound
 from backend.app.models.model_settings import ModelSettings
 from backend.app.repositories.result_repository import ResultRepository
-from backend.app.workflows.recognition import RecognitionWorkflow
+from backend.app.agents.sonar_agent import SonarAgent
 from backend.tests.test_evidence_agent import sonar_fixture,candidate_answer
 
 
@@ -18,7 +18,7 @@ class IdentityReplayTests(unittest.TestCase):
             root=Path(temp);context,images=sonar_fixture();context['require_spatial']=True
             paths=[root/'btr_A_hull.png',root/'btr_A_tow.png']
             for path,data in zip(paths,images):path.write_bytes(data)
-            workflow=RecognitionWorkflow();prompt=workflow.prepare(paths,'test','images',context)
+            workflow=SonarAgent();prompt=workflow.prepare(paths,'test','images',context)
             repo=ResultRepository(root/'outputs');source=repo.create_run()
             workflow.persist_evidence(source);answer=candidate_answer(prompt)
             repo.save(source,'answer.txt',answer)

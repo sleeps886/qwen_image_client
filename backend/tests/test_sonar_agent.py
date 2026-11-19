@@ -5,7 +5,7 @@ import unittest
 
 from backend.app.agents.sonar_agent import SonarAssociationAgent,build_association_prompt
 from backend.app.models.model_settings import ModelSettings
-from backend.app.workflows.evidence_graph import assemble
+from backend.app.agents.sonar_agent import assemble
 
 
 class SonarAgentTests(unittest.TestCase):
@@ -34,11 +34,15 @@ class SonarAgentTests(unittest.TestCase):
         with self.assertRaises(ValueError):agent.invoke_state(state|{'mode':'data'},settings,Path('unused'))
         self.assertEqual(len(calls),1)
 
-    def test_agent_module_does_not_depend_on_http_or_workflow_engine(self):
+    def test_complete_agent_owns_graph_but_does_not_depend_on_http(self):
         path=Path(__file__).parents[1]/'app/agents/sonar_agent.py'
-        for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
+        tree=ast.parse(path.read_text(encoding='utf-8'))
+        self.assertIn('SonarAgent',{node.name for node in tree.body if isinstance(node,ast.ClassDef)})
+        self.assertIn('ForwardInverseAgent',{node.name for node in tree.body if isinstance(node,ast.ClassDef)})
+        self.assertTrue(any(isinstance(node,ast.ImportFrom) and node.module=='langgraph.graph' for node in tree.body))
+        for node in ast.walk(tree):
             if isinstance(node,ast.ImportFrom):
-                self.assertFalse((node.module or '').startswith(('fastapi','starlette','langgraph','backend.app.workflows')))
+                self.assertFalse((node.module or '').startswith(('fastapi','starlette','backend.app.workflows')))
 
 
 class SonarAgentStreamTests(unittest.IsolatedAsyncioTestCase):

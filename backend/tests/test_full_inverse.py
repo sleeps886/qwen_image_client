@@ -14,13 +14,13 @@ import numpy as np
 from PIL import Image
 
 from backend.app.agents.hypothesis_review import validate_review
-from backend.app.services.forward_observation import GeoReference,observe
-from backend.app.services.btr_measurements import PALETTE
-from backend.app.services.btr_field import extract_fields
-from backend.app.services.inversion_control import InversionControl,InversionStopped
-from backend.app.services.ridge_hypotheses import nearest_unfolded,ridge_hypotheses,propose_pairs
-from backend.app.services.batch_inverse import fit_pair,evaluate_path,select_exclusive
-from backend.app.workflows.forward_inverse import ForwardInverseWorkflow,INVERSE_NODES
+from backend.app.services.localization.forward_observation import GeoReference,observe
+from backend.app.services.measurements.btr_measurements import PALETTE
+from backend.app.services.measurements.btr_field import extract_fields
+from backend.app.services.jobs.inversion_control import InversionControl,InversionStopped
+from backend.app.services.association.ridge_hypotheses import nearest_unfolded,ridge_hypotheses,propose_pairs
+from backend.app.services.localization.batch_inverse import fit_pair,evaluate_path,select_exclusive
+from backend.app.agents.sonar_agent import ForwardInverseAgent,INVERSE_NODES
 
 
 def inverse_fixture(count=33,kind='cv'):
@@ -96,7 +96,7 @@ class BatchInverseTests(unittest.TestCase):
         candidates=[{'id':name,'variants':[{'parameters':[0]*4}]} for name in ('A','B')]
         supports={'A':a,'B':b}
         evidence={'images':[{'candidates':[{'id':i} for i in set(a+b)]}]}
-        with patch('backend.app.services.batch_inverse.support_for',side_effect=lambda c,*args:(supports[c['id']],.05)):
+        with patch('backend.app.services.localization.batch_inverse.support_for',side_effect=lambda c,*args:(supports[c['id']],.05)):
             result=select_exclusive({'candidates':candidates},evidence,{},InversionControl())
         self.assertEqual(len(result['selected']),2)
         self.assertEqual(set(result['shared_crossing_ids_excluded']),{'p0','p1'})
@@ -133,7 +133,7 @@ class FullInverseWorkflowTests(unittest.TestCase):
 
     def test_local_end_to_end_exports_forward_checks_without_model(self):
         synthetic_images(self.context,self.paths)
-        workflow=ForwardInverseWorkflow();result=workflow.run(self.paths,self.context,self.root/'outputs')
+        workflow=ForwardInverseAgent();result=workflow.run(self.paths,self.context,self.root/'outputs')
         self.assertEqual(result['new_model_calls'],0)
         self.assertEqual(result['pipeline'],'forward_inverse_v1')
         statuses={e['node']:e['status'] for e in result['node_events']}
@@ -158,7 +158,7 @@ class FullInverseWorkflowTests(unittest.TestCase):
     def test_optional_review_is_one_call_and_failure_keeps_numeric_result(self):
         synthetic_images(self.context,self.paths);calls=[]
         def reviewer(*args):calls.append(args);return {'answer':'not a JSON response'}
-        workflow=ForwardInverseWorkflow(reviewer=reviewer)
+        workflow=ForwardInverseAgent(reviewer=reviewer)
         result=workflow.run(self.paths,self.context,self.root/'review-output')
         self.assertEqual(len(calls),1);self.assertEqual(result['new_model_calls'],1)
         self.assertEqual(result['hypothesis_review']['status'],'failed')
@@ -166,18 +166,18 @@ class FullInverseWorkflowTests(unittest.TestCase):
 
     def test_invalid_image_or_undeclared_profile_never_creates_fake_trajectory(self):
         synthetic_images(self.context,self.paths)
-        workflow=ForwardInverseWorkflow()
+        workflow=ForwardInverseAgent()
         with self.assertRaises(ValueError):workflow.run(self.paths,self.context|{'renderer_profile':'none'},self.root/'bad-output')
         self.assertFalse((workflow.directory/'estimated_track.png').exists())
         self.assertTrue((workflow.directory/'execution_report.json').exists())
 
     def test_refinement_deadline_keeps_candidates_and_runs_quality_and_render(self):
-        from backend.app.workflows import forward_inverse
+        from backend.app.agents import sonar_agent as forward_inverse
         synthetic_images(self.context,self.paths)
         original=forward_inverse.refine_profiles
         def limited(*args,**kwargs):return original(*args,**kwargs,phase_seconds=0)
         with patch.object(forward_inverse,'refine_profiles',side_effect=limited):
-            workflow=ForwardInverseWorkflow()
+            workflow=ForwardInverseAgent()
             result=workflow.run(self.paths,self.context,self.root/'limited-output')
         self.assertEqual(result['optimization_status'],'budget_limited')
         self.assertIn('estimated_track.png',result['downloads'])
@@ -189,7 +189,7 @@ class FullInverseWorkflowTests(unittest.TestCase):
 
     def test_crossing_pipeline_uses_no_expected_target_count(self):
         synthetic_images(self.context,self.paths,crossing=True)
-        workflow=ForwardInverseWorkflow();result=workflow.run(self.paths,self.context,self.root/'cross-output')
+        workflow=ForwardInverseAgent();result=workflow.run(self.paths,self.context,self.root/'cross-output')
         self.assertGreaterEqual(result['target_count']['localized_target_count'],2)
         selection=json.loads((workflow.directory/'inverse_selection.json').read_text(encoding='utf-8'))
         all_ids=[i for c in selection['selected'] for i in c['supported_measurement_ids']]
@@ -250,7 +250,7 @@ class InverseApiTests(unittest.TestCase):
                 released.wait(3)
                 return {'ok':True}
         async def scenario():
-            with patch.object(inversion,'prepare_job',return_value=job),patch.object(inversion,'ForwardInverseWorkflow',Worker),patch.object(inversion.LOGS,'finish') as finish:
+            with patch.object(inversion,'prepare_job',return_value=job),patch.object(inversion,'ForwardInverseAgent',Worker),patch.object(inversion.LOGS,'finish') as finish:
                 response=inversion.invert_stream(SimpleNamespace(state=SimpleNamespace(request_id='test-cancel')),[],None)
                 iterator=response.body_iterator
                 await anext(iterator);await anext(iterator)

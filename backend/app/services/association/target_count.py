@@ -7,7 +7,7 @@ import json
 import re
 import numpy as np
 from scipy.optimize import linear_sum_assignment
-from backend.app.services.model_json import model_object
+from backend.app.services.inputs.model_json import model_object
 
 
 def link_tracklets(evidence):

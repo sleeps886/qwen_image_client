@@ -1,5 +1,8 @@
-"""Server-side model settings. .env is resolved relative to this project."""
+"""Server and model settings. .env is resolved relative to this project."""
 import os
+import re
+from dataclasses import dataclass
+from ipaddress import ip_address
 from backend.app.core.paths import PROJECT_ROOT
 from backend.app.models.model_settings import ModelSettings
 
@@ -13,6 +16,46 @@ DEFAULT_MODEL='qwen3-vl-plus'
 def load_environment(path=None):
     # Never override deployment-provided values or expand credential contents.
     load_dotenv(path or ROOT/'.env',override=False,interpolate=False,encoding='utf-8-sig')
+
+
+def _host(value, name):
+    """Accept hostnames/IPs, not URLs, ports or an unrestricted wildcard."""
+    try:
+        address=ip_address(value[1:-1] if value.startswith('[') and value.endswith(']') else value)
+        if '[' in value or ']' in value:
+            if address.version!=6 or value!=f'[{address}]':
+                raise ValueError('Invalid bracketed IP')
+        return value
+    except ValueError:
+        pass
+    if not value or len(value)>253 or not all(
+            re.fullmatch(r'[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?',label)
+            for label in value.split('.')):
+        raise ValueError(f'{name}应为主机名或IP地址，不含协议、端口或通配符')
+    return value
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Immutable startup configuration shared through the settings import."""
+    host: str = '127.0.0.1'
+    port: int = 8870
+    allowed_hosts: tuple[str, ...] = ('127.0.0.1','localhost','[::1]')
+
+    @classmethod
+    def from_environment(cls):
+        host=_host(os.environ.get('APP_HOST','127.0.0.1').strip(),'APP_HOST')
+        try:
+            port=int(os.environ.get('APP_PORT','8870'))
+        except ValueError:
+            raise ValueError('APP_PORT应为1～65535的整数') from None
+        if not 1<=port<=65535:
+            raise ValueError('APP_PORT应为1～65535的整数')
+        hosts=tuple(dict.fromkeys(item.strip() for item in
+            os.environ.get('APP_ALLOWED_HOSTS','127.0.0.1,localhost,[::1]').split(',')))
+        for item in hosts:
+            _host(item,'APP_ALLOWED_HOSTS')
+        return cls(host=host,port=port,allowed_hosts=hosts)
 
 
 
@@ -74,3 +117,4 @@ def model_request_options(api_format='openai'):
 
 
 load_environment()
+settings=Settings.from_environment()

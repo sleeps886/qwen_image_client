@@ -4,9 +4,9 @@ from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw
 
-from backend.app.services.batch_inverse import evaluate_path,predicted_bearings,reference_for
-from backend.app.services.forward_observation import array_location
-from backend.app.services.btr_measurements import PALETTE
+from backend.app.services.localization.batch_inverse import evaluate_path,predicted_bearings,reference_for
+from backend.app.services.localization.forward_observation import array_location
+from backend.app.services.measurements.btr_measurements import PALETTE
 
 
 def check_and_preview(selection,evidence,context,paths,directory,control):

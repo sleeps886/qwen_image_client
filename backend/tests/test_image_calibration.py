@@ -1,8 +1,9 @@
 import json
 import unittest
 
-from backend.app.services.input_service import prepare_input
-from backend.app.services.trajectory import parse_tracks, platform_context
+from backend.app.services.inputs.input_service import prepare_input
+from backend.app.services.inputs.track_validation import parse_tracks
+from backend.app.services.inputs.platform_input import platform_context
 from backend.tests.test_trajectory import CONTEXT, result
 
 

@@ -8,8 +8,8 @@ import math
 import numpy as np
 from scipy.optimize import Bounds,LinearConstraint,least_squares,milp
 
-from backend.app.services.forward_observation import GeoReference,array_location
-from backend.app.services.spatial_tracks import intersection
+from backend.app.services.localization.forward_observation import GeoReference,array_location
+from backend.app.services.localization.spatial_tracks import intersection
 
 
 def reference_for(context):
@@ -193,7 +193,7 @@ def fit_proposals(proposals,evidence,context,control):
 
 
 def refine_associations(fitted,evidence,context,control,iterations=1):
-    from backend.app.services.ridge_hypotheses import nearest_unfolded
+    from backend.app.services.association.ridge_hypotheses import nearest_unfolded
     lookup={p['id']:(im,p) for im in evidence['images'] for p in im['candidates']}
     current=fitted;reports=[]
     for iteration in range(iterations):

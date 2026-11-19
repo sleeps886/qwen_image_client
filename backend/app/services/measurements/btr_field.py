@@ -8,8 +8,8 @@ from PIL import Image
 from scipy.ndimage import gaussian_filter1d
 from scipy.signal import find_peaks
 
-from backend.app.services.btr_measurements import PROFILE,decode_relative,fit_profile
-from backend.app.services.sonar_evidence import runs
+from backend.app.services.measurements.btr_measurements import PROFILE,decode_relative,fit_profile
+from backend.app.services.measurements.sonar_evidence import runs
 
 
 def image_geometry(path,index,context):

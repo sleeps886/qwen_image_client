@@ -21,7 +21,7 @@
             <p>支持声呐图片识别，或单份数据文件绘图。模型整理轨迹点，程序校验并生成图片。</p>
         </section>
         <div class="layout">
-            <div>
+            <div class="agent-inputs">
                 <section class="card">
                     <div class="heading">
                         <h2><b>01</b> 输入来源</h2><span id="fileCount">0 / 8 张</span>
@@ -50,12 +50,23 @@
                     <p class="note">预检仅上传到本地服务，不调用云端模型。请求不自动重试；超时不代表未计费。</p>
                 </section>
             </div>
-            <section class="card result" id="resultPanel" data-state="idle">
+            <section class="card result agent-console" id="resultPanel" data-state="idle" aria-labelledby="agentPanelTitle">
+                <div class="agent-console-head">
                 <div class="heading">
-                    <h2><b>03</b> 返回结果</h2><div class="result-controls"><span id="badge" class="badge">等待输入</span><button id="stopStream" class="stop-generation" type="button" hidden disabled title="停止本地接收；不保证中转站停止计费">■ 停止生成</button></div>
+                    <h2 id="agentPanelTitle"><b>03</b> Agent 运行面板</h2><div class="result-controls"><span id="badge" class="badge">等待输入</span><button id="stopStream" class="stop-generation" type="button" hidden disabled title="停止本地接收；不保证中转站停止计费">■ 停止生成</button></div>
                 </div>
+                <p class="agent-console-intro">从证据提取到轨迹输出，查看 Agent 的实际执行过程。节点完成不代表定位准确。</p>
+                <div class="agent-overview" aria-label="Agent实时状态">
+                    <div><small>运行策略</small><strong id="agentModeName">等待任务</strong></div>
+                    <div><small>当前阶段</small><strong id="agentCurrentNode">尚未执行</strong></div>
+                    <div><small>已返回节点</small><strong id="agentNodeCount">0 / 0</strong></div>
+                    <div><small>模型调用</small><strong id="agentModelState">尚未调用</strong></div>
+                </div>
+                <progress id="agentNodeProgress" max="1" value="0" aria-label="已有结束事件的节点比例，不表示准确率"></progress>
+                </div>
+                <div id="agentConsoleBody" class="agent-console-body" tabindex="0" role="region" aria-label="Agent执行过程、轨迹与诊断">
                 <div id="status" role="status" aria-live="polite">选择图片，或切换到单文件绘图；可先预检，再发送。</div>
-                <section id="nodePanel" class="node-panel" hidden aria-labelledby="nodePanelTitle"><h3 id="nodePanelTitle">程序／模型流程执行记录</h3><p id="nodeHelp" class="note">执行记录不代表准确率验证。</p><ol id="nodeList" aria-live="polite"></ol></section>
+                <section id="nodePanel" class="node-panel" hidden aria-labelledby="nodePanelTitle"><h3 id="nodePanelTitle">Agent 节点执行轨迹</h3><p id="nodeHelp" class="note">执行记录不代表准确率验证。</p><ol id="nodeList" aria-live="polite"></ol></section>
                 <section id="targetCountPanel" class="target-count-panel" hidden aria-labelledby="targetCountTitle"><h3 id="targetCountTitle">数量判定与定位覆盖</h3><div id="targetCountMetrics" class="usage-grid"></div><p id="targetCountExplanation" class="note"></p></section>
                 <section id="completionSummary" class="completion-summary" tabindex="-1" hidden role="status" aria-live="polite" aria-labelledby="completionTitle">
                     <div class="completion-icon" id="completionIcon" aria-hidden="true">✓</div><div><h3 id="completionTitle">轨迹图已生成</h3><p id="completionSubtitle"></p><small id="completionMeta"></small></div>
@@ -77,6 +88,7 @@
                 </details><details class="boundary"><summary>当前功能边界</summary>
                     <p>图片模式由大模型提取同目标同步双阵方位，程序结合platform.json求解空间候选轨迹并生成PNG；镜像分支不是多个目标。定位不足时明确报告，不以方位—时间图替代。单文件模式保持原有数据绘图；不会自动读取真值或执行JS、模型代码。</p><code>POST /api/recognize</code>
                 </details>
+                </div>
             </section>
         </div>
         <section class="card comparison" aria-labelledby="comparisonHeading">

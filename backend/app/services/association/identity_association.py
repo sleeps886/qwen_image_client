@@ -5,8 +5,8 @@ Unique two-sided X continuations share identity; blended observations stay exclu
 """
 import copy
 
-from backend.app.services.target_count import link_tracklets
-from backend.app.services.crossing_tracks import crossing_continuity
+from backend.app.services.association.target_count import link_tracklets
+from backend.app.services.association.crossing_tracks import crossing_continuity
 
 
 def reconcile_identities(observations,evidence):

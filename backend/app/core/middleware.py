@@ -58,10 +58,3 @@ async def local_origin(request:Request,call_next):
     if request.url.path not in ('/docs','/redoc','/docs/oauth2-redirect'):
         response.headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'"
     return response
-
-
-async def invalid_request(request,exc):
-    # Do not echo submitted field values, which might contain credentials.
-    return JSONResponse(status_code=422,content={'detail':'字段格式错误，请检查文件、确认选项及表单。'})
-
-

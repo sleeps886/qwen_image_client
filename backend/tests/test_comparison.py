@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from PIL import Image,ImageDraw
 
-from backend.app.services.comparison import compare_images,normalized_outline
+from backend.app.services.evaluation.comparison import compare_images,normalized_outline
 
 
 def drawing(kind):

@@ -11,10 +11,10 @@ import numpy as np
 from backend.app.core.exceptions import ClientError
 from backend.app.models.model_settings import ModelSettings
 from backend.app.repositories.result_repository import ResultRepository
-from backend.app.services.knowledge import retrieve_rules
-from backend.app.services.sonar_evidence import extract_candidates,resolve_pairs
-from backend.app.workflows.evidence_graph import build_preflight
-from backend.app.workflows.recognition import RecognitionWorkflow
+from backend.app.services.knowledge.rules import retrieve_rules
+from backend.app.services.measurements.sonar_evidence import extract_candidates,resolve_pairs
+from backend.app.agents.sonar_agent import build_preflight
+from backend.app.agents.sonar_agent import SonarAgent
 
 
 def sonar_fixture():
@@ -147,7 +147,7 @@ class EvidenceAgentTests(unittest.TestCase):
             def invoke(inner,images,prompt,settings,output_root,mode):
                 calls.append(prompt);run=ResultRepository(output_root).create_run()
                 return {'answer':candidate_answer(prompt),'output_dir':str(run),'usage':{}}
-        workflow=RecognitionWorkflow(gateway=FakeGateway())
+        workflow=SonarAgent(gateway=FakeGateway())
         result=workflow.invoke(self.paths,'test',ModelSettings('fake','unused','private-do-not-store'),self.root/'out','images',self.context)
         doc=workflow.render(result['answer'],result['output_dir'],self.context)
         self.assertEqual(len(doc['warnings']),len(set(doc['warnings'])))
@@ -166,7 +166,7 @@ class EvidenceAgentTests(unittest.TestCase):
         self.assertNotIn('private-do-not-store',json.dumps(workflow.evidence_state))
 
     def test_failed_validation_retains_evidence_and_no_retry(self):
-        workflow=RecognitionWorkflow();workflow.prepare(self.paths,'test','images',self.context)
+        workflow=SonarAgent();workflow.prepare(self.paths,'test','images',self.context)
         run=ResultRepository(self.root/'out').create_run();workflow.persist_evidence(run)
         with self.assertRaises(ValueError):workflow.render('{}',run,self.context)
         report=json.loads((run/'quality_report.json').read_text(encoding='utf-8'))
@@ -188,7 +188,7 @@ class EvidenceStreamingTests(unittest.IsolatedAsyncioTestCase):
                     answer=candidate_answer(prompt)
                     yield {'event':'delta','text':answer}
                     yield {'event':'model_complete','result':{'answer':answer,'output_dir':str(run),'usage':{}}}
-            workflow=RecognitionWorkflow(gateway=FakeGateway())
+            workflow=SonarAgent(gateway=FakeGateway())
             events=[e async for e in workflow.stream(paths,'test',ModelSettings('fake','unused','secret'),root/'out','images',context)]
             self.assertEqual(events[0]['phase'],'evidence');self.assertEqual(len(calls),1)
             result=events[-1]['result']

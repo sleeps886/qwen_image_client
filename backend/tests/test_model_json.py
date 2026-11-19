@@ -1,6 +1,6 @@
 import json
 import unittest
-from backend.app.services.model_json import model_object
+from backend.app.services.inputs.model_json import model_object
 
 
 class ModelJsonTests(unittest.TestCase):

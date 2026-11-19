@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image,ImageDraw
-from backend.app.services.model_json import model_object
+from backend.app.services.inputs.model_json import model_object
 
 
 def runs(mask):
