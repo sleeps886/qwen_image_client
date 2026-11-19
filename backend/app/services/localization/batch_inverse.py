@@ -299,13 +299,17 @@ def build_document(selection,evidence,context,control):
                         'supported_measurements':len(c['supported_measurement_ids']),
                         'mean_angle_error_deg':c['mean_supported_error_deg'],
                         'validation_rmse_deg':c['variants'][0]['validation_rmse_deg'],
-                        'position_information_weak':c['variants'][0]['position_information_weak']})
+                        'position_information_weak':c['variants'][0]['position_information_weak'],
+                        'range_sensitivity':c['variants'][0].get('range_sensitivity')})
     if not output:raise ValueError('正向反演没有足够的可绘制候选；未补造轨迹')
+    from backend.app.services.localization.identity_continuity import consolidate_identity_tracks
+    output,continuity=consolidate_identity_tracks(output,context)
     return {'coordinate_system':'lon_lat','position_observable':True,'plot_kind':'spatial_candidates','tracks':output,
+            'identity_continuity':continuity,
             'result_source':'numeric_forward_inverse','localization':{'method':'batch_folded_spherical_bearings_v1','unique_solution':False},
             'inverse_quality':quality,'warnings':[
                 '程序以整段折叠方位拟合空间运动，位置为模型估计，不是独立测量或真值。',
                 '镜像及等价运动解释可能同时存在，候选身份数不是已确认目标数。',
-                '只在有观测支持的时刻与范围绘制；未恢复不可见全时段，也未自动选择唯一镜像。',
+                '同一双阵身份假设、镜像和整段运动模型的片段归并为连续轨迹；缺测区间为模型估计，原观测段单独保留，不增加观测覆盖率，未恢复不可见全时段。',
                 '轨迹关联、运动模型、门限与误差代理仍需独立样本验证；回投通过不证明真实位置正确。',
                 f'仍有{len(selection["uncovered_ids"])}个测量未被选中解释，可能包括弱目标、杂波和交叉歧义。']}

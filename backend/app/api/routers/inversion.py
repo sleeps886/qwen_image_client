@@ -13,7 +13,7 @@ from backend.app.core.exceptions import InverseProcessingError
 from backend.app.services.jobs.inverse_jobs import prepare_inverse_job
 from backend.app.core.runtime import SLOTS
 from backend.app.core.logging import LOGS
-from backend.app.agents.sonar_agent import ForwardInverseAgent
+from backend.app.agents.forward_inverse_agent import ForwardInverseAgent
 from backend.app.api.dependencies import server_config_only
 
 router=APIRouter(tags=['forward-inversion'],dependencies=[Depends(server_config_only)])

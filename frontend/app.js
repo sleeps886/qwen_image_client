@@ -272,6 +272,7 @@ function showModelResult(data,{fromHistory=false}={}){
     $('completionSubtitle').textContent='完整剖面、全局归属、运动模型及BTR回投已执行；新增模型调用 '+(data.new_model_calls||0)+' 次。镜像和身份仍可能有歧义。';
     $('badge').textContent='待核验';$('trackCaption').textContent=data.downloads?.['mirror_candidates.png']?'主运动模型代表假设，不是唯一空间解；全部镜像请点“查看全部镜像候选PNG”，JSON保留所有分支。未通过独立位置精度验收。':'整段折叠方位的数值反演候选；同色为同一身份，镜像不计为新增目标，未通过独立位置精度验收。';
     $('aiCoordinateLabel').textContent=data.downloads?.['mirror_candidates.png']?'（主模型代表假设，未验证唯一侧别）':'（本地正向反演候选，镜像未唯一消歧）';
+    if(data.identity_continuity?.merged_fragment_count>0)$('trackCaption').textContent+=' 同一身份假设已归并 '+data.identity_continuity.merged_fragment_count+' 个片段，输出完整轨迹；缺测区间仍为模型估计，不属于观测。';
     if(data.optimization_status==='budget_limited'){
       $('completionTitle').textContent='已生成部分优化候选 · 细化预算已到';
       $('completionSubtitle').textContent='保留了已完成的更新，其余沿用粗估，已继续执行质检与绘图；不是完整细化或可靠定位结果。';

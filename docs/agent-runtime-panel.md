@@ -2,28 +2,25 @@
 
 ## 后端
 
-完整执行代码集中到 `backend/app/agents/sonar_agent.py`，不再保留独立的
-`backend/app/workflows` 目录。文件内部按章节组织：
+Agent 的完整实现统一归属 `backend/app/agents/` 目录，但按职责拆分文件，
+不是把所有代码放进 `sonar_agent.py`：
 
-1. 节点执行记录：开始、结束、耗时、跳过、失败及摘要。
-2. 任务状态契约：识别、证据、定位和本地反演的状态数据。
-3. 模型观测与关联：候选配对契约和单次网关调用。
-4. 基础节点：直接模型调用和绘图适配。
-5. 证据与复核图：内置规则、像素候选、数量线索、配对和身份校验。
-6. 定位图：空间交点、有界连续估计和重投影。
-7. `SonarAgent`：原模型关联全链路。
-8. `ForwardInverseAgent`：完整本地九节点反演。
+- `sonar_agent.py` / `forward_inverse_agent.py`：两个 Agent 入口、生命周期与高层调度。
+- `nodes/model.py`、`nodes/evidence.py`、`nodes/tracking.py`、`nodes/inverse.py`：节点动作。
+- `graphs/evidence.py`、`graphs/tracking.py`、`graphs/inverse.py`：LangGraph 节点/边装配。
+- `state.py`：状态数据契约。
+- `tools.py`：单次模型调用适配；底层网络仍在 infrastructure/llm。
+- `prompts.py`：关联提示词和输出契约。
+- `progress.py`：节点执行事件、标签和耗时。
+- `serialization.py`：结果序列化。
+- `hypothesis_review.py`：可选复核的提示和输出校验。
 
-`agents/hypothesis_review.py` 仅作为可选复核的提示词/校验辅助。
-数值算法仍在按职责分包的 `services` 中，上传准备仍在 `services/jobs`，
-HTTP 边界及异常转换仍在 `api`。依赖入口改为 `get_sonar_agent()`。
+本地反演的九个节点也已从 Agent.run() 内的闭包拆出，入口只调用图构建器，
+随后处理执行、失败和落盘。算法仍保留在 services 对应子包，HTTP 处理仍在 api。
+依赖入口保持 `get_sonar_agent()`，接口 URL 和前端事件协议不变。
+不恢复顶层 workflows 目录，也不新增自主重试或付费调用。
 
-项目内的导入、测试 mock 路径、离线脚本和代码文档链接同步更新；
-不保留旧 workflow 模块代理，避免重复加载同一状态与函数。
-迁移前原目录备份位于项目 `work/agent-consolidation-backup-*` 下，不参与应用导入。
-
-本次不修改定位算法、输出契约、API URL、已有结果或云端费用授权规则。
-“完整 Agent”表示执行编排集中，不表示新增自主循环、自动重试或多模型调用。
+详细目录见 [Agent模块职责](../backend/app/agents/README.md)。
 
 ## 前端
 
@@ -49,11 +46,11 @@ HTTP 边界及异常转换仍在 `api`。依赖入口改为 `get_sonar_agent()`�
 前端回归检查 Agent 面板结构、节点计数、失败状态及调用次数来源。
 浏览器验证使用同一 sample_0005 的 input 图片和平台文件，不上传 truth。
 
-### 本次实际结果
+### 验证记录
 
-- 后端 201 项回归通过；前端流式/Agent 面板回归通过。
-- 浏览器用 sample_0005 实际执行本地反演，结果 `20261119_154154_24394ae1`：
+- 后端 202 项回归通过；前端流式/Agent 面板回归通过。
+- 上轮前端改造时，浏览器用 sample_0005 实际执行本地反演，结果 `20261119_154154_24394ae1`：
   9/9 节点有结束事件，新增模型调用 0 次，生成空间候选轨迹。
 - 1440×1000 桌面面板与 390×844 手机布局检查通过，无横向溢出。
 - 这里只验证运行和展示，不将节点完成、4 个身份假设或候选图生成等同于精度验收。
-- 文档中的 56 个代码文件链接已检查可访问。
+- 本轮目录拆分未重新运行浏览器或 sample_0005；通过后端真实图/API回归与前端回归验证兼容性。

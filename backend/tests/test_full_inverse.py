@@ -20,7 +20,8 @@ from backend.app.services.measurements.btr_field import extract_fields
 from backend.app.services.jobs.inversion_control import InversionControl,InversionStopped
 from backend.app.services.association.ridge_hypotheses import nearest_unfolded,ridge_hypotheses,propose_pairs
 from backend.app.services.localization.batch_inverse import fit_pair,evaluate_path,select_exclusive
-from backend.app.agents.sonar_agent import ForwardInverseAgent,INVERSE_NODES
+from backend.app.agents.forward_inverse_agent import ForwardInverseAgent
+from backend.app.agents.progress import INVERSE_NODES
 
 
 def inverse_fixture(count=33,kind='cv'):
@@ -153,7 +154,9 @@ class FullInverseWorkflowTests(unittest.TestCase):
         self.assertTrue(doc['all_alternatives_retained'])
         self.assertEqual(doc['display_view'],'primary_motion_hypotheses')
         self.assertGreaterEqual(len({t['mirror_variant'] for t in doc['tracks']}),2)
-        self.assertTrue(all(p['point_source']=='model_estimate_at_observed_time' for t in doc['tracks'] for p in t['points']))
+        self.assertTrue(all(p['point_source']=='model_estimate_at_observed_time' for t in doc['tracks'] for s in t['observation_segments'] for p in s['points']))
+        self.assertIn('identity_continuity',doc)
+        self.assertTrue(all(p['point_source'] in ('model_estimate_at_observed_time','motion_model_gap_prediction') for t in doc['tracks'] for p in t['points']))
 
     def test_optional_review_is_one_call_and_failure_keeps_numeric_result(self):
         synthetic_images(self.context,self.paths);calls=[]
@@ -172,7 +175,7 @@ class FullInverseWorkflowTests(unittest.TestCase):
         self.assertTrue((workflow.directory/'execution_report.json').exists())
 
     def test_refinement_deadline_keeps_candidates_and_runs_quality_and_render(self):
-        from backend.app.agents import sonar_agent as forward_inverse
+        from backend.app.agents.nodes import inverse as forward_inverse
         synthetic_images(self.context,self.paths)
         original=forward_inverse.refine_profiles
         def limited(*args,**kwargs):return original(*args,**kwargs,phase_seconds=0)

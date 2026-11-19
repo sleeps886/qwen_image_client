@@ -46,7 +46,7 @@ backend/app/services/
 
 ## 依赖约定
 
-- `api` 接收 HTTP 请求；`jobs` 管理任务；`agents/sonar_agent.py` 编排执行步骤。
+- `api` 接收 HTTP 请求；`jobs` 管理任务；`agents/` 中的入口和图模块编排执行步骤。
 - `inputs` 不依赖绘图、定位或 HTTP，读取参数不应触发绘图依赖。
 - 图像测量、身份关联、定位和质量模块由完整 Agent 按阶段调用，不自行调用云端 Agent。
 - `render_document()` 只绘制已准备好的轨迹文档。

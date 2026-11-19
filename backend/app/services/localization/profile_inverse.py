@@ -12,10 +12,33 @@ from scipy.optimize import least_squares
 
 from backend.app.services.localization.batch_inverse import evaluate_path,predicted_bearings,reference_for
 from backend.app.services.localization.forward_observation import array_location
+from backend.app.services.localization.motion_families import family_seeds
+from backend.app.services.localization.observability import range_sensitivity
 
 
 class RefinementBudgetReached(Exception):
     """Optional refinement stopped; completed candidates remain usable."""
+
+
+def nuisance_coefficients(gram,rhs):
+    """Bounded active-set nuisance fit; the periodic texture coefficient remains signed."""
+    n=rhs.shape[1];matrix=gram+np.eye(n)*1e-5
+    free=np.ones(rhs.shape,dtype=bool);constrained=np.ones(n,dtype=bool);constrained[1]=False
+    coefficients=np.zeros_like(rhs)
+    for _ in range(n*2+2):
+        reduced=matrix*free[:,:,None]*free[:,None,:]+np.eye(n)[None,:,:]*(~free)[:,:,None]
+        coefficients=np.linalg.solve(reduced,(rhs*free)[...,None])[...,0]
+        negative=(coefficients < -1e-9)&free&constrained[None,:]
+        if np.any(negative):
+            free[negative]=False
+            continue
+        gradient=np.einsum('rij,rj->ri',matrix,coefficients)-rhs
+        eligible=(~free)&constrained[None,:]&(gradient < -1e-8)
+        if not np.any(eligible):break
+        choices=np.argmin(np.where(eligible,gradient,np.inf),axis=1)
+        rows=np.flatnonzero(eligible.any(axis=1));free[rows,choices[rows]]=True
+    coefficients[:,constrained]=np.maximum(0,coefficients[:,constrained])
+    return coefficients
 
 
 def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257,*,phase_seconds=60.,reserve_seconds=15.,progress=None):
@@ -31,7 +54,7 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
     def notify(iteration,index,phase):
         if progress:progress({'iteration':iteration+1,'hypothesis_id':selected[index]['id'],
                               'phase':phase,'remaining_s':max(0,round(deadline-monotonic(),1))})
-    selected=copy.deepcopy(selection['selected']);report={'method':'joint_image_variable_projection_v1','updates':[],'rounds':rounds,
+    selected=copy.deepcopy(selection['selected']);report={'method':'joint_image_variable_projection_v2','updates':[],'rounds':rounds,
         'profile_rows_budget':profile_rows,'uses_reference_labels':False,'independent_accuracy_verified':False,
         'validation':'interleaved_raster_rows_not_independent_position_truth','status':'completed',
         'phase_seconds_budget':phase_seconds,'reserved_output_seconds':reserve_seconds}
@@ -41,6 +64,22 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
     if any(abs(platform[a+'_m'][1])>1e-8 for a in ('hull','tow')):
         return selection,report|{'status':'unsupported_noncollinear_geometry'}
     images=sorted(evidence['images'],key=lambda i:i['array'])
+    lookup={p['id']:(image['array'],p) for image in images for p in image['candidates']}
+    report['observation_window_updates']=[]
+    for candidate in selected:
+        support={}
+        for cid in candidate['supported_measurement_ids']:
+            if cid in lookup:
+                array,p=lookup[cid];support.setdefault(p['t'],set()).add(array)
+        paired=sorted(t for t,arrays in support.items() if len(arrays)==2)
+        old=[candidate['start_t'],candidate['end_t']];window=old.copy()
+        # A one-array peak after an X crossing may belong to another target.
+        # Only modest extensions supported by BOTH arrays can widen a window.
+        extension=min(30.,context['T_MAX']*.05)
+        if paired and 0<old[0]-paired[0]<=extension:window[0]=paired[0]
+        if paired and 0<paired[-1]-old[1]<=extension:window[1]=paired[-1]
+        candidate['start_t'],candidate['end_t']=window
+        report['observation_window_updates'].append({'hypothesis_id':candidate['id'],'before':old,'after':window})
     data=[];widths=[];models=[c['variants'][0] for c in selected]
     for image in images:
         times=np.array([p['t'] for p in image['profiles']]);angles=image['_angles'][::2]
@@ -69,34 +108,34 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
         xy=evaluate_path(model['parameters'],times,model['model'],model['t0'],model['span'])
         return predicted_bearings(xy,centers,platform['heading_deg'],reference)
     cache={}
-    def residual_for(index,parameters,mask_kind):
-        check();model={**models[index],'parameters':parameters[:-2]};residuals=[]
+    def residual_for(index,parameters,mask_kind,base_model=None):
+        check();model={**(base_model or models[index]),'parameters':parameters[:-2]};residuals=[]
         for array,(profiles,times,angles,centers,values,scale) in enumerate(data):
             key=(index,array)
             if key not in cache:
                 templates=[]
                 for j,other in enumerate(models):
                     bearing=predictions(other,times,centers)
-                    active=(times>=selected[j]['start_t'])&(times<=selected[j]['end_t'])
-                    templates.append(np.exp(-.5*((angles[None,:]-bearing[:,None])/widths[array,j])**2)*active[:,None])
+                    # Visibility is an unknown nonnegative row amplitude. A
+                    # ridge endpoint is not proof that its image energy vanishes.
+                    templates.append(np.exp(-.5*((angles[None,:]-bearing[:,None])/widths[array,j])**2))
                 texture=np.broadcast_to(np.cos(2*np.pi*angles/120.),values.shape)
                 design=np.stack([np.ones_like(values),texture,*templates],axis=2)
-                cache[key]=(design,np.einsum('rpi,rpj->rij',design,design),np.einsum('rpi,rp->ri',design,values))
-            design,base_gram,base_rhs=cache[key]
+                # Clipped colour levels are inequalities, not exact intensities.
+                nuisance_weight=((values>10**(-.5)*1.02)&(values<10**1.6*.98)).astype(float)
+                gram=np.einsum('rpi,rpj,rp->rij',design,design,nuisance_weight);rhs=np.einsum('rpi,rp,rp->ri',design,values,nuisance_weight)
+                initial_coefficients=nuisance_coefficients(gram,rhs)
+                cache[key]=(design,gram,rhs,initial_coefficients[:,2:]>.5,nuisance_weight)
+            design,base_gram,base_rhs,visibility,nuisance_weight=cache[key]
             bearing=predictions(model,times,centers);sigma=math.exp(parameters[-2+array])
-            active=(times>=selected[index]['start_t'])&(times<=selected[index]['end_t'])
-            template=np.exp(-.5*((angles[None,:]-bearing[:,None])/sigma)**2)*active[:,None]
+            template=np.exp(-.5*((angles[None,:]-bearing[:,None])/sigma)**2)
             column=2+index;design[:,:,column]=template
-            # Linear nuisance fit plus nonnegative amplitude projection (not exact NNLS).
+            # Refit constrained nuisance amplitudes, not an unconstrained solve followed by clipping.
             gram=base_gram.copy();rhs=base_rhs.copy()
-            products=np.einsum('rp,rpi->ri',template,design)
+            products=np.einsum('rp,rpi,rp->ri',template,design,nuisance_weight)
             gram[:,:,column]=products;gram[:,column,:]=products
-            rhs[:,column]=np.einsum('rp,rp->r',template,values)
-            coefficients=np.linalg.solve(gram+np.eye(len(selected)+2)*1e-5,rhs[...,None])[...,0]
-            # The generator's periodic background has a signed coefficient;
-            # only the floor and target amplitudes must be nonnegative.
-            coefficients[:,0]=np.maximum(0,coefficients[:,0])
-            coefficients[:,2:]=np.maximum(0,coefficients[:,2:])
+            rhs[:,column]=np.einsum('rp,rp,rp->r',template,values,nuisance_weight)
+            coefficients=nuisance_coefficients(gram,rhs)
             expected=np.einsum('rpi,ri->rp',design,coefficients)
             delta=(expected-values)/scale[:,None]
             delta[values>=10**1.6*.98]=np.minimum(delta[values>=10**1.6*.98],0)
@@ -113,7 +152,7 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
             clear=np.ones(len(times),dtype=bool)
             for j,other in enumerate(models):
                 if j==index:continue
-                active=(times>=selected[j]['start_t'])&(times<=selected[j]['end_t'])
+                active=visibility[:,j]
                 separation=abs(b-predictions(other,times,centers))
                 resolution=min(widths[array,index],widths[array,j])
                 clear&=~active|(separation>resolution)
@@ -152,49 +191,44 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
                 # of a uniquely known motion family or side.
                 effective_rows=max(10,sum(np.count_nonzero((times>=candidate['start_t'])&(times<=candidate['end_t'])) for _,times,_,_,_,_ in data))
                 def score(mse,count):return effective_rows*math.log(max(1e-12,mse))+count*math.log(effective_rows)
-                before_score=score(before,len(active));families=[(family or model['model'],initial,active)]
-                if model['model']=='cv' and iteration==0:
-                    observations=[]
-                    for image in images:
-                        for p in image['candidates']:
-                            if p['id'] in candidate['supported_measurement_ids']:
-                                observations.append((image['array'],p))
-                    sample_times=np.array([p['t'] for _,p in observations])
-                    sample_centers=np.array([array_location(platform,platform[a+'_m'],float(p['t']),reference) for a,p in observations])
-                    sample_angles=np.array([p['bearing_deg'] for _,p in observations])
-                    for name,zero in (('constant_latitude',3),('constant_longitude',2)):
-                        seeds=[];position_indices=np.array([k for k in range(4) if k!=zero])
-                        for previous in [model,*candidate['variants']]:
-                            if previous['model']!='cv':continue
-                            template=initial.copy();template[:4]=previous['parameters'];template[zero]=0
-                            def angular(values):
-                                check();p=template[:4].copy();p[position_indices]=values
-                                m={**model,'parameters':p}
-                                return predictions(m,sample_times,sample_centers)-sample_angles
-                            seed=least_squares(angular,template[position_indices],bounds=(lo[position_indices],hi[position_indices]),
-                                               loss='soft_l1',f_scale=.3,max_nfev=50,x_scale='jac')
-                            if seed.success:
-                                template[position_indices]=seed.x
-                                seeds.append((float(np.mean(angular(seed.x)**2)),template.copy()))
-                        if not seeds:continue
-                        _,template=min(seeds,key=lambda x:x[0])
-                        indices=np.array([k for k in range(len(initial)) if k!=zero])
-                        families.append((name,template,indices))
+                before_score=score(before,len(active));families=[(family or model['model'],initial,active,model)]
+                if iteration==0:
+                    # Compare simpler motion and both independent-axis harmonic
+                    # families AFTER identity selection. Initial centroid BIC must
+                    # not permanently lock a high-dimensional, wrong-heading fit.
+                    seeds=family_seeds(model,candidate['variants'],candidate,images,context,check)
+                    chosen={}
+                    for seed,indices in seeds:
+                        name=seed['parameter_family']
+                        template=np.r_[seed['parameters'],np.log(widths[:,index])]
+                        indices=np.r_[indices,len(template)-2,len(template)-1]
+                        residual=residual_for(index,template,'train',seed)
+                        if len(residual)<50:continue
+                        value=float(np.mean(residual**2))
+                        if name not in chosen or value<chosen[name][0]:chosen[name]=(value,template,indices,seed)
+                    families.extend((name,item[1],item[2],item[3]) for name,item in chosen.items()
+                                    if not (name==(family or model['model']) and item[3]['model']==model['model']))
                 proposals=[];tests=[]
-                for name,template,indices in families:
+                for name,template,indices,family_model in families:
+                    lower=np.full(len(template),-100.);upper=np.full(len(template),100.)
+                    lower[:2]=origin-100;upper[:2]=origin+100
+                    if family_model['model']=='harmonic':lower[-3]=.25;upper[-3]=4.
+                    if family_model['model']=='waypoint':lower[-3]=-.45;upper[-3]=.45
+                    lower[-2:]=np.log(.3);upper[-2:]=np.log(10.)
+                    template=np.clip(template,lower+1e-7,upper-1e-7)
                     def expand(values):
                         full=template.copy();full[indices]=values
                         return full
-                    fit=least_squares(lambda p:residual_for(index,expand(p),'train'),template[indices],bounds=(lo[indices],hi[indices]),loss='soft_l1',
+                    fit=least_squares(lambda p:residual_for(index,expand(p),'train',family_model),template[indices],bounds=(lower[indices],upper[indices]),loss='soft_l1',
                                       f_scale=.1,max_nfev=45 if name==(family or model['model']) else 25,x_scale='jac')
-                    parameters=expand(fit.x);after=float(np.mean(residual_for(index,parameters,'validation')**2))
+                    parameters=expand(fit.x);after=float(np.mean(residual_for(index,parameters,'validation',family_model)**2))
                     value=score(after,len(indices));grid=np.linspace(candidate['start_t'],candidate['end_t'],30)
-                    xy=evaluate_path(parameters[:-2],grid,model['model'],model['t0'],model['span'])
+                    xy=evaluate_path(parameters[:-2],grid,family_model['model'],family_model['t0'],family_model['span'])
                     speed=np.linalg.norm(np.diff(xy,axis=0),axis=1)/np.diff(grid)
                     eligible=bool(fit.success and speed.max()<50 and np.linalg.norm(xy-origin*1000,axis=1).max()<100000)
-                    tests.append({'family':name,'validation_mse':after,'selection_score':value,'eligible':eligible})
+                    tests.append({'family':name,'validation_mse':after,'selection_score':value,'eligible':eligible,'model':family_model['model']})
                     notify(iteration,index,'已比较运动族 '+name)
-                    if eligible:proposals.append((value,after,parameters,name,len(indices)))
+                    if eligible:proposals.append((value,after,parameters,name,len(indices),family_model))
                 best=min(proposals,key=lambda p:p[0]) if proposals else None
                 accepted=bool(best and best[0]<before_score-1e-6)
                 report['updates'].append({'round':iteration+1,'hypothesis_id':candidate['id'],'accepted':accepted,
@@ -202,10 +236,13 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
                     'selection_score_before':before_score,'selection_score_after':best[0] if best else None,
                     'motion_family_tests':tests,'optimizer_success':best is not None})
                 if accepted:
-                    value,after,parameters,name,count=best
-                    models[index]={**model,'parameters':parameters[:-2].tolist(),'profile_refined':True,
+                    value,after,parameters,name,count,family_model=best
+                    competing=sorted(item[0] for item in proposals)
+                    models[index]={**family_model,'parameters':parameters[:-2].tolist(),'profile_refined':True,
                         'parameter_family':name,'effective_parameters':count-2,
-                        'image_validation_mse':after,'image_selection_score':value,'validation_is_truth':False}
+                        'image_validation_mse':after,'image_selection_score':value,'validation_is_truth':False,
+                        'family_competition_margin':competing[1]-competing[0] if len(competing)>1 else model.get('family_competition_margin'),
+                        'family_prior':'engineering_motion_candidates_not_known_target_headings'}
                     widths[:,index]=np.exp(parameters[-2:])
     try:
         optimize()
@@ -242,7 +279,9 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
             variant['rmse_deg']=float(np.sqrt(np.mean(np.array(errors)**2)))
             variant['validation_rmse_deg']=float(np.sqrt(np.mean(np.array(validation or errors)**2)))
             variant['condition_proxy_source']='initial_centroid_fit_not_image_posterior'
-            variant['score_source']='initial_centroid_model_selection'
+            variant['score_source']='held_out_image_and_engineering_complexity' if variant.get('profile_refined') else 'initial_centroid_model_selection'
+            variant['range_sensitivity']=range_sensitivity(variant,candidate,evidence,context)
+            variant['position_information_weak']=bool(variant.get('position_information_weak') or variant['range_sensitivity']['range_sensitive'])
         candidate['variants']=variants
         candidate['profile_widths_deg']={im['array']:float(widths[a,i]) for a,im in enumerate(images)}
     return {**selection,'selected':selected},report

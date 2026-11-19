@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 
 from backend.app.services.inputs.input_service import prepare_input
 from backend.app.services.evaluation.comparison import compare_images
-from backend.app.agents.sonar_agent import ForwardInverseAgent
+from backend.app.agents.forward_inverse_agent import ForwardInverseAgent
 from backend.scripts.evaluate_inverse import evaluate
 
 
@@ -92,7 +92,8 @@ def compare_result(directory,sample,gate_m=250.):
     report['all_mirrors_geometry_outline']=aligned_outline(labels,document['tracks'],directory,'offline_all_mirrors_aligned_overlay.png')
     report['input_sha256']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((sample/'input').iterdir()) if p.is_file()}
     report['development_sample_not_independent_test']=True
-    sources=['backend/app/services/measurements/btr_field.py','backend/app/services/localization/batch_inverse.py','backend/app/services/localization/profile_inverse.py']
+    sources=['backend/app/services/measurements/btr_field.py','backend/app/services/localization/batch_inverse.py','backend/app/services/localization/profile_inverse.py',
+             'backend/app/services/localization/motion_families.py','backend/app/services/localization/observability.py']
     report['comparison_time_code_sha256_not_historical_inference']={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in sources}
     report['runtime_tracks_unchanged_by_evaluation']=(directory/'tracks.json').read_bytes()==before
     (directory/'offline_evaluation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')

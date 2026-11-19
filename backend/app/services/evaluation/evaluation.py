@@ -1,5 +1,6 @@
 """Local structured evaluation. Never forward reference labels to models."""
 import json
+from backend.app.services.evaluation.observation_support import observation_segments
 import math
 import numpy as np
 
@@ -94,7 +95,7 @@ def evaluate(prediction,semantic_raw=None,truth_raw=None,gate_m=1000,max_gap_s=1
         return report
     groups={}
     for track in tracks:
-        groups.setdefault(track['id'],{}).setdefault(track.get('branch','main'),[]).append(track['points'])
+        groups.setdefault(track['id'],{}).setdefault(track.get('branch','main'),[]).extend(observation_segments(track))
     if any(len(branches)>1 for branches in groups.values()):
         report['position_status']='存在未消歧候选分支，需先确定分支；未按真值挑选最优答案。'
         return report

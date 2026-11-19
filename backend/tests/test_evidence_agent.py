@@ -13,7 +13,7 @@ from backend.app.models.model_settings import ModelSettings
 from backend.app.repositories.result_repository import ResultRepository
 from backend.app.services.knowledge.rules import retrieve_rules
 from backend.app.services.measurements.sonar_evidence import extract_candidates,resolve_pairs
-from backend.app.agents.sonar_agent import build_preflight
+from backend.app.agents.graphs.evidence import build_preflight
 from backend.app.agents.sonar_agent import SonarAgent
 
 

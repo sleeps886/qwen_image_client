@@ -38,7 +38,8 @@ def render_document(doc,directory,context=None,*,filename='estimated_track.png',
     if spatial:
         doc['plot_summary']={'identity_hypotheses':len(identity_colors),'candidate_segments':len(doc['tracks']),
                              'target_count_confirmed':False,'colors_grouped_by_identity':True,
-                             'mirror_styles_not_unique_solutions':True}
+                             'mirror_styles_not_unique_solutions':True,
+                             'continuous_identity_tracks':bool(doc.get('identity_continuity'))}
     with PLOT_LOCK:
         fig=Figure(figsize=(11,6.5),dpi=150,facecolor='#050810');FigureCanvasAgg(fig)
         ax=fig.add_subplot(111);ax.set_facecolor('#0a0f1f')
@@ -91,7 +92,9 @@ def render_document(doc,directory,context=None,*,filename='estimated_track.png',
         if doc.get('plot_kind')=='meta_reconstruction':title='META RECONSTRUCTION - FULL SIMULATION TRACKS'
         if doc.get('plot_kind')=='spatial_candidates':title='DUAL-ARRAY SPATIAL CANDIDATES - MIRROR AMBIGUITY'
         if doc.get('display_view')=='primary_motion_hypotheses':title='PRIMARY MOTION HYPOTHESES - SIDE NOT VERIFIED'
-        if spatial:title+=f"\n{len(identity_colors)} identity hypotheses / {len(doc['tracks'])} fragments - NOT confirmed targets"
+        if spatial:
+            kind="candidate paths" if doc.get("identity_continuity") else "fragments"
+            title+=f"\n{len(identity_colors)} identity hypotheses / {len(doc['tracks'])} {kind} - NOT confirmed targets"
         ax.set_title(title+(' / BEARING-TIME ONLY' if frame=='bearing_time' else ''),color='#dce3ee',fontsize=11)
         ax.legend(facecolor='#101828',labelcolor='#dce3ee',fontsize=8)
         directory=Path(directory)

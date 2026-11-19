@@ -3,9 +3,10 @@ import json
 from pathlib import Path
 import unittest
 
-from backend.app.agents.sonar_agent import SonarAssociationAgent,build_association_prompt
+from backend.app.agents.tools import SonarAssociationAgent
+from backend.app.agents.prompts import build_association_prompt
 from backend.app.models.model_settings import ModelSettings
-from backend.app.agents.sonar_agent import assemble
+from backend.app.agents.nodes.evidence import assemble
 
 
 class SonarAgentTests(unittest.TestCase):
@@ -34,15 +35,28 @@ class SonarAgentTests(unittest.TestCase):
         with self.assertRaises(ValueError):agent.invoke_state(state|{'mode':'data'},settings,Path('unused'))
         self.assertEqual(len(calls),1)
 
-    def test_complete_agent_owns_graph_but_does_not_depend_on_http(self):
+    def test_agent_entry_and_nodes_have_separate_ownership(self):
         path=Path(__file__).parents[1]/'app/agents/sonar_agent.py'
         tree=ast.parse(path.read_text(encoding='utf-8'))
         self.assertIn('SonarAgent',{node.name for node in tree.body if isinstance(node,ast.ClassDef)})
-        self.assertIn('ForwardInverseAgent',{node.name for node in tree.body if isinstance(node,ast.ClassDef)})
-        self.assertTrue(any(isinstance(node,ast.ImportFrom) and node.module=='langgraph.graph' for node in tree.body))
+        self.assertNotIn('ForwardInverseAgent',{node.name for node in tree.body if isinstance(node,ast.ClassDef)})
+        self.assertFalse(any(isinstance(node,ast.ImportFrom) and node.module=='langgraph.graph' for node in tree.body))
+        self.assertFalse(any(isinstance(node,ast.FunctionDef) for node in tree.body))
         for node in ast.walk(tree):
             if isinstance(node,ast.ImportFrom):
                 self.assertFalse((node.module or '').startswith(('fastapi','starlette','backend.app.workflows')))
+
+    def test_inverse_nodes_and_graph_are_separate_from_agent_lifecycle(self):
+        root=Path(__file__).parents[1]/'app/agents'
+        node_tree=ast.parse((root/'nodes/inverse.py').read_text(encoding='utf-8'))
+        node_class=next(node for node in node_tree.body if isinstance(node,ast.ClassDef))
+        self.assertEqual({node.name for node in node_class.body if isinstance(node,ast.FunctionDef)},
+                         {'__init__','validate','field','paths_node','associations','fit','refine','review','quality','render'})
+        agent_tree=ast.parse((root/'forward_inverse_agent.py').read_text(encoding='utf-8'))
+        run=next(node for node in ast.walk(agent_tree) if isinstance(node,ast.FunctionDef) and node.name=='run')
+        self.assertFalse(any(isinstance(node,ast.FunctionDef) for node in run.body))
+        graph_tree=ast.parse((root/'graphs/inverse.py').read_text(encoding='utf-8'))
+        self.assertIn('build_inverse_graph',{node.name for node in graph_tree.body if isinstance(node,ast.FunctionDef)})
 
 
 class SonarAgentStreamTests(unittest.IsolatedAsyncioTestCase):

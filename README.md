@@ -17,9 +17,10 @@
 **尚未通过完整精度验收**：三个同批次工具样本的数值身份数为3/3/4，标签均有4个目标；镜像和部分公里级偏差仍存在。旧流程保留默认，不自动推广。详情见[完整链路实现与实测](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/docs/forward-inverse-completion.md)。案例知识库仍是独立设计，不属于已上线功能。
 
 项目已按前后端划分：`backend/`存放Python后端、Agent、工作流、脚本和测试，`frontend/`存放HTML、JS、CSS。
+后端方向纠偏的实际改善与剩余误差见[方向优化记录](docs/backend-direction-optimization.md)，不是所有样本精度均提升。
 `services/`已按输入、任务、测量、关联、定位、质量、绘图、评测和知识规则分包，见[Service职责与目录](docs/service-packages.md)。
 目录见[前后端架构说明](docs/architecture.md)，Agent位于`backend/app/agents/sonar_agent.py`。
-完整Agent及LangGraph编排集中在`backend/app/agents/sonar_agent.py`，不再单独保留`workflows/`；右侧整栏为Agent运行面板。
+Agent入口、节点、图、状态和工具按职责组织在`backend/app/agents/`目录，不再单独保留`workflows/`；右侧整栏为Agent运行面板。
 当前图片空间流程运行LangGraph证据图；单文件绘图保持直接执行。暂不支持跨请求断点恢复。
 
 ```powershell

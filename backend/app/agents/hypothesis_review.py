@@ -1,7 +1,7 @@
 """One optional visual review of locally generated hypothesis IDs, never coordinates."""
 import json
-
 from backend.app.services.inputs.model_json import model_object
+
 
 
 def review_prompt(selection,ridges):

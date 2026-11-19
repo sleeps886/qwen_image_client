@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 from backend.app.services.association.target_count import link_tracklets,count_hypothesis,audit_count,finalize_count
 from backend.app.services.localization.spatial_tracks import solve_spatial
-from backend.app.agents.sonar_agent import observed
-from backend.app.agents.sonar_agent import build_preflight
+from backend.app.agents.progress import observed
+from backend.app.agents.graphs.evidence import build_preflight
 from backend.tests.test_spatial_tracks import spatial_fixture
 
 
@@ -93,7 +93,7 @@ class TargetCountTests(unittest.TestCase):
 
     def test_clutter_rule_is_actually_retrieved_and_prompt_disallows_unfounded_causes(self):
         from backend.app.services.knowledge.rules import retrieve_rules
-        from backend.app.agents.sonar_agent import build_association_prompt
+        from backend.app.agents.prompts import build_association_prompt
         self.assertIn('clutter-review-v1',[r['id'] for r in retrieve_rules('observation')])
         prompt=build_association_prompt({'images':[]},[])
         self.assertIn('排除证据约束',prompt)
@@ -146,7 +146,7 @@ class TargetCountTests(unittest.TestCase):
 
     def test_audit_keeps_submillisecond_precision_and_execution_scope(self):
         events=[]
-        with patch('backend.app.agents.sonar_agent.perf_counter_ns',side_effect=[1000000,1234567]):
+        with patch('backend.app.agents.progress.perf_counter_ns',side_effect=[1000000,1234567]):
             observed('count_hypothesis',lambda s:{'count_hypothesis':{'min':1,'max':2}},events.append)({})
         self.assertEqual(events[-1]['elapsed_ms'],.235)
         self.assertEqual(events[-1]['execution_kind'],'local_heuristic')

@@ -3,7 +3,7 @@
 ```text
 backend/
   backend/app/
-    agents/          # sonar_agent.py：完整Agent和LangGraph编排
+    agents/          # Agent入口、nodes/、graphs/、工具、状态和提示词
     api/             # FastAPI路由和依赖
     core/            # 配置、路径、错误、中间件
     infrastructure/  # 模型网关与协议

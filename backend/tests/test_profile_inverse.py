@@ -4,7 +4,9 @@ import unittest
 import numpy as np
 
 from backend.app.services.localization.batch_inverse import fit_pair,evaluate_path
-from backend.app.services.localization.profile_inverse import refine_profiles
+from backend.app.services.localization.profile_inverse import refine_profiles,nuisance_coefficients
+from backend.app.services.localization.motion_families import family_seeds
+from backend.app.services.localization.observability import range_sensitivity
 from backend.app.services.jobs.inversion_control import InversionControl,InversionStopped
 from backend.tests.test_full_inverse import inverse_fixture
 
@@ -65,3 +67,53 @@ class ProfileInverseTests(unittest.TestCase):
         self.assertFalse(report['updates'])
         self.assertEqual([v['parameters'] for v in result['selected'][0]['variants']],
                          [v['parameters'] for v in selection['selected'][0]['variants']])
+
+    def test_nuisance_fit_keeps_signed_texture_but_nonnegative_target_amplitudes(self):
+        design=np.array([[1,-1,0],[1,0,2],[1,1,0],[1,0,2]],dtype=float)
+        values=np.array([design@np.array([2.,-1.,1.5]),design@np.array([5.,.2,-1.])])
+        gram=np.broadcast_to(design.T@design,(2,3,3)).copy();rhs=values@design
+        coefficients=nuisance_coefficients(gram,rhs)
+        np.testing.assert_allclose(coefficients[0],[2,-1,1.5],atol=1e-4)
+        np.testing.assert_allclose(coefficients[1],[4,.2,0],atol=1e-4)
+
+    def test_motion_family_seeds_ignore_holdout_rows_and_preserve_measurements(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        frozen=[copy.deepcopy(image['candidates']) for image in evidence['images']];original=copy.deepcopy(candidate);model=candidate['variants'][0]
+        check=lambda:None
+        before=family_seeds(model,candidate['variants'],candidate,evidence['images'],context,check)
+        self.assertEqual(frozen,[image['candidates'] for image in evidence['images']])
+        for image in evidence['images']:
+            for p in image['candidates']:
+                if p['sample_index']%5==0:p['bearing_deg']+=10
+        after=family_seeds(model,candidate['variants'],candidate,evidence['images'],context,check)
+        summarize=lambda seeds:[(m['model'],m['parameter_family'],m['parameters'],indices.tolist()) for m,indices in seeds]
+        self.assertEqual(summarize(before),summarize(after))
+        self.assertEqual({m['parameter_family'] for m,_ in before},{'cv','constant_latitude','constant_longitude'})
+        self.assertEqual(selection['selected'][0],original)
+
+    def test_harmonic_initial_fit_still_compares_both_axis_families(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        model={**candidate['variants'][0],'model':'harmonic','parameter_family':'harmonic',
+               'parameters':candidate['variants'][0]['parameters']+[0.,0.,0.,0.,.8]}
+        seeds=family_seeds(model,[model],candidate,evidence['images'],context,lambda:None)
+        self.assertEqual({m['parameter_family'] for m,_ in seeds},{'latitude_harmonic','longitude_harmonic'})
+        for model,active in seeds:
+            excluded=(4,6) if model['parameter_family']=='latitude_harmonic' else (5,7)
+            self.assertTrue(all(model['parameters'][index]==0 for index in excluded))
+
+    def test_single_array_late_peak_does_not_extend_visibility_window(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        candidate['end_t']=570.
+        candidate['supported_measurement_ids'].remove(evidence['images'][0]['candidates'][-1]['id'])
+        result,report=refine_profiles(selection,evidence,context,InversionControl(),phase_seconds=0)
+        self.assertEqual(report['observation_window_updates'][0]['after'][1],570.)
+        self.assertEqual(result['selected'][0]['end_t'],570.)
+
+    def test_tiny_parallax_is_reported_as_weak_range_information(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        near={**candidate['variants'][0],'model':'cv','parameters':[1.,1.,0.,0.]}
+        far={**near,'parameters':[50.,50.,0.,0.]}
+        a=range_sensitivity(near,candidate,evidence,context);b=range_sensitivity(far,candidate,evidence,context)
+        self.assertGreater(a['median_folded_parallax_deg'],b['median_folded_parallax_deg'])
+        self.assertTrue(b['range_sensitive'])
+        self.assertFalse(b['is_statistical_confidence'])

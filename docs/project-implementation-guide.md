@@ -55,7 +55,7 @@ python -m backend.app.main
 |---|---|---|
 | 页面交互 | [frontend/app.js](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/frontend/app.js) | 组织请求、读取SSE、更新页面，不在浏览器求空间轨迹 |
 | HTTP边界 | [inversion.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/api/routers/inversion.py) | 接收上传、校验请求、创建任务、回传事件 |
-| 工作流 | [sonar_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py) | 编排节点和状态，调用算法服务，保存阶段报告 |
+| 工作流 | [forward_inverse_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/forward_inverse_agent.py) | 编排节点和状态，调用算法服务，保存阶段报告 |
 | 算法服务 | [batch_inverse.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/localization/batch_inverse.py) | 运动拟合、关联选择和轨迹文档构造 |
 | Agent | [hypothesis_review.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/hypothesis_review.py) | 构造受限复核上下文，验证模型输出 |
 | 外部模型适配 | [gateway.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/infrastructure/llm/gateway.py) | 隔离模型协议和客户端，允许测试时替换网关 |
@@ -80,9 +80,9 @@ python -m backend.app.main
 主要代码如下：
 
 - [sonar_agent.py · 原关联编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)：`SonarAgent`总调度。
-- [sonar_agent.py · 证据与复核图](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)：本地预处理、关联结果校验和身份复核。
-- [sonar_agent.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)：`SonarAssociationAgent`与`build_association_prompt()`。
-- [sonar_agent.py · 定位图](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)：定位、连续估计和重投影节点。
+- [graphs/evidence.py · 证据与复核图](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/graphs/evidence.py)：本地预处理、关联结果校验和身份复核。
+- [tools.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/tools.py)的`SonarAssociationAgent`执行模型调用；[prompts.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/prompts.py)的`build_association_prompt()`组装契约。
+- [graphs/tracking.py · 定位图](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/graphs/tracking.py)：定位、连续估计和重投影节点。
 
 这条路线中，大模型负责选择真实候选编号和双阵配对，不应直接猜经纬度。返回解释文字而非规定JSON、引用不存在编号、配对不同步或重复使用证据，都可能被后续校验拒绝。因此“模型已返回”不等于“能够绘图”。
 
@@ -100,7 +100,7 @@ python -m backend.app.main
   → 主模型图、全部镜像图、轨迹和报告
 ```
 
-核心调度是 [sonar_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)中的`ForwardInverseAgent.run()`。默认不调用模型，不要求API Key或云端费用同意。只有另外申请复核时，才检查服务端模型配置与授权。
+核心调度是 [forward_inverse_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/forward_inverse_agent.py)中的`ForwardInverseAgent.run()`。默认不调用模型，不要求API Key或云端费用同意。只有另外申请复核时，才检查服务端模型配置与授权。
 
 页面“识别流程”需要选择完整正向反演；只改变“模型前测量诊断”不会切换主路线。当前界面仍保留旧路线作为默认对照。
 
@@ -313,7 +313,7 @@ python -m backend.app.main
 1. [main.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/main.py)：理解服务如何启动。
 2. [app.js](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/frontend/app.js)：从`submit()`追踪选项、请求和SSE展示。
 3. [inversion.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/api/routers/inversion.py)：理解HTTP、上传、线程与取消边界。
-4. [sonar_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/sonar_agent.py)：理解九节点和状态传递。
+4. [forward_inverse_agent.py · 本地反演编排](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/agents/forward_inverse_agent.py)：理解九节点和状态传递。
 5. [btr_field.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/measurements/btr_field.py)：理解图片如何变成测量。
 6. [ridge_hypotheses.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/association/ridge_hypotheses.py)：理解时间路径和双阵提案。
 7. [batch_inverse.py](C:/Users/LENOVO/Desktop/btr_gens/qwen_image_client/backend/app/services/localization/batch_inverse.py)：理解空间拟合与独占选择。

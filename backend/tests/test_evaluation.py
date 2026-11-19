@@ -42,6 +42,14 @@ class EvaluationTests(unittest.TestCase):
         self.assertIsNone(m['rmse_m']);self.assertEqual(m['matched_targets'],0)
         self.assertEqual(len(m['unmatched_truth_ids']),2)
 
+    def test_display_gap_predictions_do_not_improve_position_metrics(self):
+        document=prediction()
+        before=evaluate(document,truth_raw=truth(),max_gap_s=1)
+        document['model_gap_estimates']=[{'id':'AI-X','estimated_not_observed':True,
+            'used_for_evaluation':False,'points':[{'t':5,'x':122.0005,'y':30.1}]}]
+        after=evaluate(document,truth_raw=truth(),max_gap_s=1)
+        self.assertEqual(after,before)
+
     def test_semantic_only_and_limits(self):
         report=evaluate(prediction(),semantic_raw=semantic())
         self.assertTrue(report['target_count_correct'])

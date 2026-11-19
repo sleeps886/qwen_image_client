@@ -36,6 +36,7 @@ def historical_result(result_id:str):
             'input_mode':doc.get('input_mode','images'),'input_data':{'plot_kind':doc.get('plot_kind','tracks')},
             'trajectory_status':'bearing_time' if doc['coordinate_system']=='bearing_time' else 'position_estimate',
             'trajectory_image':f'/api/results/{result_id}/estimated_track.png','warnings':doc.get('warnings',[]),
+            'identity_continuity':doc.get('identity_continuity'),
             'downloads':{n:f'/api/results/{result_id}/{n}' for n in stored['files']},'usage':None if metadata.get('offline_reprocessed') else stored.get('usage'),**metadata}
     except ResultNotFound as exc:raise NotFoundError(str(exc)) from None
     except (InvalidStoredResult,KeyError,TypeError):raise InputError('本地结果格式无效') from None

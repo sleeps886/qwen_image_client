@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 
 import numpy as np
+from backend.app.services.evaluation.observation_support import observation_segments
 from scipy.optimize import linear_sum_assignment
 
 
@@ -33,7 +34,7 @@ def evaluate(directory,truth_path,gate_m=1000.):
     grouped=defaultdict(lambda:defaultdict(list))
     for track in document['tracks']:
         alternative=str(track.get('mirror_variant',track.get('handedness','unresolved')))
-        grouped[track['id']][alternative].extend(track['points'])
+        for segment in observation_segments(track):grouped[track['id']][alternative].extend(segment)
     if len(grouped)>24:raise ValueError('候选身份超过离线评价预算')
     predictions=list(grouped);targets=list(reference);matrix=np.full((len(predictions),len(targets)),1e9);details={}
     for i,identity in enumerate(predictions):

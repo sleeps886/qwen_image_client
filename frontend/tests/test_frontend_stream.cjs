@@ -178,7 +178,7 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  context.fetch=async(url,options)=>{
    inverseRequests.push({url,options});
    const result={ok:true,result_id:'inverse-test',answer:'{}',input_mode:'images',pipeline:'forward_inverse_v1',new_model_calls:0,
-     trajectory_status:'position_estimate',trajectory_image:'/inverse.png',warnings:[],downloads:{'inverse_quality.json':'/inverse-quality.json'},
+     trajectory_status:'position_estimate',trajectory_image:'/inverse.png',warnings:[],downloads:{'inverse_quality.json':'/inverse-quality.json'},identity_continuity:{merged_fragment_count:2},
      target_count:{status:'needs_review',count_origin:'numeric_hypotheses',inventory_target_count:2,associated_target_count:2,continuous_identity_count:2,localized_target_count:2},
      node_events:[{node:'inverse_field',status:'completed',elapsed_ms:25,summary:'完整测量'},{node:'inverse_review',status:'skipped',elapsed_ms:0,summary:'未申请模型复核'}]};
    return new Response('data: '+JSON.stringify({event:'phase',phase:'local_inverse',message:'本地计算'})+'\n\ndata: '+JSON.stringify({event:'result',data:result})+'\n\n',
@@ -198,6 +198,7 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.match(node('bodySummary').textContent,/程序反演报告/);assert.match(node('completionSubtitle').textContent,/调用 0 次/);
  assert.match(node('targetCountMetrics').textContent,/程序关联假设/);assert.equal(node('nodeList').children.length,9);
  assert.equal(node('agentModeName').textContent,'完整本地反演');
+ assert.match(node('trackCaption').textContent,/归并 2 个片段.*完整轨迹.*模型估计.*不属于观测/);
  assert.equal(node('agentNodeCount').textContent,'2 / 9');
  assert.equal(node('agentModelState').textContent,'0 次（本次记录）');
  assert.match(node('agentCurrentNode').textContent,/任务已结束/);

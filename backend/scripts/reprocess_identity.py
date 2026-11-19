@@ -9,7 +9,7 @@ from backend.app.core.exceptions import ResultNotFound
 from backend.app.repositories.result_repository import ResultRepository
 from backend.app.services.association.target_count import link_tracklets,count_hypothesis
 from backend.app.agents.sonar_agent import SonarAgent
-from backend.app.agents.sonar_agent import LABELS
+from backend.app.agents.progress import LABELS
 
 
 def reprocess(source_id,root=OUTPUTS_DIR):
