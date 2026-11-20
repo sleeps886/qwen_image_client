@@ -54,7 +54,8 @@ function showTargetCount(report){
 const dataMode=()=>$('inputMode').value==='data';
 const forwardMode=()=>!dataMode()&&['forward_v1','forward_model'].includes($('processingPipeline').value);
 function updatePipeline(){
-  $('reviewHypothesesLabel').hidden=fusionMode();
+  $('reviewHypothesesLabel').hidden=true;
+  $('reviewHypotheses').checked=false;
   if(forwardMode()){$('rendererProfile').value='btr_gui_v1';$('send').textContent=fusionMode()?'发送三类图并生成最终轨迹 ↗':'执行本地正向反演 ↗';}
   else $('send').textContent=dataMode()?'发送数据并生成轨迹图 ↗':'流式识别并生成轨迹 ↗';
   $('consent').checked=false;
@@ -418,7 +419,7 @@ async function submit(dryRun){
   if(platform){if(platform.size>(isData?1024*1024:100000)){status(isData?'数据文件超过1MiB限制。':'平台JSON超过100KB限制。','error');return;} form.append('platform',platform);}
   busy=true;document.querySelectorAll('input,textarea,button,select').forEach(x=>x.disabled=true);
   resetResultPresentation();
-  resetEvaluation();currentResultId='';currentTrajectoryStatus='';$('aiComparePreview').hidden=true;$('aiComparePreview').removeAttribute('src');$('aiCompareEmpty').hidden=false;resetComparison();
+  currentResultId='';currentTrajectoryStatus='';$('aiComparePreview').hidden=true;$('aiComparePreview').removeAttribute('src');$('aiCompareEmpty').hidden=false;resetComparison();
   $('trackFigure').hidden=true;$('trackImage').removeAttribute('src');$('trackWarnings').textContent='';
   $('downloads').replaceChildren();$('usage').textContent='';status(dryRun?'正在本地预检，不会调用模型服务…':forward?(fusionMode()?'正在生成本地证据，随后调用模型输出最终轨迹…':'正在执行本地正向反演；可选云端复核…'):'请求已提交本地服务，等待模型服务返回；请勿重复发送或关闭页面…');
   const correlationId=beginLogs();
@@ -480,6 +481,7 @@ fetch('/api/health').then(r=>{if(!r.ok)throw new Error('服务不可用');return
 
 function resetComparison(){
   $('similarityScore').textContent='—';$('comparisonDetails').hidden=true;
+  $('comparisonTrackRows').replaceChildren();$('similarityScore').classList.remove('comparison-problem');
   $('comparisonStatus').textContent='等待比较。请确认参考图与AI输入来自同一个样本。';
 }
 $('referenceKind').addEventListener('change',resetComparison);
@@ -505,8 +507,8 @@ $('compareButton').addEventListener('click',async()=>{
     const response=await fetch('/api/compare',{method:'POST',body:form});
     const data=await response.json();if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'比较失败');
     $('similarityScore').textContent=data.similarity_percent.toFixed(2);
-    $('comparisonStatus').textContent='轮廓比较完成。此分数不是坐标准确率，也不代表目标识别正确率。';
-    $('comparisonMetrics').textContent='AI轮廓匹配率 '+data.ai_outline_match_percent+'% · 参考轮廓覆盖率 '+data.reference_coverage_percent+'% · 256×256归一化，容差3像素';
+    showTrackComparison(data);
+    $('comparisonMetrics').textContent='参考线 '+data.reference_track_count+' 条 · AI线 '+data.prediction_track_count+' 条 · 全图轮廓F1 '+data.global_outline_similarity_percent+'% · 256×256归一化，容差3像素';
     $('comparisonWarnings').textContent=data.warnings.join(' ');
     $('comparisonOverlay').src=data.overlay_url;$('comparisonReport').href=data.report_url;$('comparisonReport').download='comparison.json';
     $('comparisonDetails').hidden=false;
@@ -514,40 +516,22 @@ $('compareButton').addEventListener('click',async()=>{
   finally{comparing=false;$('compareButton').disabled=false;$('referenceTrack').disabled=false;$('send').disabled=false;$('inspect').disabled=false;}
 });
 
-function resetEvaluation(){
-  $('evaluationDetails').hidden=true;
-  $('evaluationStatus').textContent='至少选择一种参考文件，且确认与模型输入属于同一样本。';
+function showTrackComparison(data){
+  const rows=data.per_track||[],problems=rows.filter(row=>row.status!=='ok');
+  $('comparisonTrackRows').replaceChildren();
+  const labels={ok:'通过轮廓阈值',low_similarity:'相似度偏低',missing:'疑似漏检',extra:'疑似多出轨迹'};
+  for(const row of rows){
+    const tr=document.createElement('tr');
+    if(row.status!=='ok')tr.classList.add('comparison-problem');
+    for(const value of [row.reference_id||'—',row.prediction_id||'—',row.similarity_percent.toFixed(2)+'%',labels[row.status]||'待检查']){
+      const td=document.createElement('td');td.textContent=value;tr.appendChild(td);
+    }
+    $('comparisonTrackRows').appendChild(tr);
+  }
+  $('similarityScore').classList.toggle('comparison-problem',problems.length>0);
+  $('comparisonAggregation').textContent=data.aggregation+' 问题阈值：低于 '+data.problem_threshold_percent+'%。R/A是图内线条编号，不是真实目标ID。';
+  $('comparisonStatus').textContent=problems.length?'发现 '+problems.length+' 条待检查项，已标红：'+problems.map(row=>(row.reference_id||'无参考')+' ↔ '+(row.prediction_id||'无AI')).join('、')+'。这不是坐标准确率。':'逐线比较完成，未发现低于阈值的线条；不代表定位正确。';
 }
-for(const id of ['semanticReference','truthReference','matchGate','interpolationGap'])$(id).addEventListener('change',resetEvaluation);
-$('evaluateButton').addEventListener('click',async()=>{
-  if(busy || comparing)return;
-  if(!currentResultId){$('evaluationStatus').textContent='请先生成本次AI轨迹数据。';return;}
-  const semantic=$('semanticReference').files[0],truth=$('truthReference').files[0];
-  if(!semantic && !truth){$('evaluationStatus').textContent='至少选择semantic.json或逐时刻truth.jsonl。';return;}
-  if((semantic && semantic.size>2*1024*1024)||(truth && truth.size>16*1024*1024)){$('evaluationStatus').textContent='semantic最多2MiB，truth最多16MiB。';return;}
-  if(!$('matchGate').reportValidity() || !$('interpolationGap').reportValidity())return;
-  const form=new FormData();form.append('result_id',currentResultId);form.append('gate_m',$('matchGate').value);form.append('max_gap_s',$('interpolationGap').value);
-  if(semantic)form.append('semantic',semantic);if(truth)form.append('truth',truth);
-  comparing=true;for(const id of ['evaluateButton','compareButton','send','inspect'])$(id).disabled=true;
-  resetEvaluation();$('evaluationStatus').textContent='正在本地核对参考、匹配航迹并计算误差，不调用模型…';
-  try{
-    const response=await fetch('/api/evaluate',{method:'POST',body:form});const data=await response.json();
-    if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'评测失败，请检查文件与参数');
-    $('evaluationStatus').textContent='结构化评测完成；请同时查看误差、未匹配目标和时间覆盖率。';
-    const metrics=data.position_metrics;
-    const items=[['目标数量（参考 / AI）',data.reference_target_count+' / '+data.predicted_target_count],['计数绝对误差',data.target_count_absolute_error]];
-    if(metrics)items.push(['匹配目标数',metrics.matched_targets],['位置RMSE（米）',metrics.rmse_m??'无匹配'],['P95误差（米）',metrics.p95_error_m??'无匹配'],['总体时间覆盖率',metrics.overall_time_coverage_percent+'%']);
-    $('evaluationSummary').replaceChildren();
-    for(const [label,value] of items){const box=document.createElement('div');const title=document.createElement('small');title.textContent=label;const strong=document.createElement('strong');strong.textContent=value;box.append(title,strong);$('evaluationSummary').append(box);}
-    $('evaluationPositionStatus').textContent='位置评测：'+(data.position_status||'未执行');
-    $('evaluationPairs').replaceChildren();
-    for(const pair of metrics?.matches||[]){const row=document.createElement('tr');for(const value of [pair.truth_id,pair.predicted_id,pair.rmse_m,pair.p95_error_m,pair.time_coverage_percent+'%']){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}$('evaluationPairs').append(row);}
-    $('evaluationUnmatched').textContent=metrics?'未匹配真值目标：'+(metrics.unmatched_truth_ids.join('、')||'无')+'；未匹配AI目标：'+(metrics.unmatched_predicted_ids.join('、')||'无'):'';
-    $('evaluationWarnings').textContent=data.warnings.join(' ');
-    $('evaluationRaw').textContent=JSON.stringify(data,null,2);$('evaluationDownload').href=data.report_url;$('evaluationDownload').download='evaluation.json';$('evaluationDetails').hidden=false;
-  }catch(error){$('evaluationStatus').textContent=error.message;}
-  finally{comparing=false;for(const id of ['evaluateButton','compareButton','send','inspect'])$(id).disabled=false;}
-});
 
 async function refreshHistory(){
   try{
@@ -563,7 +547,7 @@ $('loadHistory').addEventListener('click',async()=>{
   try{
     const response=await fetch('/api/history/'+encodeURIComponent(id));const data=await response.json();
     if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'导入失败');
-    resetComparison();resetEvaluation();$('downloads').replaceChildren();showModelResult(data,{fromHistory:true});
+    resetComparison();$('downloads').replaceChildren();showModelResult(data,{fromHistory:true});
     $('comparisonStatus').textContent='已导入生成结果。请选择同一样本、同一坐标类型的参考图；未调用模型。';
   }catch(error){$('comparisonStatus').textContent=error.message;}
   finally{$('loadHistory').disabled=false;}

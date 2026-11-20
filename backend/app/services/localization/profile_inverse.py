@@ -206,8 +206,14 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
                         if len(residual)<50:continue
                         value=float(np.mean(residual**2))
                         if name not in chosen or value<chosen[name][0]:chosen[name]=(value,template,indices,seed)
-                    families.extend((name,item[1],item[2],item[3]) for name,item in chosen.items()
-                                    if not (name==(family or model['model']) and item[3]['model']==model['model']))
+                    for name,item in chosen.items():
+                        same_family=name==(family or model['model']) and item[3]['model']==model['model']
+                        # Do not discard a better geometric/radial start merely
+                        # because its motion-family name matches the current one.
+                        # At most one extra seed per family reaches optimization.
+                        if same_family and (item[1].shape==initial.shape and np.allclose(item[1],initial,rtol=1e-7,atol=1e-8)
+                                            or item[0]>=float(np.mean(training**2))-1e-9):continue
+                        families.append((name,item[1],item[2],item[3]))
                 proposals=[];tests=[]
                 for name,template,indices,family_model in families:
                     lower=np.full(len(template),-100.);upper=np.full(len(template),100.)

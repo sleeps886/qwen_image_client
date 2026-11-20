@@ -1,9 +1,18 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const path=require('path');
+const html=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
+assert.match(html, /id="processingPipeline" type="hidden" value="forward_model"/);
+assert.match(html, /id="rendererProfile" type="hidden" value="btr_gui_v1"/);
+assert.doesNotMatch(html, /option value="(?:legacy|forward_v1)"/);
+assert.doesNotMatch(html, /id="reviewHypotheses" type="checkbox"/);
 const nodes=new Map();
-function node(id){if(!nodes.has(id))nodes.set(id,{textContent:'',value:'',dataset:{},className:'',hidden:false,open:false,style:{},files:[],children:[],listeners:{},addEventListener(type,fn){this.listeners[type]=fn},removeAttribute(){},replaceChildren(...items){this.children=[];this.textContent='';for(const item of items)this.append(item)},append(...items){for(const text of items){this.children.push(text);this.textContent+=typeof text==='string'?text:(text.textContent||'')}},classList:{toggle(){}}});return nodes.get(id);}
+function node(id){if(!nodes.has(id))nodes.set(id,{textContent:'',value:'',dataset:{},className:'',hidden:false,open:false,style:{},files:[],children:[],listeners:{},addEventListener(type,fn){this.listeners[type]=fn},removeAttribute(){},replaceChildren(...items){this.children=[];this.textContent='';for(const item of items)this.append(item)},append(...items){for(const text of items){this.children.push(text);this.textContent+=typeof text==='string'?text:(text.textContent||'')}},appendChild(item){this.append(item);return item},classList:{values:new Set(),toggle(name,force){const on=force===undefined?!this.values.has(name):force;if(on)this.values.add(name);else this.values.delete(name)},add(name){this.values.add(name)},remove(name){this.values.delete(name)},contains(name){return this.values.has(name)}}});return nodes.get(id);}
 const context=vm.createContext({document:{getElementById:node,createTextNode:text=>({textContent:text}),createElement:()=>node('new'+nodes.size),querySelectorAll:()=>[]},fetch:async()=>({ok:true,json:async()=>({default_prompt:'test',data_prompt:'data prompt',provider_label:'test',key_configured:true})}),FormData,TextDecoder,Uint8Array,AbortController,AbortSignal,URL,setTimeout,clearTimeout,crypto:require('crypto').webcrypto,console});
 vm.runInContext(fs.readFileSync(path.resolve(__dirname,'../app.js'),'utf8'),context);
+const pageHtml=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
+assert.doesNotMatch(pageHtml,/structured-eval|semanticReference|truthReference|evaluateButton/);
+assert.match(pageHtml,/comparisonTrackRows/);
+assert.doesNotMatch(fs.readFileSync(path.resolve(__dirname,'../app.js'),'utf8'),/resetEvaluation|evaluateButton/);
 // Match the browser's native file-input reset semantics.
 Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''},set(value){this.fileValue=value;if(value==='')this.files=[]}});
 (async()=>{
@@ -267,5 +276,15 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  vm.runInContext('showModelResult({result_id:"invalid-model-json",answer:"bad JSON",answer_source:"model_output",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed",failed_stage:"coordinate_validation"},trajectory_image:null,warnings:[],downloads:{"answer.txt":"/answer.txt","model_final_answer.txt":"/model-answer.txt"}})',context);
  assert.match(node('bodySummary').textContent,/大模型最终轨迹正文/);
  assert.doesNotMatch(node('bodyOutputHint').textContent,/未收到/);
+ context.comparisonFixture={per_track:[{reference_id:'R1',prediction_id:'A2',similarity_percent:45,status:'low_similarity'},{reference_id:'R2',prediction_id:null,similarity_percent:0,status:'missing'},{reference_id:'R3',prediction_id:'A1',similarity_percent:95,status:'ok'}],aggregation:'equal average',problem_threshold_percent:70};
+ vm.runInContext('showTrackComparison(comparisonFixture)',context);
+ assert.equal(node('comparisonTrackRows').children.length,3);
+ assert.equal(node('comparisonTrackRows').children[0].classList.contains('comparison-problem'),true);
+ assert.equal(node('comparisonTrackRows').children[2].classList.contains('comparison-problem'),false);
+ assert.match(node('comparisonStatus').textContent,/R1.*A2/);
+ assert.match(node('comparisonAggregation').textContent,/70/);
+ vm.runInContext('resetComparison()',context);
+ assert.equal(node('comparisonTrackRows').children.length,0);
+ assert.equal(node('similarityScore').classList.contains('comparison-problem'),false);
  console.log('PASS: streaming, stop, file modes, Agent overview, real node counts, model-call metadata, console structure');
 })().catch(e=>{console.error(e);process.exitCode=1});

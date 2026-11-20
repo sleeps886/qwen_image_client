@@ -32,13 +32,14 @@
                             class="upload-icon">＋</span><strong>点击选择，或拖入声呐图片</strong><small>PNG / JPEG / WebP · 单张 ≤ 10
                             MiB · 合计 ≤ 20 MiB</small></label>
                     <p id="imageSelectionStatus" class="note" role="status" aria-live="polite">在文件窗口选好后点击“打开”；也可直接把两张图片拖到上方区域。重新选择会替换当前图片。</p><div id="previews" class="previews"></div>
-                    <label>识别流程<select id="processingPipeline"><option value="legacy">原模型关联流程（对照）</option><option value="forward_model" selected>三类图融合 → 大模型生成最终轨迹（实验）</option><option value="forward_v1">本地正向反演（不调用模型，实验）</option></select></label>
-                    <label class="check" id="reviewHypothesesLabel"><input id="reviewHypotheses" type="checkbox"><span>正向反演后申请一次云端假设复核（可选；需下方同意费用，否则只在本地计算）</span></label>
-                    <p class="note">三类图融合：后端先生成高斯测量点叠加图和反演候选图，连同原始双阵声呐图、平台标定与候选坐标一起发送大模型；最终轨迹点由模型输出，后端仅校验和渲染。需要下方费用确认；失败不以本地候选冒充模型结果，准确率待验证。</p>
-                    <p class="note">本地正向反演包含完整剖面测量、交叉展开假设、双阵全局关联、运动模型拟合与BTR回投，不是仅预览。默认不调用模型；侧别不唯一时保留候选，不把镜像算成新目标。</p>
-                    <label>模型前测量诊断<select id="rendererProfile"><option value="none">原流程（默认，不更改观测）</option><option value="btr_gui_v1">本工具原始BTR · 高斯测量预览（实验）</option></select></label>
-                    <p class="note">实验项仅适用于本工具配色、−5～16 dB的原始hull/tow图；先点“仅预检图片”免费查看。绿色为拟合诊断、橙色为待复核，不表示已确认目标；不替换原候选或直接改变定位。非默认配色、有理论线叠加或外部声呐图请保留原流程。</p>
-                    <p class="note">可以从任意文件夹选择同一样本的 hull / tow 图片。平台文件兼容旧版 DB_STEP，但必须只含一个平台；当前专注单平台多目标，不限制图片所在目录。无刻度原图按工具默认标定识别：横轴0～180°、时间0～600秒（从下到上）；非默认范围请附同样本的 input/platform.json。空间定位请附同一样本的input/platform.json；大模型提取同步双阵方位，程序求解空间候选轨迹，定位不足不生成替代图。不要上传 truth、meta.json 或 semantic.json。</p></div>
+                    <div class="fixed-pipeline"><span>识别流程</span><strong>三类图融合 → 大模型生成最终轨迹</strong><small>实验流程 · 后端准备证据，模型输出轨迹点</small><input id="processingPipeline" type="hidden" value="forward_model"></div>
+                    <input id="reviewHypotheses" type="hidden" value="false"><span id="reviewHypothesesLabel" hidden></span>
+
+
+                    <div class="fixed-pipeline fixed-measurement"><span>测量方式</span><strong>本工具原始 BTR · 高斯测量</strong><small>支持免费预检，不替代目标识别或定位验证</small><input id="rendererProfile" type="hidden" value="btr_gui_v1"></div>
+
+
+                    <details class="input-guide"><summary>流程说明与图片要求 <span>实验限制 / 标定 / 平台参数</span></summary><p class="note">三类图融合：后端先生成高斯测量点叠加图和反演候选图，连同原始双阵声呐图、平台标定与候选坐标一起发送大模型；最终轨迹点由模型输出，后端仅校验和渲染。需要下方费用确认；失败不以本地候选冒充模型结果，准确率待验证。</p><p class="note">本地正向反演包含完整剖面测量、交叉展开假设、双阵全局关联、运动模型拟合与BTR回投，不是仅预览。这些本地步骤用于准备融合证据；侧别不唯一时保留候选，不把镜像算成新目标。</p><p class="note">实验项仅适用于本工具配色、−5～16 dB的原始hull/tow图；先点“仅预检图片”免费查看。绿色为拟合诊断、橙色为待复核，不表示已确认目标；不替换原候选或直接改变定位。非默认配色、有理论线叠加或外部声呐图不适用当前工具高斯测量。</p><p class="note">可以从任意文件夹选择同一样本的 hull / tow 图片。平台文件兼容旧版 DB_STEP，但必须只含一个平台；当前专注单平台多目标，不限制图片所在目录。无刻度原图按工具默认标定识别：横轴0～180°、时间0～600秒（从下到上）；非默认范围请附同样本的 input/platform.json。空间定位请附同一样本的input/platform.json；大模型提取同步双阵方位，程序求解空间候选轨迹，定位不足不生成替代图。不要上传 truth、meta.json 或 semantic.json。</p></details></div>
                 </section>
                 <section class="card">
                     <div class="heading">
@@ -97,16 +98,8 @@
             <p class="note">选择同一样本 truth/btr_A_track.png。相似度只比较彩色轨迹轮廓，不代表定位准确率；不能将方位—时间图与地理轨迹图比较。</p>
             <div class="comparison-controls"><label>已生成结果（可直接导入，无需重跑模型）<select id="historyResults"><option value="">选择历史结果</option></select></label><button id="loadHistory" type="button">导入已生成轨迹图</button></div><div class="comparison-controls"><label>仿真工具生成的参考轨迹图<input id="referenceTrack" type="file" accept="image/png,image/jpeg,image/webp"></label><label>参考图类型<select id="referenceKind"><option value="position">地理／平面位置轨迹</option><option value="bearing_time">方位—时间轨迹（非声呐热力图）</option></select></label><button id="compareButton" type="button">计算轮廓相似度</button></div>
             <div class="compare-pair"><figure><figcaption>仿真工具 · 参考轨迹</figcaption><img id="referencePreview" alt="待选择仿真参考图" hidden><p id="referenceEmpty" class="note">尚未选择参考图</p></figure><figure><figcaption>AI · 估计轨迹 <span id="aiCoordinateLabel"></span></figcaption><img id="aiComparePreview" alt="待生成AI估计轨迹" hidden><p id="aiCompareEmpty" class="note">在上方生成，或导入已有轨迹图</p></figure></div>
-            <div class="comparison-score"><div><small>归一化轮廓相似度</small><strong id="similarityScore">—</strong><span> / 100</span></div><p id="comparisonStatus" role="status">等待AI轨迹和参考图。参考数据仅用于比较，不参与模型生成。</p></div>
-            <div id="comparisonDetails" hidden><p id="comparisonMetrics" class="note"></p><p id="comparisonWarnings" class="note"></p><details><summary>查看归一化轮廓叠加图（青：参考，粉：AI，白：直接重叠）</summary><img id="comparisonOverlay" alt="归一化轮廓叠加图"></details><a id="comparisonReport">下载对比报告 JSON</a></div>
-            <section class="structured-eval" aria-labelledby="evalHeading">
-                <h2 id="evalHeading">结构化评测 · 真值核对</h2>
-                <p class="note">semantic.json用于核对目标数量、展示场景参考；逐时刻truth.jsonl用于计算位置误差。无需上传参考图片，两类评测彼此独立；文件仅本地使用，不发给模型。</p>
-                <div class="evaluation-fields"><label>语义参考（可选）<input id="semanticReference" type="file" accept=".json,application/json"></label><label>逐时刻真值（可选）<input id="truthReference" type="file" accept=".jsonl,.txt"></label><label>目标匹配门限（米）<input id="matchGate" type="number" min="1" max="100000" value="1000"></label><label>最大插值间隔（秒）<input id="interpolationGap" type="number" min="0.1" max="600" step="0.1" value="10"></label></div>
-                <button id="evaluateButton" type="button">开始结构化评测</button>
-                <p id="evaluationStatus" class="note" role="status">至少选择一种参考文件。位置评测会先匹配目标，不按T1/T2编号直接比较。</p>
-                <div id="evaluationDetails" hidden><div id="evaluationSummary" class="evaluation-summary"></div><p id="evaluationPositionStatus" class="note"></p><div class="table-scroll"><table><thead><tr><th>真值目标</th><th>AI目标</th><th>RMSE（米）</th><th>P95（米）</th><th>时间覆盖率</th></tr></thead><tbody id="evaluationPairs"></tbody></table></div><p id="evaluationUnmatched" class="note"></p><p id="evaluationWarnings" class="note"></p><details><summary>场景参考及完整评测数据</summary><pre id="evaluationRaw"></pre></details><a id="evaluationDownload">下载结构化评测报告</a></div>
-            </section>
+            <div class="comparison-score"><div><small>逐轨迹整体相似度</small><strong id="similarityScore">—</strong><span> / 100</span></div><p id="comparisonStatus" role="status">等待AI轨迹和参考图。参考数据仅用于比较，不参与模型生成。</p></div>
+            <div id="comparisonDetails" hidden><p id="comparisonMetrics" class="note"></p><div class="track-comparison-scroll"><table class="track-comparison"><thead><tr><th>参考线</th><th>AI线</th><th>相似度</th><th>检查结果</th></tr></thead><tbody id="comparisonTrackRows"></tbody></table></div><p id="comparisonAggregation" class="note"></p><p id="comparisonWarnings" class="note"></p><details open><summary>查看逐线编号与问题标红（青：参考，粉：AI，白：重叠，红：问题线）</summary><img id="comparisonOverlay" alt="逐线编号与问题轨迹叠加图"></details><a id="comparisonReport">下载对比报告 JSON</a></div>
         </section>
     </main>
     <footer>小怪 · 本地 FastAPI 服务 <span>127.0.0.1 / 数据由你决定发送</span></footer>

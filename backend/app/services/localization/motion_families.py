@@ -47,16 +47,18 @@ def family_seeds(model,variants,candidate,images,context,check):
                 parameters=expand(fit.x)
                 item={**model,'model':kind,'parameter_family':family,'parameters':parameters.tolist()}
                 if all(np.linalg.norm(parameters-np.array(old['parameters']))>.01 for old in seeds):seeds.append(item)
-        if kind=='cv' and abs(platform['speed_kn'])<1e-8:
+        if kind in ('cv','harmonic') and abs(platform['speed_kn'])<1e-8:
             # Bearing-only short-baseline ranges have shallow local minima.
             # Search bounded radial scales before image optimization, using
             # the same observations (not a geographic target-location prior).
             base=list(seeds)
             for item in base:
                 for factor in (.5,.75,1.5,2.):
-                    parameters=np.array(item['parameters']).reshape(-1,2).copy()
+                    values=np.array(item['parameters'],dtype=float)
+                    tail=values[-1:].copy() if kind=='harmonic' else np.zeros(0)
+                    parameters=(values[:-1] if len(tail) else values).reshape(-1,2).copy()
                     parameters[0]=origin+factor*(parameters[0]-origin)
                     parameters[1:]*=factor
-                    seeds.append({**item,'parameters':parameters.ravel().tolist(),'radial_seed_scale':factor})
+                    seeds.append({**item,'parameters':np.r_[parameters.ravel(),tail].tolist(),'radial_seed_scale':factor})
         candidates.extend((item,np.array([i for i in range(len(item['parameters'])) if i not in excluded])) for item in seeds)
     return candidates

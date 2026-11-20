@@ -1,5 +1,6 @@
 import copy
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
@@ -100,6 +101,30 @@ class ProfileInverseTests(unittest.TestCase):
         for model,active in seeds:
             excluded=(4,6) if model['parameter_family']=='latitude_harmonic' else (5,7)
             self.assertTrue(all(model['parameters'][index]==0 for index in excluded))
+
+    def test_harmonic_radial_seeds_preserve_period_and_input(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        model={**candidate['variants'][0],'model':'harmonic','parameter_family':'harmonic',
+               'parameters':candidate['variants'][0]['parameters']+[0.,.05,0.,.03,.8]}
+        before=copy.deepcopy(model)
+        seeds=family_seeds(model,[model],candidate,evidence['images'],context,lambda:None)
+        radial=[m for m,_ in seeds if 'radial_seed_scale' in m]
+        self.assertTrue(radial)
+        for item in radial:
+            period=item['parameters'][-1]
+            bases=[m for m,_ in seeds if 'radial_seed_scale' not in m and m['parameter_family']==item['parameter_family']]
+            self.assertTrue(any(abs(period-base['parameters'][-1])<1e-12 for base in bases))
+            self.assertTrue(.25<=period<=4.)
+        self.assertEqual(model,before)
+
+    def test_better_same_family_seed_is_not_discarded_by_family_name(self):
+        context,selection,evidence,_=self.fixture();model=selection['selected'][0]['variants'][0]
+        seed=copy.deepcopy(model);seed['parameters'][0]-=.1
+        family=seed.get('parameter_family','cv');seed['parameter_family']=family
+        with patch('backend.app.services.localization.profile_inverse.family_seeds',return_value=[(seed,np.arange(len(seed['parameters']))) ]):
+            _,report=refine_profiles(selection,evidence,context,InversionControl(),rounds=1)
+        tests=report['updates'][0]['motion_family_tests']
+        self.assertGreaterEqual(sum(t['family']==family for t in tests),2)
 
     def test_single_array_late_peak_does_not_extend_visibility_window(self):
         context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
