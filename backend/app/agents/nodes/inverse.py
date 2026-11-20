@@ -99,15 +99,16 @@ class InverseNodes:
         context=self.agent.state['context'];paths=self.agent.state['paths']
         result=propose_pairs(state['ridges'],self.agent.control)
         self.agent.save('inverse_proposals.json',{'pairs':[{'id':p['id'],'hull':p['hull']['id'],'tow':p['tow']['id'],
-                   'synchronous_times':len(p['common_rows'])} for p in result['pairs']],
-                   'budget_excluded':result['budget_excluded']})
+                   'synchronous_times':len(p['common_rows']),'sparse_dual_support':p.get('sparse_dual_support',False)} for p in result['pairs']],
+                   'budget_excluded':result['budget_excluded'],'retained_sparse_pairs':result.get('retained_sparse_pairs',0),
+                   'rejected_sync_gate':result.get('rejected_sync_gate',0),'sparse_policy':result.get('sparse_policy')})
         return {'proposals':result,'_summary':f"筛出{len(result['pairs'])}组轨迹级双阵解释；预算排除{result['budget_excluded']}组"}
 
 
     def fit(self,state):
         context=self.agent.state['context'];paths=self.agent.state['paths']
         result=fit_proposals(state['proposals'],state['evidence'],context,self.agent.control);self.agent.save('inverse_fit.json',result)
-        return {'fitted':result,'_summary':f"{len(result['candidates'])}组可行批量拟合；比较匀速、转向、二次及谐波模型，不预设目标数量"}
+        return {'fitted':result,'_summary':f"{len(result['candidates'])}组可行拟合；共{result.get('fit_attempts',result['attempted'])}次全路径/同步窗口拟合，包含折叠角初始化兜底；不预设目标数量"}
 
 
     def refine(self,state):

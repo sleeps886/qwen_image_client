@@ -105,19 +105,30 @@ def propose_pairs(ridges,control):
                     joined.append({**a,'id':a['id']+'+'+b['id'],'points':points,'support':len(points),'end_t':points[-1]['t']})
         return tracks+joined[:8]
     hull=combined(hull);tow=combined(tow)
-    proposals=[]
+    proposals=[];rejected_sync=0
     for h in hull:
         for t in tow:
             control.check()
             if h['platform_id']!=t['platform_id']:continue
             hm={p['sample_index']:p for p in h['points']};tm={p['sample_index']:p for p in t['points']};common=sorted(hm.keys()&tm.keys())
-            if len(common)<6:continue
+            sparse=False
+            if len(common)<6:
+                # A weak broad-array ridge may contain only a few clean peaks
+                # while the other array has a long continuous observation.
+                # Permit a bounded asymmetric hypothesis, not single-array
+                # localization or a global relaxation of the six-point gate.
+                lengths=sorted((len(h['points']),len(t['points'])))
+                span=hm[common[-1]]['t']-hm[common[0]]['t'] if common else 0.
+                sparse=len(common)>=4 and lengths[1]>=20 and lengths[0]<=lengths[1]/3 and span>=30.
+                if not sparse:rejected_sync+=1;continue
             differences=[abs(hm[r]['bearing_deg']-tm[r]['bearing_deg']) for r in common]
             # A bounded broad-parallax screen, not a target classifier. Near-array
             # cases outside it remain uncovered and are reported, never invented.
             if np.median(differences)>45:continue
             proposals.append({'id':f'A{len(proposals)+1:03d}','hull':h,'tow':t,'common_rows':common,
-                              'rank':len(common)-float(np.median(differences))*.2})
+                              'sparse_dual_support':sparse,'rank':len(common)-float(np.median(differences))*.2})
     proposals.sort(key=lambda p:p['rank'],reverse=True)
     return {'pairs':proposals[:24],'total_proposed':len(proposals),'budget_excluded':max(0,len(proposals)-24),
+            'rejected_sync_gate':rejected_sync,'retained_sparse_pairs':sum(p['sparse_dual_support'] for p in proposals[:24]),
+            'sparse_policy':{'minimum_common_rows':4,'minimum_long_ridge':20,'maximum_short_long_ratio':1/3,'minimum_overlap_seconds':30},
             'max_median_parallax_deg':45.}

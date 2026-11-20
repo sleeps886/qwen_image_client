@@ -284,4 +284,7 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
             variant['position_information_weak']=bool(variant.get('position_information_weak') or variant['range_sensitivity']['range_sensitive'])
         candidate['variants']=variants
         candidate['profile_widths_deg']={im['array']:float(widths[a,i]) for a,im in enumerate(images)}
+    from backend.app.services.localization.visibility_windows import extend_visibility_windows
+    selected,visibility_report=extend_visibility_windows(selected,evidence,context,control)
+    report['raster_visibility_windows']=visibility_report
     return {**selection,'selected':selected},report

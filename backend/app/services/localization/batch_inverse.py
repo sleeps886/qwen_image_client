@@ -54,7 +54,7 @@ def _arrays(pair,context,reference):
     return records,times,measured,centers,sigma
 
 
-def _seeds(pair,context,reference,t0,span):
+def _seeds(pair,context,reference,t0,span,angle_key='unfolded_deg'):
     platform=context['platforms'][0];h={p['sample_index']:p for p in pair['hull']['points']};t={p['sample_index']:p for p in pair['tow']['points']}
     seeds=[]
     for mirror in (1,-1):
@@ -63,8 +63,8 @@ def _seeds(pair,context,reference,t0,span):
             hp,tp=h[row],t[row];time=hp['t']
             hl=reference.to_xy(array_location(platform,platform['hull_m'],time,reference))
             tl=reference.to_xy(array_location(platform,platform['tow_m'],time,reference))
-            solution=intersection(hl,tl,platform['heading_deg']+mirror*hp['unfolded_deg'],
-                                  platform['heading_deg']+mirror*tp['unfolded_deg'],.005)
+            solution=intersection(hl,tl,platform['heading_deg']+mirror*hp[angle_key],
+                                  platform['heading_deg']+mirror*tp[angle_key],.005)
             if solution and solution[2]<80000:samples.append((time,*solution[:2]))
         if len(samples)>=3:
             data=np.array(samples);s=(data[:,0]-t0)/span
@@ -74,15 +74,22 @@ def _seeds(pair,context,reference,t0,span):
             design=np.array([np.ones(keep.sum()),s[keep]]).T
             parameters=np.linalg.lstsq(design,data[keep,1:]/1000,rcond=None)[0].ravel()
             seeds.append(parameters)
+    if not seeds and angle_key=='unfolded_deg':
+        # Each temporal ridge chooses an unfolded sign independently. At a
+        # folded boundary those signs need not agree between hull and tow.
+        # Retry only the initialization with measured folded bearings; the
+        # fit still validates both arrays and retains competing reflections.
+        return _seeds(pair,context,reference,t0,span,angle_key='bearing_deg')
     return seeds
 
 
-def fit_pair(pair,context,control,initial_models=None):
+def fit_pair(pair,context,control,initial_models=None,diagnostics=None):
     reference=reference_for(context);platform=context['platforms'][0]
     records,times,measured,centers,sigma=_arrays(pair,context,reference)
     t0=float(np.mean(times));span=max(30.,float(times.max()-times.min()))
     if initial_models:t0=initial_models[0]['t0'];span=initial_models[0]['span']
     seeds=_seeds(pair,context,reference,t0,span)
+    if diagnostics is not None:diagnostics.append({'stage':'seeds','count':len(seeds),'measurements':len(records),'synchronous_times':len(pair['common_rows'])})
     if not seeds:return None
     train=np.array([p['sample_index']%5!=0 for _,p in records]);validation=~train
     if train.sum()<10 or validation.sum()<4:train[:]=True;validation[:]=True
@@ -117,6 +124,11 @@ def fit_pair(pair,context,control,initial_models=None):
                 smooth=acceleration.ravel()/.4 if model not in ('cv','waypoint') else np.zeros(0)
                 return np.r_[angular[mask],speed,smooth]
             fit=least_squares(residual,initial[active],bounds=(lo[active],hi[active]),loss='soft_l1',f_scale=1.,max_nfev=90,x_scale='jac')
+            if diagnostics is not None:
+                probe=evaluate_path(expand(fit.x),times,model,t0,span)
+                probe_error=predicted_bearings(probe,centers,platform['heading_deg'],reference)-measured
+                diagnostics.append({'stage':'fit','model':model,'family':family or model,'success':bool(fit.success),
+                                    'nfev':fit.nfev,'angular_rmse_deg':float(np.sqrt(np.mean(probe_error**2)))})
             if not fit.success:return None
             parameters=expand(fit.x);xy=evaluate_path(parameters,times,model,t0,span)
             error=predicted_bearings(xy,centers,platform['heading_deg'],reference)-measured
@@ -183,13 +195,35 @@ def fit_pair(pair,context,control,initial_models=None):
             'synchronous_times':len(pair['common_rows']),'validation_is_truth':False}
 
 
+def _synchronous_window(pair):
+    """Additional bounded fit, excluding unrelated non-overlapping ridge tails."""
+    common=pair['common_rows']
+    if len(common)<6:return None
+    lo,hi=min(common),max(common);trimmed={};total=removed=0
+    for array in ('hull','tow'):
+        points=pair[array]['points'];inside=[p for p in points if lo<=p['sample_index']<=hi]
+        total+=len(points);removed+=len(points)-len(inside)
+        trimmed[array]={**pair[array],'points':inside}
+    if removed<4 or removed/max(1,total)<.15:return None
+    return {**pair,**trimmed,'id':pair['id']+':sync'}
+
+
 def fit_proposals(proposals,evidence,context,control):
-    fitted=[]
+    fitted=[];diagnostics=[];attempts=0;accepted=0
     for pair in proposals['pairs']:
-        control.check();result=fit_pair(pair,context,control)
-        if result:fitted.append(result)
-    return {'candidates':fitted,'attempted':len(proposals['pairs']),'rejected':len(proposals['pairs'])-len(fitted),
-            'budget_excluded':proposals['budget_excluded'],'method':'batch_folded_spherical_bearings_v1'}
+        control.check();log=[];result=fit_pair(pair,context,control,diagnostics=log);attempts+=1
+        diagnostics.append({'pair_id':pair['id'],'scope':'global_ridge','accepted':result is not None,'stages':log})
+        any_result=result is not None
+        if result:fitted.append({**result,'fitting_scope':'global_ridge'})
+        window=_synchronous_window(pair)
+        if window:
+            control.check();log=[];local=fit_pair(window,context,control,diagnostics=log);attempts+=1
+            diagnostics.append({'pair_id':window['id'],'scope':'synchronous_window','accepted':local is not None,'stages':log})
+            if local:fitted.append({**local,'fitting_scope':'synchronous_window'});any_result=True
+        accepted+=int(any_result)
+    return {'candidates':fitted,'attempted':len(proposals['pairs']),'fit_attempts':attempts,
+            'rejected':len(proposals['pairs'])-accepted,'fit_diagnostics':diagnostics,
+            'budget_excluded':proposals['budget_excluded'],'method':'batch_folded_spherical_bearings_v2_sync_window'}
 
 
 def refine_associations(fitted,evidence,context,control,iterations=1):
@@ -225,7 +259,13 @@ def support_for(candidate,evidence,context):
         rows={}
         for p in points:rows.setdefault(p['sample_index'],[]).append(p)
         for row,values in rows.items():
-            time=values[0]['t'];xy=evaluate_path(v['parameters'],[time],v['model'],v['t0'],v['span'])
+            time=values[0]['t']
+            # A short or crossed ridge must not acquire a large gain by
+            # extrapolating into unrelated peaks outside its fitted window.
+            # Later explicit window extension is separately bounded by
+            # synchronous measurements in refine_profiles.
+            if time<candidate.get('start_t',-math.inf) or time>candidate.get('end_t',math.inf):continue
+            xy=evaluate_path(v['parameters'],[time],v['model'],v['t0'],v['span'])
             center=np.array([array_location(platform,platform[image['array']+'_m'],time,reference)])
             prediction=float(predicted_bearings(xy,center,platform['heading_deg'],reference)[0])
             ranked=sorted(values,key=lambda p:abs(p['bearing_deg']-prediction))
@@ -238,9 +278,12 @@ def support_for(candidate,evidence,context):
 
 def select_exclusive(fitted,evidence,context,control):
     candidates=[]
+    arrays={p['id']:image['array'] for image in evidence['images'] for p in image['candidates']}
+    def dual_support(ids):
+        return all(sum(arrays[i]==array for i in ids)>=4 for array in ('hull','tow'))
     for candidate in fitted['candidates']:
         control.check();ids,error=support_for(candidate,evidence,context)
-        if len(ids)<12:continue
+        if len(ids)<12 or not dual_support(ids):continue
         candidates.append({**candidate,'supported_measurement_ids':ids,'mean_supported_error_deg':error,
                            'gain':len(ids)-8-4*error-len(candidate['variants'][0]['parameters'])*.15})
     if not candidates:return {'selected':[],'candidates':[],'uncovered_ids':[p['id'] for im in evidence['images'] for p in im['candidates']],
@@ -267,7 +310,7 @@ def select_exclusive(fitted,evidence,context,control):
     selected=[{**c,'all_supported_measurement_ids':c['supported_measurement_ids'],
                'excluded_shared_ids':sorted(set(c['supported_measurement_ids'])&shared),
                'supported_measurement_ids':[i for i in c['supported_measurement_ids'] if i not in shared]} for c in selected]
-    selected=[c for c in selected if len(c['supported_measurement_ids'])>=12]
+    selected=[c for c in selected if len(c['supported_measurement_ids'])>=12 and dual_support(c['supported_measurement_ids'])]
     used={i for c in selected for i in c['supported_measurement_ids']}
     return {'selected':selected,'candidates':candidates,'uncovered_ids':[p['id'] for im in evidence['images'] for p in im['candidates'] if p['id'] not in used],
             'status':'candidate_hypotheses','target_count_confirmed':False,'solver_optimal':bool(optimization.success),

@@ -96,7 +96,8 @@ class BatchInverseTests(unittest.TestCase):
         a=[f'p{i}' for i in range(20)];b=['p0','p1']+[f'q{i}' for i in range(18)]
         candidates=[{'id':name,'variants':[{'parameters':[0]*4}]} for name in ('A','B')]
         supports={'A':a,'B':b}
-        evidence={'images':[{'candidates':[{'id':i} for i in set(a+b)]}]}
+        evidence={'images':[{'array':array,'candidates':[{'id':i} for i in set(a+b) if int(i[1:])%2==index]}
+                            for index,array in enumerate(('hull','tow'))]}
         with patch('backend.app.services.localization.batch_inverse.support_for',side_effect=lambda c,*args:(supports[c['id']],.05)):
             result=select_exclusive({'candidates':candidates},evidence,{},InversionControl())
         self.assertEqual(len(result['selected']),2)

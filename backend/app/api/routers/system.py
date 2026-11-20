@@ -35,7 +35,7 @@ def health():
             'project_layout':'backend_frontend_v1',
             'knowledge_backend':'sqlite-reviewed-rules','candidate_extraction_supported':True,
             'experimental_measurement_profiles':['btr_gui_v1'],'measurement_default':'legacy',
-            'sonar_platform_scope':'single_only','forward_inverse_supported':True,'forward_inverse_default_model_calls':0,
+            'sonar_platform_scope':'single_only','inverse_fit_version':'folded_seed_sync_window_sparse_visibility_v4','forward_inverse_supported':True,'forward_inverse_default_model_calls':0,
             'automatic_paid_retry':False,'full_tracking_implemented':False,
             'continuous_estimation_supported':True,'reprojection_check_supported':True,
             'target_count_audit_supported':True,'node_progress_supported':True,

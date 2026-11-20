@@ -105,6 +105,9 @@ class ProfileInverseTests(unittest.TestCase):
         context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
         candidate['end_t']=570.
         candidate['supported_measurement_ids'].remove(evidence['images'][0]['candidates'][-1]['id'])
+        # No hull raster energy either: missing a clean peak alone no longer
+        # proves invisibility when both original raster profiles support it.
+        evidence['images'][0]['_profile_values'][-1]=.6
         result,report=refine_profiles(selection,evidence,context,InversionControl(),phase_seconds=0)
         self.assertEqual(report['observation_window_updates'][0]['after'][1],570.)
         self.assertEqual(result['selected'][0]['end_t'],570.)
