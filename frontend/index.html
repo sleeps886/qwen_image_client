@@ -28,16 +28,17 @@
                     </div><label>输入模式<select id="inputMode"><option value="images">图片识别（原有模式）</option><option value="data">单文件绘图（无需图片）</option></select></label>
                     <p id="dataInputNote" class="note" hidden>无需上传图片。完整轨迹请选 meta.json：按目标航点／曲线公式和DT重建，保留波浪线等中间路径，无需另传platform.json。semantic.json只能画起终点，platform.json仅有平台参数。也支持逐时刻点位JSON/JSONL。<a href="/api/data-example" download>下载点位格式示例</a></p>
                     <div id="imageInputs"><label class="drop" id="dropZone" tabindex="0"><input id="files" type="file"
-                            accept="image/png,image/jpeg,image/webp" multiple><span
+                            accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" multiple><span
                             class="upload-icon">＋</span><strong>点击选择，或拖入声呐图片</strong><small>PNG / JPEG / WebP · 单张 ≤ 10
                             MiB · 合计 ≤ 20 MiB</small></label>
-                    <div id="previews" class="previews"></div>
-                    <label>识别流程<select id="processingPipeline"><option value="legacy">原模型关联流程（对照）</option><option value="forward_v1">完整正向反演（工具原图，实验）</option></select></label>
-                    <label class="check"><input id="reviewHypotheses" type="checkbox"><span>正向反演后申请一次云端假设复核（可选；需下方同意费用，否则只在本地计算）</span></label>
-                    <p class="note">正向反演包含完整剖面测量、交叉展开假设、双阵全局关联、运动模型拟合与BTR回投，不是仅预览。默认不调用模型；侧别不唯一时保留候选，不把镜像算成新目标。</p>
+                    <p id="imageSelectionStatus" class="note" role="status" aria-live="polite">在文件窗口选好后点击“打开”；也可直接把两张图片拖到上方区域。重新选择会替换当前图片。</p><div id="previews" class="previews"></div>
+                    <label>识别流程<select id="processingPipeline"><option value="legacy">原模型关联流程（对照）</option><option value="forward_model" selected>三类图融合 → 大模型生成最终轨迹（实验）</option><option value="forward_v1">本地正向反演（不调用模型，实验）</option></select></label>
+                    <label class="check" id="reviewHypothesesLabel"><input id="reviewHypotheses" type="checkbox"><span>正向反演后申请一次云端假设复核（可选；需下方同意费用，否则只在本地计算）</span></label>
+                    <p class="note">三类图融合：后端先生成高斯测量点叠加图和反演候选图，连同原始双阵声呐图、平台标定与候选坐标一起发送大模型；最终轨迹点由模型输出，后端仅校验和渲染。需要下方费用确认；失败不以本地候选冒充模型结果，准确率待验证。</p>
+                    <p class="note">本地正向反演包含完整剖面测量、交叉展开假设、双阵全局关联、运动模型拟合与BTR回投，不是仅预览。默认不调用模型；侧别不唯一时保留候选，不把镜像算成新目标。</p>
                     <label>模型前测量诊断<select id="rendererProfile"><option value="none">原流程（默认，不更改观测）</option><option value="btr_gui_v1">本工具原始BTR · 高斯测量预览（实验）</option></select></label>
                     <p class="note">实验项仅适用于本工具配色、−5～16 dB的原始hull/tow图；先点“仅预检图片”免费查看。绿色为拟合诊断、橙色为待复核，不表示已确认目标；不替换原候选或直接改变定位。非默认配色、有理论线叠加或外部声呐图请保留原流程。</p>
-                    <p class="note">建议选择 input 下的 hull / tow 图片。无刻度原图按工具默认标定识别：横轴0～180°、时间0～600秒（从下到上）；非默认范围请附同样本的 input/platform.json。空间定位请附同一样本的input/platform.json；大模型提取同步双阵方位，程序求解空间候选轨迹，定位不足不生成替代图。不要上传 truth、meta.json 或 semantic.json。</p></div>
+                    <p class="note">可以从任意文件夹选择同一样本的 hull / tow 图片。平台文件兼容旧版 DB_STEP，但必须只含一个平台；当前专注单平台多目标，不限制图片所在目录。无刻度原图按工具默认标定识别：横轴0～180°、时间0～600秒（从下到上）；非默认范围请附同样本的 input/platform.json。空间定位请附同一样本的input/platform.json；大模型提取同步双阵方位，程序求解空间候选轨迹，定位不足不生成替代图。不要上传 truth、meta.json 或 semantic.json。</p></div>
                 </section>
                 <section class="card">
                     <div class="heading">

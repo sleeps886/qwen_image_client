@@ -7,7 +7,7 @@ import uuid
 
 from backend.app.core.exceptions import ResultNotFound,InvalidStoredResult
 
-RESULT_FILES=('answer.txt','response.json','request_meta.json','estimated_track.png','mirror_candidates.png','tracks.json',
+RESULT_FILES=('model_mirror_candidates.png','model_final_quality.json','backend_candidate.png','backend_tracks.json','model_final_input.json','model_final_answer.txt','model_final_report.json','answer.txt','response.json','request_meta.json','estimated_track.png','mirror_candidates.png','tracks.json',
               'provider_reasoning.txt','stream_state.json','candidate_evidence.json','knowledge_sources.json',
               'agent_trace.json','quality_report.json','resolved_observations.json',
               'spatial_raw.json','tracking_report.json','reprojection_report.json','calibration_context.json',

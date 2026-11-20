@@ -6,10 +6,15 @@ import math
 def platform_context(raw):
     if len(raw)>100000:raise ValueError('platform.json超过100KB限制')
     data=json.loads(raw)
-    allowed={'T_MAX','DT','B_MIN','B_MAX','REF_LAT','REF_LON','EARTH_R','platforms',
+    allowed={'T_MAX','DT','B_MIN','B_MAX','DB_STEP','REF_LAT','REF_LON','EARTH_R','platforms',
              'platform_motion_model','image_time_axis','bearing_convention','left_right_ambiguous'}
-    if not isinstance(data,dict) or set(data)-allowed or not isinstance(data.get('platforms'),list) or not 1<=len(data['platforms'])<=8:
-        raise ValueError('请选择input/platform.json，不接受含targets、params或真值的文件')
+    if not isinstance(data,dict):raise ValueError('平台文件必须是JSON对象')
+    if set(data)-allowed:
+        raise ValueError('平台文件含不支持的字段：'+','.join(sorted(set(data)-allowed))[:180]+'；请上传平台参数，不要上传目标真值或meta文件')
+    if not isinstance(data.get('platforms'),list) or not 1<=len(data['platforms'])<=8:
+        raise ValueError('平台文件需要platforms数组，包含1～8个平台；不是文件所在目录受限')
+    if 'DB_STEP' in data and (type(data['DB_STEP']) not in (int,float) or not math.isfinite(data['DB_STEP']) or not 0<data['DB_STEP']<=180):
+        raise ValueError('平台DB_STEP必须为有限正数且不大于180；此旧版显示字段不参与位置反演')
     duration=data.get('T_MAX',600)
     if type(duration) not in (int,float) or not math.isfinite(duration) or not 0<duration<=604800:
         raise ValueError('平台观测时长无效')

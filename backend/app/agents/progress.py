@@ -91,15 +91,15 @@ INVERSE_NODES=[('inverse_input','反演输入与标定'),('inverse_field','完�
  ('inverse_review','可选模型假设复核'),('inverse_quality','正向BTR与可辨识性检查'),('inverse_render','空间候选绘图与汇总')]
 
 
-INVERSE_LABELS=dict(INVERSE_NODES)
+INVERSE_LABELS=dict(INVERSE_NODES)|{'inverse_model_final':'三类图模型最终轨迹生成'}
 
 
 def inverse_start(name):
     token,event=start_record(name)
-    event.update(label=INVERSE_LABELS[name],execution_kind='model_gateway' if name=='inverse_review' else 'local_numeric')
+    event.update(label=INVERSE_LABELS[name],execution_kind='model_gateway' if name in ('inverse_review','inverse_model_final') else 'local_numeric')
     return token,event
 
 
 def inverse_end(name,token,status,summary):
     return end_record(name,token,status,summary)|{'label':INVERSE_LABELS[name],
-        'execution_kind':'model_gateway' if name=='inverse_review' else 'local_numeric'}
+        'execution_kind':'model_gateway' if name in ('inverse_review','inverse_model_final') else 'local_numeric'}

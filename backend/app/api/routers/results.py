@@ -30,8 +30,9 @@ def historical_result(result_id:str):
             if file.stat().st_size<=4*1024*1024:
                 try:
                     saved=json.loads(file.read_text(encoding='utf-8'))
-                    if isinstance(saved,dict):metadata={k:saved[k] for k in ('node_events','target_count','offline_reprocessed','source_result_id','new_model_calls','pipeline','result_source','hypothesis_review','optimization_status') if k in saved}
+                    if isinstance(saved,dict):metadata={k:saved[k] for k in ('node_events','target_count','offline_reprocessed','source_result_id','new_model_calls','pipeline','result_source','hypothesis_review','optimization_status','model_final','model_final_requested','answer_source') if k in saved}
                 except (OSError,ValueError):pass
+        metadata.setdefault('answer_source','model_output' if 'model_final_answer.txt' in stored['files'] else 'local_numeric_report' if metadata.get('pipeline')=='forward_inverse_v1' else 'model_output')
         return {'ok':True,'result_id':result_id,'answer':stored['answer'],
             'input_mode':doc.get('input_mode','images'),'input_data':{'plot_kind':doc.get('plot_kind','tracks')},
             'trajectory_status':'bearing_time' if doc['coordinate_system']=='bearing_time' else 'position_estimate',

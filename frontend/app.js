@@ -7,35 +7,38 @@ let defaultImagePrompt='';
 const nodeDefinitions=[['knowledge_retrieval','知识规则检索'],['pixel_candidates','绘图区与候选提取'],['tracklet_linking','亮带连续性分析'],['count_hypothesis','数量线索判定'],['association_context','关联上下文组装'],['model_association','模型清单与双阵关联'],['pair_validation','配对归属与同步校验'],['count_audit','数量与覆盖复核'],['identity_reconciliation','跨时段身份与串线复核'],['spatial_localization','双阵空间定位'],['continuous_trajectory_estimation','连续轨迹估计'],['reprojection_quality_check','重投影质检'],['result_summary','数量与定位汇总'],['render','空间候选绘图']];
 let executionNodes=new Map();
 const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与交叉假设'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
+const fusionNodeDefinitions=[...inverseNodeDefinitions,['inverse_model_final','三类图模型最终轨迹生成']];
+const fusionMode=()=>!dataMode()&&$('processingPipeline').value==='forward_model';
+function fusionRun(){return !!agentResultMetadata?.model_final_requested||executionNodes.has('inverse_model_final')||(!executionNodes.size&&fusionMode());}
 let agentResultMetadata=null;
 function updateAgentOverview(){
   const entries=[...executionNodes.entries()];
   const inverse=entries.some(([id])=>id.startsWith('inverse_'))||(!entries.length&&forwardMode());
-  const definitions=inverse?inverseNodeDefinitions:nodeDefinitions;
+  const definitions=inverse?(fusionRun()?fusionNodeDefinitions:inverseNodeDefinitions):nodeDefinitions;
   const isData=agentResultMetadata?.input_mode==='data'||(!entries.length&&dataMode());
   const finished=entries.filter(([,event])=>['completed','failed','skipped','stopped'].includes(event.status)).length;
   const current=[...entries].reverse().find(([,event])=>event.status==='running')||[...entries].reverse().find(([,event])=>event.status==='failed'||event.status==='stopped');
   const label=current?definitions.find(([id])=>id===current[0])?.[1]:null;
-  $('agentModeName').textContent=isData?'单文件绘图':inverse?'完整本地反演':'模型关联';
+  $('agentModeName').textContent=isData?'单文件绘图':inverse?(fusionRun()?'三类图模型融合':'完整本地反演'):'模型关联';
   const state=$('resultPanel').dataset.state;
   $('agentCurrentNode').textContent=state==='error'?'任务未完成 · 查看日志':label||(state==='completed'?'任务已结束 · 结果待核验':state==='preflight'?'本地预检已结束':entries.length?'等待后续事件':'尚未收到节点事件');
   $('agentNodeCount').textContent=isData?finished+' 个记录 · 直接绘图':finished+' / '+definitions.length;
   $('agentNodeProgress').max=isData?Math.max(entries.length,1):definitions.length;
   $('agentNodeProgress').value=finished;
-  const model=executionNodes.get(inverse?'inverse_review':'model_association');
+  const model=executionNodes.get(inverse?(fusionRun()?'inverse_model_final':'inverse_review'):'model_association');
   const calls=agentResultMetadata?.new_model_calls;
-  $('agentModelState').textContent=Number.isInteger(calls)?calls+' 次（本次记录）':model?({running:'调用中',completed:'调用已结束',failed:'调用失败',skipped:'未调用 · 已跳过',stopped:'本地接收已停止'}[model.status]||'等待事件'):inverse?'本地计算 · 复核可选':'尚未收到调用记录';
+  $('agentModelState').textContent=Number.isInteger(calls)?calls+' 次（本次记录）':model?({running:'调用中',completed:'调用已结束',failed:'调用失败',skipped:'未调用 · 已跳过',stopped:'本地接收已停止'}[model.status]||'等待事件'):inverse?(fusionRun()?'待调用 · 先生成本地证据':'本地计算 · 复核可选'):'尚未收到调用记录';
 }
 function drawNodes(){
   $('nodePanel').hidden=!executionNodes.size;$('nodeList').replaceChildren();
   const statusNames={pending:'待执行',running:'执行中',completed:'已执行',failed:'失败',skipped:'已跳过',stopped:'已停止'};
-  const definitions=[...executionNodes.keys()].some(id=>id.startsWith('inverse_'))?inverseNodeDefinitions:nodeDefinitions;
-  $('nodeHelp').textContent=definitions===inverseNodeDefinitions?'完整正向反演由本地程序执行；只有明确申请的“可选模型假设复核”可能调用一次云端模型，跳过表示没有调用。节点完成和BTR一致性不代表独立位置精度合格。':'仅“模型清单与双阵关联”调用大模型；其余为内置规则、启发式或数值程序。记录执行不等于验证正确，重投影不是独立准确性评测；未自动付费重试。';
-  for(const [id,label] of definitions){const event=executionNodes.get(id)||{status:'pending'},row=document.createElement('li'),title=document.createElement('strong'),state=document.createElement('span'),time=document.createElement('small'),detail=document.createElement('p');row.className='node-row '+event.status;title.textContent=label;state.textContent=statusNames[event.status]||'未知';time.textContent=Number.isFinite(event.elapsed_ms)?(event.elapsed_ms<10?(event.elapsed_ms===0?'＜1毫秒（旧记录取整）':event.elapsed_ms.toFixed(3)+'毫秒'):(event.elapsed_ms/1000).toFixed(2)+'秒'):'';detail.textContent=(['model_association','inverse_review'].includes(id)?'[模型网关] ':['knowledge_retrieval'].includes(id)?'[内置规则] ':['pixel_candidates','tracklet_linking','count_hypothesis','identity_reconciliation'].includes(id)?'[本地启发式] ':'[本地程序] ')+(event.summary||'');row.append(title,state,time,detail);$('nodeList').append(row);}
+  const definitions=[...executionNodes.keys()].some(id=>id.startsWith('inverse_'))?(fusionRun()?fusionNodeDefinitions:inverseNodeDefinitions):nodeDefinitions;
+  $('nodeHelp').textContent=definitions===fusionNodeDefinitions?'三类图一起发送模型，由模型输出最终坐标；后端逐身份审计、检查模型坐标回投并渲染。回投一致不代表定位正确。':definitions===inverseNodeDefinitions?'完整正向反演由本地程序执行；只有明确申请的“可选模型假设复核”可能调用一次云端模型，跳过表示没有调用。节点完成和BTR一致性不代表独立位置精度合格。':'仅“模型清单与双阵关联”调用大模型；其余为内置规则、启发式或数值程序。记录执行不等于验证正确，重投影不是独立准确性评测；未自动付费重试。';
+  for(const [id,label] of definitions){const event=executionNodes.get(id)||{status:'pending'},row=document.createElement('li'),title=document.createElement('strong'),state=document.createElement('span'),time=document.createElement('small'),detail=document.createElement('p');row.className='node-row '+event.status;title.textContent=label;state.textContent=statusNames[event.status]||'未知';time.textContent=Number.isFinite(event.elapsed_ms)?(event.elapsed_ms<10?(event.elapsed_ms===0?'＜1毫秒（旧记录取整）':event.elapsed_ms.toFixed(3)+'毫秒'):(event.elapsed_ms/1000).toFixed(2)+'秒'):'';detail.textContent=(['model_association','inverse_review','inverse_model_final'].includes(id)?'[模型网关] ':['knowledge_retrieval'].includes(id)?'[内置规则] ':['pixel_candidates','tracklet_linking','count_hypothesis','identity_reconciliation'].includes(id)?'[本地启发式] ':'[本地程序] ')+(event.summary||'');row.append(title,state,time,detail);$('nodeList').append(row);}
   updateAgentOverview();
 }
 function receiveNode(event){
-  if(![...nodeDefinitions,...inverseNodeDefinitions].some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
+  if(![...nodeDefinitions,...fusionNodeDefinitions].some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
   executionNodes.set(event.node,{status:event.status,elapsed_ms:typeof event.elapsed_ms==='number'?event.elapsed_ms:undefined,summary:typeof event.summary==='string'?event.summary.slice(0,300):''});drawNodes();
 }
 function showExecution(events){executionNodes=new Map();for(const event of events||[])receiveNode(event);drawNodes();}
@@ -49,9 +52,10 @@ function showTargetCount(report){
   if(report.shared_inventory_evidence?.length)$('targetCountExplanation').textContent+=' 共享数量证据已隔离：'+report.shared_inventory_evidence.map(x=>x.candidate_id+'（'+x.target_ids.join('/')+'）').join('；')+'。不能据这些点重复确认目标数。';
 }
 const dataMode=()=>$('inputMode').value==='data';
-const forwardMode=()=>!dataMode()&&$('processingPipeline').value==='forward_v1';
+const forwardMode=()=>!dataMode()&&['forward_v1','forward_model'].includes($('processingPipeline').value);
 function updatePipeline(){
-  if(forwardMode()){$('rendererProfile').value='btr_gui_v1';$('send').textContent='执行完整正向反演 ↗';}
+  $('reviewHypothesesLabel').hidden=fusionMode();
+  if(forwardMode()){$('rendererProfile').value='btr_gui_v1';$('send').textContent=fusionMode()?'发送三类图并生成最终轨迹 ↗':'执行本地正向反演 ↗';}
   else $('send').textContent=dataMode()?'发送数据并生成轨迹图 ↗':'流式识别并生成轨迹 ↗';
   $('consent').checked=false;
 }
@@ -71,7 +75,7 @@ function updateInputMode(){
   $('fileCount').textContent=mode==='data'?'仅 1 份数据，无需图片':images.length+' / 8 张';
   $('dataFileLabel').textContent=mode==='data'?'目标数据文件（必选，仅一份）':'平台参数（空间定位必需）';
   $('platform').accept=mode==='data'?'.json,.jsonl,.js,application/json,application/javascript':'.json,application/json';
-  $('dataFileHint').textContent=mode==='data'?'完整轨迹请选meta.json（最多1MiB）；semantic.json只有起终点摘要，platform.json只有平台参数。也支持点位JSON/JSONL。':'请选择同一样本 input/platform.json；用于定位，不是目标真值。';
+  $('dataFileHint').textContent=mode==='data'?'完整轨迹请选meta.json（最多1MiB）；semantic.json只有起终点摘要，platform.json只有平台参数。也支持点位JSON/JSONL。':'请选择同一样本的平台JSON；支持旧版DB_STEP，仅限单平台，不限文件夹。用于定位，不是目标真值。';
   $('send').textContent=mode==='data'?'发送数据并生成轨迹图 ↗':'流式识别并生成轨迹 ↗';
   $('inspect').textContent=mode==='data'?'仅预检数据':'仅预检图片';
   $('consent').checked=false;
@@ -120,12 +124,21 @@ function beginLogs(){
   return requestLogId;
 }
 $('clearLogs').addEventListener('click',()=>{$('logOutput').textContent='';});
+function imageSelectionStatus(text,kind=''){
+  $('imageSelectionStatus').textContent=text;
+  $('imageSelectionStatus').style.color=kind==='error'?'#ffb2b2':'';
+  status(text,kind);
+}
 function selectImages(files){
-  if(busy)return;
+  if(busy){imageSelectionStatus('当前任务仍在运行，请先停止或等待结束再选择图片。','error');return;}
   const selected=Array.from(files);
   if(!selected.length)return;
-  if(selected.length>8 || selected.some(x=>x.size>10*1024*1024) || selected.reduce((s,x)=>s+x.size,0)>20*1024*1024){status('最多8张图片；单图10MiB、合计20MiB。','error');return;}
-  if(selected.some(x=>!['image/png','image/jpeg','image/webp'].includes(x.type))){status('只支持PNG、JPEG、WebP图片。','error');return;}
+  if(selected.length>8 || selected.some(x=>x.size>10*1024*1024) || selected.reduce((s,x)=>s+x.size,0)>20*1024*1024){imageSelectionStatus('最多8张图片；单图10MiB、合计20MiB。','error');return;}
+  const unsupported=selected.find(file=>{
+    const type=(file.type||'').toLowerCase();
+    return !['image/png','image/jpeg','image/webp','image/x-png','image/jpg'].includes(type) && !((!type||type==='application/octet-stream')&&/\.(png|jpe?g|webp)$/i.test(file.name||''));
+  });
+  if(unsupported){imageSelectionStatus('无法添加 '+(unsupported.name||'此文件')+'：只支持PNG、JPEG、WebP图片；后端还会检查真实图片内容。','error');return;}
   urls.forEach(URL.revokeObjectURL);urls=[];images=selected;$('consent').checked=false;$('previews').replaceChildren();
   for(const file of images){
     const box=document.createElement('div');box.className='preview';
@@ -134,9 +147,12 @@ function selectImages(files){
     const size=document.createElement('small');size.textContent=(file.size/1024/1024).toFixed(2)+' MiB';
     box.append(img,name,size);$('previews').append(box);
   }
-  $('fileCount').textContent=images.length+' / 8 张';status('已选择 '+images.length+' 张图片，尚未调用模型。');
+  $('fileCount').textContent=images.length+' / 8 张';imageSelectionStatus('已加入 '+images.length+' 张图片：'+images.map(file=>file.name).join('、')+'。尚未调用模型。');
 }
-$('files').addEventListener('change',event=>selectImages(event.target.files));
+$('files').addEventListener('change',event=>{
+  const selected=Array.from(event.target.files||[]);
+  try{selectImages(selected);}finally{event.target.value='';} // Re-selecting the same pair must fire change again.
+});
 $('dropZone').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();if(!busy)$('files').click();}});
 for(const kind of ['dragover','dragleave','drop'])$('dropZone').addEventListener(kind,event=>{
   event.preventDefault();$('dropZone').classList.toggle('dragover',kind==='dragover');if(kind==='drop')selectImages(event.dataTransfer.files);
@@ -218,6 +234,7 @@ function showModelResult(data,{fromHistory=false}={}){
   showExecution(data.node_events);showTargetCount(data.target_count);
   showEvidence(data);
   const forwardResult=data.pipeline==='forward_inverse_v1';
+  const hasFinalModelAnswer=data.answer_source?data.answer_source==='model_output':!!data.downloads?.['model_final_answer.txt']||data.model_final?.status==='generated';
   const candidateResult=data.input_mode!=='data' && !!data.trajectory_image && (!!data.downloads?.['quality_report.json']||forwardResult);
   $('bodyOutputHint').textContent='模型正文已接收完毕，绘图状态见结果和告警。';
   status('已保存结果，编号：'+data.result_id,data.trajectory_image?'ok':'warning');$('answer').textContent=data.answer.slice(0,4000000);
@@ -242,11 +259,13 @@ function showModelResult(data,{fromHistory=false}={}){
   renderUsage(data.usage);
   $('downloads').replaceChildren();$('debugDownloads').replaceChildren();
   const primaryNames={'estimated_track.png':forwardResult?'下载主模型假设 PNG（未消歧）':'下载轨迹图 PNG','mirror_candidates.png':'查看全部镜像候选 PNG','tracks.json':'下载轨迹点 JSON','answer.txt':forwardResult?'下载本地反演报告':'下载模型正文'};
+  if(data.model_final_requested)Object.assign(primaryNames,{'estimated_track.png':'下载模型代表轨迹 PNG（未消歧）','model_mirror_candidates.png':'查看模型全部镜像候选 PNG','answer.txt':'下载模型最终正文','backend_candidate.png':'查看后端候选 PNG（非模型最终结果）','backend_tracks.json':'下载后端候选坐标 JSON','mirror_candidates.png':'查看后端全部镜像候选 PNG'});
+  if(data.model_final_requested && !hasFinalModelAnswer)primaryNames['answer.txt']='下载本地诊断报告（非模型回复）';
   let debugFiles=0;
   const rank=name=>name==='estimated_track.png'?0:name==='tracks.json'?1:name==='answer.txt'?2:3;
   for(const [name,path] of Object.entries(data.downloads||{}).sort((a,b)=>rank(a[0])-rank(b[0]))){
     const a=document.createElement('a');a.textContent=primaryNames[name]||name;a.href=path;a.download=name;
-    if(name==='mirror_candidates.png'){a.removeAttribute('download');a.target='_blank';a.rel='noopener';}
+    if(['mirror_candidates.png','model_mirror_candidates.png'].includes(name)){a.removeAttribute('download');a.target='_blank';a.rel='noopener';}
     a.className=name==='estimated_track.png'?'download-link download-primary':'download-link';
     (primaryNames[name]?$('downloads'):$('debugDownloads')).append(a);if(!primaryNames[name])debugFiles++;
   }
@@ -278,6 +297,30 @@ function showModelResult(data,{fromHistory=false}={}){
       $('completionSubtitle').textContent='保留了已完成的更新，其余沿用粗估，已继续执行质检与绘图；不是完整细化或可靠定位结果。';
       $('badge').textContent='部分优化';
     }
+  }
+  if(data.model_final_requested){
+    const generated=data.model_final?.status==='generated'&&hasImage;
+    $('bodySummary').textContent=hasFinalModelAnswer?'大模型最终轨迹正文 · 查看 JSON':'本地诊断报告 · 非模型回复';
+    $('bodyOutputHint').textContent=hasFinalModelAnswer?'三类图融合：最终点位由模型输出；本地候选仅作参考证据。':'本次未收到大模型正文。下方JSON为本地反演诊断报告，不表示大模型已返回轨迹。';
+    $('completionTitle').textContent=generated?'大模型融合轨迹已生成 · 待核验':'大模型最终轨迹未生成';
+    $('completionSubtitle').textContent=generated?'原始声呐图、高斯测量叠加图与反演候选一起输入模型；后端校验、渲染并检查模型坐标回投；未通过独立精度验证。':'请求失败或坐标校验未通过；后端候选单独保留，没有回退冒充模型结果，未自动重试。';
+    if(!generated && data.model_final?.error_message)$('completionSubtitle').textContent+=' 原因：'+data.model_final.error_message;
+    $('trackCaption').textContent='模型综合三类图输出的坐标；后端候选与模型坐标分别质检，回投一致不等于独立定位准确。';
+    $('aiCoordinateLabel').textContent=data.downloads?.['model_mirror_candidates.png']?'（每身份代表分支，侧别未确认）':'（大模型融合估计，非真值）';
+    if(data.downloads?.['model_mirror_candidates.png'])$('trackCaption').textContent='主图每个身份只展示一组代表分支，不代表唯一正确侧别；模型全部镜像请点“查看模型全部镜像候选 PNG”。颜色不与参考图目标编号对应，JSON保留所有分支。';
+    const audit=data.model_final?.identity_audit;
+    if(generated && audit?.omitted_source_identity_ids?.length){
+      $('completionTitle').textContent='仅生成部分身份轨迹 · 目标识别未完整';
+      $('completionSubtitle').textContent+=' 未输出来源身份：'+audit.omitted_source_identity_ids.join('、')+'；不能将这张图当作完整多目标结果。';
+    }
+    if(generated && audit?.unrepresented_mirror_variants?.length)$('completionSubtitle').textContent+=' 部分镜像分支未保留，侧别仍未消歧：'+audit.unrepresented_mirror_variants.map(x=>x.candidate_id).join('、')+'。';
+    if(generated && audit?.unreviewed_identity_ids?.length)$('completionSubtitle').textContent+=' 未完成逐身份说明：'+audit.unreviewed_identity_ids.join('、')+'。';
+    if(generated && data.model_final?.geometry_audit?.warning_track_count){
+      if(!audit?.omitted_source_identity_ids?.length)$('completionTitle').textContent='模型轨迹回投有疑点 · 仅供诊断';
+      $('completionSubtitle').textContent+=' 模型坐标回投有不匹配或观测不足，请检查质检报告。';
+    }
+    $('bodyDetails').open=!generated;$('warningsDetails').open=true;
+    $('completionIcon').textContent=generated?'✓':'!';$('badge').textContent=generated?'模型估计待核验':'未生成最终轨迹';
   }
   $('runLogsDetails').open=false;$('logPhase').textContent=fromHistory?'历史结果，未发起新请求':'已结束';
   $('stopStream').hidden=true;$('stopStream').disabled=true;
@@ -364,12 +407,12 @@ async function submit(dryRun){
   if(!isData && !images.length){status('请先选择图片，或切换到单文件绘图模式。','error');return;}
   if(forward && !platform){status('完整正向反演需要同一样本的platform.json。','error');return;}
   if(!forward && !$('prompt').value.trim()){status('提示词不能为空。','error');return;}
-  const needsCloud=!dryRun&&(!forward||$('reviewHypotheses').checked);
+  const needsCloud=!dryRun&&(!forward||fusionMode()||$('reviewHypotheses').checked);
   if(needsCloud && !$('consent').checked){status('请先勾选云端传输与费用确认。','error');return;}
   const form=new FormData();if(!isData)images.forEach(file=>form.append('files',file));
   form.append('input_mode',isData?'data':'images');
   form.append('renderer_profile',isData?'none':($('rendererProfile').value||'none'));
-  if(forward)form.append('review_model',String(!!$('reviewHypotheses').checked));
+  if(forward){form.append('review_model',String(!fusionMode()&&!!$('reviewHypotheses').checked));form.append('final_model',String(fusionMode()));}
   form.append('prompt',$('prompt').value);
   form.append('dry_run',String(dryRun));form.append('consent',String($('consent').checked));
   if(platform){if(platform.size>(isData?1024*1024:100000)){status(isData?'数据文件超过1MiB限制。':'平台JSON超过100KB限制。','error');return;} form.append('platform',platform);}
@@ -377,7 +420,7 @@ async function submit(dryRun){
   resetResultPresentation();
   resetEvaluation();currentResultId='';currentTrajectoryStatus='';$('aiComparePreview').hidden=true;$('aiComparePreview').removeAttribute('src');$('aiCompareEmpty').hidden=false;resetComparison();
   $('trackFigure').hidden=true;$('trackImage').removeAttribute('src');$('trackWarnings').textContent='';
-  $('downloads').replaceChildren();$('usage').textContent='';status(dryRun?'正在本地预检，不会调用模型服务…':forward?'正在执行完整正向反演；默认本地计算，不调用模型…':'请求已提交本地服务，等待模型服务返回；请勿重复发送或关闭页面…');
+  $('downloads').replaceChildren();$('usage').textContent='';status(dryRun?'正在本地预检，不会调用模型服务…':forward?(fusionMode()?'正在生成本地证据，随后调用模型输出最终轨迹…':'正在执行本地正向反演；可选云端复核…'):'请求已提交本地服务，等待模型服务返回；请勿重复发送或关闭页面…');
   const correlationId=beginLogs();
   if(dryRun)logTimer=setTimeout(()=>pollLogs(correlationId),300);
   $('bodyOutputHint').textContent='等待模型正文；推理文本不作为轨迹数据。';
@@ -526,3 +569,5 @@ $('loadHistory').addEventListener('click',async()=>{
   finally{$('loadHistory').disabled=false;}
 });
 refreshHistory();
+
+updatePipeline();

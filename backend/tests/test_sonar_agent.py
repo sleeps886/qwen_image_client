@@ -51,7 +51,7 @@ class SonarAgentTests(unittest.TestCase):
         node_tree=ast.parse((root/'nodes/inverse.py').read_text(encoding='utf-8'))
         node_class=next(node for node in node_tree.body if isinstance(node,ast.ClassDef))
         self.assertEqual({node.name for node in node_class.body if isinstance(node,ast.FunctionDef)},
-                         {'__init__','validate','field','paths_node','associations','fit','refine','review','quality','render'})
+                         {'__init__','validate','field','paths_node','associations','fit','refine','review','quality','render','model_final'})
         agent_tree=ast.parse((root/'forward_inverse_agent.py').read_text(encoding='utf-8'))
         run=next(node for node in ast.walk(agent_tree) if isinstance(node,ast.FunctionDef) and node.name=='run')
         self.assertFalse(any(isinstance(node,ast.FunctionDef) for node in run.body))

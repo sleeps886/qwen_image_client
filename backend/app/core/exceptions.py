@@ -52,7 +52,7 @@ class ModelTimeoutError(ModelServiceError):
 
 # Forward-inversion input errors. Keep user messages here, not in services.
 class ReviewConsentRequired(InputError):
-    default_message='申请模型复核必须明确同意云端传输与费用；本地反演不需要勾选'
+    default_message='申请模型复核或最终轨迹生成必须明确同意云端传输与费用；本地反演不需要勾选'
 
 
 class InvalidImagePair(InputError):
@@ -72,7 +72,7 @@ class InvalidImageFormat(InputError):
 
 
 class ReviewCredentialsRequired(InputError):
-    default_message='模型复核需要服务端API Key；可取消复核仅运行本地反演'
+    default_message='云端模型需要服务端API Key；可切换本地正向反演'
 
 
 class InversePreparationError(InputError):

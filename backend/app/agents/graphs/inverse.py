@@ -13,5 +13,9 @@ def build_inverse_graph(agent):
         graph.add_node(name,agent.observed(name,function))
     graph.add_edge(START,INVERSE_NODES[0][0])
     for a,b in zip(INVERSE_NODES,INVERSE_NODES[1:]):graph.add_edge(a[0],b[0])
-    graph.add_edge(INVERSE_NODES[-1][0],END)
+    if agent.finalizer is not None:
+        graph.add_node('inverse_model_final',agent.observed('inverse_model_final',nodes.model_final))
+        graph.add_edge(INVERSE_NODES[-1][0],'inverse_model_final')
+        graph.add_edge('inverse_model_final',END)
+    else:graph.add_edge(INVERSE_NODES[-1][0],END)
     return graph

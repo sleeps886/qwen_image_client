@@ -20,6 +20,57 @@ class InverseNodes:
     def __init__(self,agent):
         self.agent=agent
 
+    def model_final(self,state):
+        from backend.app.agents.model_trajectory import evidence_bundle,validate_final,PROMPT_VERSION
+        directory=self.agent.directory;context=state['context']
+        # Numeric products remain explicitly separate; never pass them off as model output.
+        self.agent.save('backend_tracks.json',state['document'])
+        (directory/'estimated_track.png').replace(directory/'backend_candidate.png')
+        (directory/'tracks.json').unlink(missing_ok=True)
+        self.agent.final_report={'status':'preparing','automatic_retry':False}
+        stage='evidence_preparation'
+        try:
+            images,prompt,manifest=evidence_bundle(state['paths'],state['evidence'],state['document'],context,directory,state.get('selection'))
+            self.agent.save('model_final_input.json',{'images':manifest,'prompt':prompt,'prompt_version':PROMPT_VERSION})
+            # Local optimization keeps its original 120s budget. Cloud stage gets a separate allowance.
+            self.agent.control.seconds+=90
+            self.agent.control.check()
+            self.agent.new_model_calls+=1
+            stage='model_gateway'
+            response=self.agent.finalizer(images,prompt,directory)
+            answer=response['answer']
+            (directory/'model_final_answer.txt').write_text(answer,encoding='utf-8')
+            self.agent.final_report['usage']=response.get('usage')
+            self.agent.control.check()
+            stage='coordinate_validation'
+            document=validate_final(answer,context,state['document'])
+            from backend.app.services.quality.model_final_quality import audit_geometry
+            stage='model_reprojection'
+            quality=audit_geometry(document,state['document'],state['evidence'],context,state.get('selection'))
+            self.agent.save('model_final_quality.json',quality)
+            document['model_geometry_audit']=quality
+            if quality['warning_track_count']:document['warnings'].append('模型修订坐标回投检查有'+str(quality['warning_track_count'])+'条分支不匹配或观测不足；不能当作可靠位置。')
+            stage='rendering'
+            from backend.app.services.rendering.model_views import render_model_views
+            render_model_views(document,directory,context,state['document'])
+            self.agent.final_report.update(status='generated',coordinate_source='model_output',
+                                          physical_validation='observation_consistency_only',prompt_version=PROMPT_VERSION,identity_audit=document['model_identity_audit'],
+                                          geometry_audit=quality)
+            self.agent.save('model_final_report.json',self.agent.final_report)
+            return {'document':document,'_summary':'已由大模型综合三类图输出最终轨迹点；已做逐身份覆盖审计和模型坐标回投；非真值验证'}
+        except InversionStopped:raise
+        except Exception as exc:
+            message=str(exc)[:250] if stage=='coordinate_validation' and isinstance(exc,ValueError) else '最终轨迹阶段失败：'+stage+'（'+type(exc).__name__+'）'
+            self.agent.final_report.update(status='failed',error_type=type(exc).__name__,numeric_fallback=False,
+                                           failed_stage=stage,error_message=message)
+            self.agent.save('model_final_report.json',self.agent.final_report)
+            # Do not show backend coordinates as a successful model final trajectory.
+            (directory/'estimated_track.png').unlink(missing_ok=True)
+            (directory/'tracks.json').unlink(missing_ok=True)
+            document={'coordinate_system':'local_xy_m','tracks':[],
+                      'warnings':['模型最终轨迹未生成或校验未通过：'+message+'；后端候选单独保留，未替代模型结果，未自动重试。']}
+            return {'document':document,'_summary':'模型最终轨迹生成失败；只保留独立后端候选，不回退冒充模型结果'}
+
     def validate(self,state):
         context=self.agent.state['context'];paths=self.agent.state['paths']
         if context.get('renderer_profile')!='btr_gui_v1':raise ValueError('完整正向反演仅支持显式声明的工具原始图配置')

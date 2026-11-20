@@ -8,6 +8,21 @@ vm.runInContext(fs.readFileSync(path.resolve(__dirname,'../app.js'),'utf8'),cont
 Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''},set(value){this.fileValue=value;if(value==='')this.files=[]}});
 (async()=>{
  await new Promise(setImmediate);
+ // Windows may omit MIME metadata; trust the extension only for empty/generic MIME.
+ context.selectionFiles=[new File(['png'],'btr_A_hull.png',{type:''}),new File(['png'],'btr_A_tow.PNG',{type:'application/octet-stream'})];
+ vm.runInContext('selectImages(selectionFiles)',context);
+ assert.equal(node('previews').children.length,2);
+ assert.match(node('imageSelectionStatus').textContent,/已加入 2 张/);
+ const picker={files:context.selectionFiles,value:'selected'};
+ node('files').listeners.change({target:picker});assert.equal(picker.value,'');
+ picker.value='selected';node('files').listeners.change({target:picker});
+ assert.equal(node('previews').children.length,2);assert.equal(picker.value,'');
+ node('files').listeners.change({target:{files:[],value:''}});
+ assert.equal(node('previews').children.length,2); // Cancelling does not clear existing images.
+ context.badSelection=[new File(['bad'],'fake.png',{type:'text/plain'})];
+ vm.runInContext('selectImages(badSelection)',context);
+ assert.match(node('imageSelectionStatus').textContent,/无法添加 fake.png/);
+ assert.equal(node('previews').children.length,2);
  vm.runInContext('showTargetCount({inventory_target_count:4,associated_target_count:2,warnings:[],clutter_classification_reviews:[{id:"T3"},{id:"T4"}]})',context);
  assert.match(node('targetCountExplanation').textContent,/T3（模型原判杂波，程序未确认/);
  assert.match(node('targetCountExplanation').textContent,/T4（模型原判杂波，程序未确认/);
@@ -223,5 +238,34 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  node('reviewHypotheses').checked=true;node('consent').checked=false;
  await vm.runInContext('submit(false)',context);
  assert.equal(inverseRequests.length,1);assert.match(node('status').textContent,/云端传输与费用确认/);
+ // Fusion mode must require consent, dispatch the new flag, and identify model coordinates.
+ node('inputMode').value='images';node('processingPipeline').value='forward_model';node('processingPipeline').listeners.change();
+ assert.equal(node('reviewHypothesesLabel').hidden,true);
+ node('platform').files=[new Blob(['{}'],{type:'application/json'})];
+ vm.runInContext('images=[inverseImage,inverseImage]',context);
+ const fusionRequests=[];
+ context.fetch=async(url,options)=>{fusionRequests.push({url,options});return new Response('data: '+JSON.stringify({event:'result',data:{ok:true,result_id:'fusion',answer:'{}',pipeline:'forward_inverse_v1',model_final_requested:true,model_final:{status:'generated'},new_model_calls:1,trajectory_image:'/model.png',warnings:[],downloads:{'estimated_track.png':'/model.png','backend_candidate.png':'/local.png'},node_events:[{node:'inverse_model_final',status:'completed',summary:'model'}]}})+'\n\n',{headers:{'content-type':'text/event-stream'}});};
+ node('consent').checked=false;await vm.runInContext('submit(false)',context);assert.equal(fusionRequests.length,0);
+ node('consent').checked=true;await vm.runInContext('submit(false)',context);
+ assert.equal(fusionRequests.length,1);assert.equal(fusionRequests[0].url,'/api/invert/stream');
+ assert.equal(fusionRequests[0].options.body.get('final_model'),'true');
+ assert.equal(fusionRequests[0].options.body.get('review_model'),'false');
+ assert.equal(fusionRequests[0].options.body.has('platform_id'),false);
+ assert.match(node('completionTitle').textContent,/大模型融合轨迹/);
+ assert.match(node('bodySummary').textContent,/大模型最终/);assert.equal(node('nodeList').children.length,10);
+ assert.match(node('agentModelState').textContent,/1 次/);
+ vm.runInContext('showModelResult({result_id:"failed-fusion",answer:"bad",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed"},trajectory_image:null,warnings:[],downloads:{"backend_candidate.png":"/local.png"}})',context);
+ assert.match(node('completionTitle').textContent,/未生成/);assert.equal(node('trackFigure').hidden,true);
+ vm.runInContext('showModelResult({result_id:"partial-identities",answer:"{}",pipeline:"forward_inverse_v1",trajectory_image:"/model.png",warnings:[],downloads:{},model_final_requested:true,model_final:{status:"generated",identity_audit:{omitted_source_identity_ids:["N2"],unreviewed_identity_ids:["N2"],unrepresented_mirror_variants:[]}}})',context);
+ assert.match(node('completionTitle').textContent,/部分身份/);assert.match(node('completionSubtitle').textContent,/N2/);
+ vm.runInContext('showModelResult({result_id:"mirror-review",answer:"{}",pipeline:"forward_inverse_v1",trajectory_image:"/model.png",warnings:[],downloads:{},model_final_requested:true,model_final:{status:"generated",identity_audit:{omitted_source_identity_ids:[],unrepresented_mirror_variants:[{candidate_id:"N1",missing_mirror_variants:[1]}]},geometry_audit:{warning_track_count:1}}})',context);
+ assert.match(node('completionTitle').textContent,/回投有疑点/);assert.match(node('completionSubtitle').textContent,/侧别仍未消歧/);
+ vm.runInContext('showModelResult({result_id:"network-error",answer:"{source:local_numeric_report}",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed",failed_stage:"model_gateway"},trajectory_image:null,warnings:[],downloads:{"answer.txt":"/local-report.txt"}})',context);
+ assert.match(node('bodySummary').textContent,/非模型回复/);
+ assert.match(node('bodyOutputHint').textContent,/未收到大模型正文/);
+ assert.match(node('downloads').textContent,/本地诊断报告/);
+ vm.runInContext('showModelResult({result_id:"invalid-model-json",answer:"bad JSON",answer_source:"model_output",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed",failed_stage:"coordinate_validation"},trajectory_image:null,warnings:[],downloads:{"answer.txt":"/answer.txt","model_final_answer.txt":"/model-answer.txt"}})',context);
+ assert.match(node('bodySummary').textContent,/大模型最终轨迹正文/);
+ assert.doesNotMatch(node('bodyOutputHint').textContent,/未收到/);
  console.log('PASS: streaming, stop, file modes, Agent overview, real node counts, model-call metadata, console structure');
 })().catch(e=>{console.error(e);process.exitCode=1});

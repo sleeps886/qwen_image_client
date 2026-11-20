@@ -19,17 +19,17 @@ from backend.app.api.dependencies import server_config_only
 router=APIRouter(tags=['forward-inversion'],dependencies=[Depends(server_config_only)])
 
 
-def prepare_job(files,platform,renderer_profile,review_model,consent):
+def prepare_job(files,platform,renderer_profile,review_model,consent,final_model=False):
     return prepare_inverse_job(files,platform,renderer_profile,review_model,consent,
-                               uploads_dir=UPLOADS,slots=SLOTS)
+                               uploads_dir=UPLOADS,slots=SLOTS,final_model=final_model)
 
 
 @router.post('/api/invert',summary='完整正向反演；默认只本地计算，模型复核需单独授权')
 def invert(request:Request,files:Annotated[list[UploadFile],File()],platform:Annotated[UploadFile,File()],
            renderer_profile:Annotated[str,Form()]='none',review_model:Annotated[bool,Form()]=False,
-           consent:Annotated[bool,Form()]=False):
-    job=prepare_job(files,platform,renderer_profile,review_model,consent)
-    workflow=ForwardInverseAgent(control=job.control,reviewer=job.reviewer)
+           consent:Annotated[bool,Form()]=False,final_model:Annotated[bool,Form()]=False):
+    job=prepare_job(files,platform,renderer_profile,review_model,consent,final_model)
+    workflow=ForwardInverseAgent(control=job.control,reviewer=job.reviewer,finalizer=getattr(job,'finalizer',None))
     try:return workflow.run(job.paths,job.context,OUTPUTS)|{'request_id':request.state.request_id}
     except ValueError as exc:raise InverseProcessingError(str(exc),
         result_id=workflow.directory.name if workflow.directory else None) from None
@@ -39,8 +39,8 @@ def invert(request:Request,files:Annotated[list[UploadFile],File()],platform:Ann
 @router.post('/api/invert/stream',summary='完整正向反演SSE：实际节点、可取消、默认零模型调用')
 def invert_stream(request:Request,files:Annotated[list[UploadFile],File()],platform:Annotated[UploadFile,File()],
                   renderer_profile:Annotated[str,Form()]='none',review_model:Annotated[bool,Form()]=False,
-                  consent:Annotated[bool,Form()]=False):
-    job=prepare_job(files,platform,renderer_profile,review_model,consent);rid=request.state.request_id
+                  consent:Annotated[bool,Form()]=False,final_model:Annotated[bool,Form()]=False):
+    job=prepare_job(files,platform,renderer_profile,review_model,consent,final_model);rid=request.state.request_id
     def encode(event):return 'event: '+event['event']+'\ndata: '+json.dumps(event,ensure_ascii=False,allow_nan=False)+'\n\n'
     task=None;final_status=200;cleanup_scheduled=False
     def finalize():
@@ -61,7 +61,7 @@ def invert_stream(request:Request,files:Annotated[list[UploadFile],File()],platf
         queue=asyncio.Queue();loop=asyncio.get_running_loop();alive=True
         def emit(event):
             if alive and not loop.is_closed():loop.call_soon_threadsafe(queue.put_nowait,event)
-        workflow=ForwardInverseAgent(emit=emit,control=job.control,reviewer=job.reviewer)
+        workflow=ForwardInverseAgent(emit=emit,control=job.control,reviewer=job.reviewer,finalizer=getattr(job,'finalizer',None))
         async def work():
             try:
                 result=await asyncio.to_thread(workflow.run,job.paths,job.context,OUTPUTS)
@@ -72,8 +72,8 @@ def invert_stream(request:Request,files:Annotated[list[UploadFile],File()],platf
             finally:await queue.put(None)
         task=asyncio.create_task(work())
         try:
-            LOGS.add(rid,'INFO','开始本地正向反演；'+('已授权最多一次云端假设复核。' if review_model else '不调用模型，不需要API Key。'))
-            yield encode({'event':'phase','phase':'local_inverse','message':'本地正向反演已接收；'+('含已授权可选模型复核。' if review_model else '不发送云端模型请求。'),'request_id':rid})
+            LOGS.add(rid,'INFO','开始本地正向反演；'+('已授权一次三类图模型最终轨迹生成。' if final_model else '已授权最多一次云端假设复核。' if review_model else '不调用模型，不需要API Key。'))
+            yield encode({'event':'phase','phase':'local_inverse','message':'本地正向反演已接收；'+('本地候选生成后将发送三类图，让模型输出最终轨迹。' if final_model else '含已授权可选模型复核。' if review_model else '不发送云端模型请求。'),'request_id':rid})
             while True:
                 try:event=await asyncio.wait_for(queue.get(),15)
                 except asyncio.TimeoutError:

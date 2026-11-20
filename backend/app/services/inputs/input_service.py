@@ -30,6 +30,7 @@ def prepare_input(image_count, platform_raw, prompt, input_mode, filename='data.
             if isinstance(document,dict) and any(key in document for key in ('params','targets','sim_settings','tracks','points')):
                 raise ValueError('当前是图片识别模式，但选择了meta/目标数据文件。请切换“单文件绘图（无需图片）”后再提交；该模式不会发送已选图片。图片识别模式的参数入口只接受input/platform.json。')
             context=platform_context(raw)
+            if len(context['platforms'])!=1:raise ValueError('当前仅分析单平台：平台参数必须恰好包含一个平台；多平台分析已停用')
         context['require_spatial']=True
         if renderer_profile!='none':context['renderer_profile']=renderer_profile
         # Replace the old default (including cached browser text), not append two conflicting contracts.

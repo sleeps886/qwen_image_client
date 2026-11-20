@@ -92,13 +92,15 @@ def render_document(doc,directory,context=None,*,filename='estimated_track.png',
         if doc.get('plot_kind')=='meta_reconstruction':title='META RECONSTRUCTION - FULL SIMULATION TRACKS'
         if doc.get('plot_kind')=='spatial_candidates':title='DUAL-ARRAY SPATIAL CANDIDATES - MIRROR AMBIGUITY'
         if doc.get('display_view')=='primary_motion_hypotheses':title='PRIMARY MOTION HYPOTHESES - SIDE NOT VERIFIED'
+        if doc.get('display_view')=='model_primary_hypotheses':title='MODEL REPRESENTATIVE PATHS - SIDE NOT VERIFIED'
+        if doc.get('display_view')=='model_visual_fusion':title='MODEL VISUAL FUSION - NOT INDEPENDENTLY VERIFIED'
         if spatial:
             kind="candidate paths" if doc.get("identity_continuity") else "fragments"
             title+=f"\n{len(identity_colors)} identity hypotheses / {len(doc['tracks'])} {kind} - NOT confirmed targets"
         ax.set_title(title+(' / BEARING-TIME ONLY' if frame=='bearing_time' else ''),color='#dce3ee',fontsize=11)
         ax.legend(facecolor='#101828',labelcolor='#dce3ee',fontsize=8)
         directory=Path(directory)
-        if filename not in ('estimated_track.png','mirror_candidates.png'):raise ValueError('轨迹视图文件名无效')
+        if filename not in ('estimated_track.png','mirror_candidates.png','backend_candidate.png','model_mirror_candidates.png'):raise ValueError('轨迹视图文件名无效')
         fig.savefig(directory/filename,bbox_inches='tight',facecolor=fig.get_facecolor())
         if persist:(directory/'tracks.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
         fig.clear()

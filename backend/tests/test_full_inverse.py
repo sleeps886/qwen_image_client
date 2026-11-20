@@ -274,6 +274,12 @@ class InverseApiTests(unittest.TestCase):
         self.assertEqual(self.post_inverse(extra={'review_model':'true','consent':'true'}).status_code,400)
         self.assertEqual(self.slots._value,1)
 
+    def test_model_final_requires_consent_and_key(self):
+        self.assertEqual(self.post_inverse(extra={'final_model':'true'}).status_code,400)
+        self.assertEqual(self.post_inverse(extra={'final_model':'true','consent':'true'}).status_code,400)
+        self.assertEqual(self.post_inverse(extra={'final_model':'true','review_model':'true','consent':'true'}).status_code,400)
+        self.assertEqual(self.slots._value,1)
+
     def test_unknown_profile_and_client_credentials_are_rejected(self):
         self.assertEqual(self.post_inverse(extra={'renderer_profile':'unknown'}).status_code,400)
         self.assertEqual(self.post_inverse(extra={'api_key':'client-key'}).status_code,400)
