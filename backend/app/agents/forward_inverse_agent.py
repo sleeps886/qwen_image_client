@@ -27,6 +27,7 @@ class ForwardInverseAgent:
             'model_final_requested':self.finalizer is not None,'model_final':self.final_report,
             'new_model_calls':self.new_model_calls,'node_events':self.events,'hypothesis_review':self.review_report,
             'optimization_status':self.state.get('profile_report',{}).get('status','not_completed'),
+            'gap_continuity':self.state.get('gap_report',{}),
             'target_count':{'status':'needs_review','inventory_target_count':len(selected),
                 'associated_target_count':len(selected),'continuous_identity_count':len(selected),
                 'localized_target_count':len({t['id'] for t in self.state.get('document',{}).get('tracks',[])}),
@@ -84,7 +85,7 @@ class ForwardInverseAgent:
     def result(self):
         result_id=self.directory.name;doc=self.state['document']
         names=('model_mirror_candidates.png','model_final_quality.json','backend_candidate.png','backend_tracks.json','model_final_input.json','model_final_answer.txt','model_final_report.json','gaussian_0.png','gaussian_1.png','estimated_track.png','mirror_candidates.png','tracks.json','answer.txt','execution_report.json','inverse_fields.json',
-               'inverse_ridges.json','inverse_proposals.json','inverse_fit.json','inverse_selection.json',
+               'inverse_ridges.json','inverse_gaps.json','inverse_proposals.json','inverse_fit.json','inverse_selection.json',
                'inverse_iterations.json','inverse_profile_fit.json','inverse_quality.json','calibration_context.json','knowledge_sources.json','hypothesis_review.json',
                'hypothesis_review_answer.txt','evidence_0.png','evidence_1.png','inverse_overlay_0.png',
                'inverse_overlay_1.png','expected_btr_0.png','expected_btr_1.png')
@@ -92,5 +93,6 @@ class ForwardInverseAgent:
             'answer':(self.directory/'answer.txt').read_text(encoding='utf-8'),'usage':self.final_report.get('usage') or self.review_report.get('usage'),
             'trajectory_image':f'/api/results/{result_id}/estimated_track.png' if (self.directory/'estimated_track.png').is_file() else None,'trajectory_status':'position_estimate' if (self.directory/'estimated_track.png').is_file() else 'not_generated',
             'downloads':{n:f'/api/results/{result_id}/{n}' for n in names if (self.directory/n).is_file()},
-            'warnings':doc['warnings'],'identity_continuity':doc.get('identity_continuity'),**self.metadata()}
+            'warnings':doc['warnings'],'identity_continuity':doc.get('identity_continuity'),
+            'model_display_continuity':doc.get('model_display_continuity'),**self.metadata()}
 

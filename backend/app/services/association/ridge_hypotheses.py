@@ -86,6 +86,7 @@ def context_step(image):
 def propose_pairs(ridges,control):
     hull=[t for t in ridges['tracks'] if t['array']=='hull'];tow=[t for t in ridges['tracks'] if t['array']=='tow']
     def combined(tracks):
+        if ridges.get('gap_review_applied'):return tracks
         joined=[]
         for i,first in enumerate(tracks):
             for second in tracks[i+1:]:

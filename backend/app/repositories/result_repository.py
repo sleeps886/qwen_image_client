@@ -13,7 +13,7 @@ RESULT_FILES=('model_mirror_candidates.png','model_final_quality.json','backend_
               'spatial_raw.json','tracking_report.json','reprojection_report.json','calibration_context.json',
               'tracklets.json','target_count_report.json','execution_report.json',
               'model_observations.json','identity_report.json','measurement_report.json',
-              'inverse_fields.json','inverse_ridges.json','inverse_proposals.json','inverse_fit.json',
+              'inverse_fields.json','inverse_ridges.json','inverse_gaps.json','inverse_proposals.json','inverse_fit.json',
               'inverse_selection.json','inverse_iterations.json','inverse_quality.json','inverse_profile_fit.json',
               'hypothesis_review.json','hypothesis_review_answer.txt',
               *(f'inverse_overlay_{i}.png' for i in range(2)),*(f'expected_btr_{i}.png' for i in range(2)),

@@ -23,12 +23,15 @@ class ModelViewsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp,patch('backend.app.services.rendering.model_views.render_document',side_effect=render):
             render_model_views(document,Path(tmp),{},candidates={'tracks':tracks})
             saved=json.loads((Path(tmp)/'tracks.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(views[0][1]['tracks']),8)
-        self.assertEqual(len(views[1][1]['tracks']),4)
+        self.assertEqual(len(views[0][1]['tracks']),4)
+        self.assertEqual(len(views[1][1]['tracks']),2)
         self.assertTrue(all(t['mirror_variant']==1 for t in views[1][1]['tracks']))
         self.assertEqual(saved['tracks'],original)
         self.assertFalse(saved['primary_display']['side_verified'])
         self.assertEqual(saved['primary_display']['identity_count'],2)
+        self.assertEqual(saved['model_display_continuity']['merged_fragment_count'],2)
+        self.assertEqual(saved['primary_display']['displayed_paths'],2)
+        self.assertTrue(all(len(t['render_segments'])==2 for t in saved['continuous_model_paths']))
 
 
 if __name__=='__main__':unittest.main()

@@ -220,21 +220,21 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.equal(inverseRequests[0].options.body.get('review_model'),'false');
  assert.equal(inverseRequests[0].options.body.get('renderer_profile'),'btr_gui_v1');
  assert.match(node('bodySummary').textContent,/程序反演报告/);assert.match(node('completionSubtitle').textContent,/调用 0 次/);
- assert.match(node('targetCountMetrics').textContent,/程序关联假设/);assert.equal(node('nodeList').children.length,9);
+ assert.match(node('targetCountMetrics').textContent,/程序关联假设/);assert.equal(node('nodeList').children.length,10);
  assert.equal(node('agentModeName').textContent,'完整本地反演');
  assert.match(node('trackCaption').textContent,/归并 2 个片段.*完整轨迹.*模型估计.*不属于观测/);
- assert.equal(node('agentNodeCount').textContent,'2 / 9');
+ assert.equal(node('agentNodeCount').textContent,'2 / 10');
  assert.equal(node('agentModelState').textContent,'0 次（本次记录）');
  assert.match(node('agentCurrentNode').textContent,/任务已结束/);
  // Repeated progress events must not invent extra completed nodes or calls.
  vm.runInContext('resetResultPresentation();receiveNode({node:"inverse_refine",status:"running",summary:"真实细化进度"})',context);
- assert.equal(node('agentNodeCount').textContent,'0 / 9');
+ assert.equal(node('agentNodeCount').textContent,'0 / 10');
  assert.equal(node('agentCurrentNode').textContent,'全局归属与有界迭代');
  vm.runInContext('receiveNode({node:"inverse_refine",status:"running",summary:"另一条进度"});receiveNode({node:"inverse_review",status:"skipped"})',context);
- assert.equal(node('agentNodeCount').textContent,'1 / 9');
+ assert.equal(node('agentNodeCount').textContent,'1 / 10');
  assert.equal(node('agentModelState').textContent,'未调用 · 已跳过');
  vm.runInContext('receiveNode({node:"inverse_refine",status:"failed",summary:"求解失败"})',context);
- assert.equal(node('agentNodeCount').textContent,'2 / 9');
+ assert.equal(node('agentNodeCount').textContent,'2 / 10');
  node('resultPanel').dataset.state='error';vm.runInContext('updateAgentOverview()',context);
  assert.match(node('agentCurrentNode').textContent,/任务未完成/);
  const html=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
@@ -261,7 +261,7 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.equal(fusionRequests[0].options.body.get('review_model'),'false');
  assert.equal(fusionRequests[0].options.body.has('platform_id'),false);
  assert.match(node('completionTitle').textContent,/大模型融合轨迹/);
- assert.match(node('bodySummary').textContent,/大模型最终/);assert.equal(node('nodeList').children.length,10);
+ assert.match(node('bodySummary').textContent,/大模型最终/);assert.equal(node('nodeList').children.length,11);
  assert.match(node('agentModelState').textContent,/1 次/);
  vm.runInContext('showModelResult({result_id:"failed-fusion",answer:"bad",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed"},trajectory_image:null,warnings:[],downloads:{"backend_candidate.png":"/local.png"}})',context);
  assert.match(node('completionTitle').textContent,/未生成/);assert.equal(node('trackFigure').hidden,true);
@@ -286,5 +286,9 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  vm.runInContext('resetComparison()',context);
  assert.equal(node('comparisonTrackRows').children.length,0);
  assert.equal(node('similarityScore').classList.contains('comparison-problem'),false);
+ vm.runInContext('showModelResult({result_id:"reprojection-blocked",answer:"saved output",pipeline:"forward_inverse_v1",model_final_requested:true,model_final:{status:"failed",failed_stage:"model_reprojection",error_message:"N1:observation_mismatch"},trajectory_image:null,warnings:[],downloads:{"model_final_answer.txt":"/raw.txt"}})',context);
+ assert.match(node('completionTitle').textContent,/方位校验未通过.*阻止出图/);
+ assert.match(node('bodyOutputHint').textContent,/不使用本地候选替代/);
+ assert.equal(node('trackFigure').hidden,true);
  console.log('PASS: streaming, stop, file modes, Agent overview, real node counts, model-call metadata, console structure');
 })().catch(e=>{console.error(e);process.exitCode=1});

@@ -6,7 +6,7 @@ let activeMode='images',promptDrafts={images:'',data:''};
 let defaultImagePrompt='';
 const nodeDefinitions=[['knowledge_retrieval','知识规则检索'],['pixel_candidates','绘图区与候选提取'],['tracklet_linking','亮带连续性分析'],['count_hypothesis','数量线索判定'],['association_context','关联上下文组装'],['model_association','模型清单与双阵关联'],['pair_validation','配对归属与同步校验'],['count_audit','数量与覆盖复核'],['identity_reconciliation','跨时段身份与串线复核'],['spatial_localization','双阵空间定位'],['continuous_trajectory_estimation','连续轨迹估计'],['reprojection_quality_check','重投影质检'],['result_summary','数量与定位汇总'],['render','空间候选绘图']];
 let executionNodes=new Map();
-const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与交叉假设'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
+const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与断段检测'],['inverse_gap','断段延续性复核'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
 const fusionNodeDefinitions=[...inverseNodeDefinitions,['inverse_model_final','三类图模型最终轨迹生成']];
 const fusionMode=()=>!dataMode()&&$('processingPipeline').value==='forward_model';
 function fusionRun(){return !!agentResultMetadata?.model_final_requested||executionNodes.has('inverse_model_final')||(!executionNodes.size&&fusionMode());}
@@ -293,6 +293,7 @@ function showModelResult(data,{fromHistory=false}={}){
     $('badge').textContent='待核验';$('trackCaption').textContent=data.downloads?.['mirror_candidates.png']?'主运动模型代表假设，不是唯一空间解；全部镜像请点“查看全部镜像候选PNG”，JSON保留所有分支。未通过独立位置精度验收。':'整段折叠方位的数值反演候选；同色为同一身份，镜像不计为新增目标，未通过独立位置精度验收。';
     $('aiCoordinateLabel').textContent=data.downloads?.['mirror_candidates.png']?'（主模型代表假设，未验证唯一侧别）':'（本地正向反演候选，镜像未唯一消歧）';
     if(data.identity_continuity?.merged_fragment_count>0)$('trackCaption').textContent+=' 同一身份假设已归并 '+data.identity_continuity.merged_fragment_count+' 个片段，输出完整轨迹；缺测区间仍为模型估计，不属于观测。';
+    if(data.model_display_continuity?.merged_fragment_count>0)$('trackCaption').textContent+=' 已将 '+data.model_display_continuity.source_fragment_count+' 个模型片段归并显示为 '+data.model_display_continuity.output_track_count+' 条连续路径；同一目标同色，缺口虚线为预测连接，原模型点位未改动。';
     if(data.optimization_status==='budget_limited'){
       $('completionTitle').textContent='已生成部分优化候选 · 细化预算已到';
       $('completionSubtitle').textContent='保留了已完成的更新，其余沿用粗估，已继续执行质检与绘图；不是完整细化或可靠定位结果。';
@@ -306,6 +307,10 @@ function showModelResult(data,{fromHistory=false}={}){
     $('completionTitle').textContent=generated?'大模型融合轨迹已生成 · 待核验':'大模型最终轨迹未生成';
     $('completionSubtitle').textContent=generated?'原始声呐图、高斯测量叠加图与反演候选一起输入模型；后端校验、渲染并检查模型坐标回投；未通过独立精度验证。':'请求失败或坐标校验未通过；后端候选单独保留，没有回退冒充模型结果，未自动重试。';
     if(!generated && data.model_final?.error_message)$('completionSubtitle').textContent+=' 原因：'+data.model_final.error_message;
+    if(!generated && data.model_final?.failed_stage==='model_reprojection'){
+      $('completionTitle').textContent='模型方位校验未通过 · 已阻止出图';
+      $('bodyOutputHint').textContent='模型原回复已保留，但双阵方位、观测支持或方向修改校验未通过，不生成最终轨迹，也不使用本地候选替代。';
+    }
     $('trackCaption').textContent='模型综合三类图输出的坐标；后端候选与模型坐标分别质检，回投一致不等于独立定位准确。';
     $('aiCoordinateLabel').textContent=data.downloads?.['model_mirror_candidates.png']?'（每身份代表分支，侧别未确认）':'（大模型融合估计，非真值）';
     if(data.downloads?.['model_mirror_candidates.png'])$('trackCaption').textContent='主图每个身份只展示一组代表分支，不代表唯一正确侧别；模型全部镜像请点“查看模型全部镜像候选 PNG”。颜色不与参考图目标编号对应，JSON保留所有分支。';

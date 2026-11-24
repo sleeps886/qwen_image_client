@@ -33,12 +33,21 @@ def historical_result(result_id:str):
                     if isinstance(saved,dict):metadata={k:saved[k] for k in ('node_events','target_count','offline_reprocessed','source_result_id','new_model_calls','pipeline','result_source','hypothesis_review','optimization_status','model_final','model_final_requested','answer_source') if k in saved}
                 except (OSError,ValueError):pass
         metadata.setdefault('answer_source','model_output' if 'model_final_answer.txt' in stored['files'] else 'local_numeric_report' if metadata.get('pipeline')=='forward_inverse_v1' else 'model_output')
+        blocked=False
+        if metadata.get('model_final_requested'):
+            audit=metadata.get('model_final',{}).get('geometry_audit',{})
+            blocked=audit.get('gate_passed') is not True
+            if blocked:
+                metadata['model_final']={**metadata.get('model_final',{}),'status':'failed','failed_stage':'model_reprojection',
+                    'error_message':'历史模型轨迹尚未通过当前双阵方位门槛，已停止作为成功结果展示；可离线复核，无需重新调用模型。'}
+                metadata['result_source']='model_visual_fusion_failed'
         return {'ok':True,'result_id':result_id,'answer':stored['answer'],
             'input_mode':doc.get('input_mode','images'),'input_data':{'plot_kind':doc.get('plot_kind','tracks')},
-            'trajectory_status':'bearing_time' if doc['coordinate_system']=='bearing_time' else 'position_estimate',
-            'trajectory_image':f'/api/results/{result_id}/estimated_track.png','warnings':doc.get('warnings',[]),
+            'trajectory_status':'not_generated' if blocked else 'bearing_time' if doc['coordinate_system']=='bearing_time' else 'position_estimate',
+            'trajectory_image':None if blocked else f'/api/results/{result_id}/estimated_track.png','warnings':doc.get('warnings',[]),
             'identity_continuity':doc.get('identity_continuity'),
-            'downloads':{n:f'/api/results/{result_id}/{n}' for n in stored['files']},'usage':None if metadata.get('offline_reprocessed') else stored.get('usage'),**metadata}
+            'model_display_continuity':doc.get('model_display_continuity'),
+            'downloads':{n:f'/api/results/{result_id}/{n}' for n in stored['files'] if not blocked or n not in ('estimated_track.png','model_mirror_candidates.png','tracks.json')},'usage':None if metadata.get('offline_reprocessed') else stored.get('usage'),**metadata}
     except ResultNotFound as exc:raise NotFoundError(str(exc)) from None
     except (InvalidStoredResult,KeyError,TypeError):raise InputError('本地结果格式无效') from None
 

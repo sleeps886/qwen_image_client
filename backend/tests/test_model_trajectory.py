@@ -90,8 +90,13 @@ class ModelTrajectoryTests(unittest.TestCase):
         from backend.scripts.recover_model_final import recover
         with tempfile.TemporaryDirectory() as tmp:
             repo=ResultRepository(Path(tmp));source=repo.create_run()
-            for name,value in [('model_final_answer.txt',json.dumps(self.answer)),('calibration_context.json',self.context),
-                               ('backend_tracks.json',self.candidates),('execution_report.json',{'new_model_calls':1,'node_events':[]})]:
+            context,pair,truth=inverse_fixture();times=sorted(truth)
+            candidates=copy.deepcopy(self.candidates);candidates['tracks'][0].update(association_hypothesis_id='A001',points=[{'t':t,'x':truth[t][0],'y':truth[t][1]} for t in times])
+            answer=copy.deepcopy(self.answer);answer['tracks'][0]['points']=[{'t':t,'x':truth[t][0],'y':truth[t][1]} for t in (times[0],times[-1])]
+            fields={'images':[{'array':array,'candidates':pair[array]['points']} for array in ('hull','tow')]}
+            selection={'selected':[{'id':'A001','supported_measurement_ids':[p['id'] for array in ('hull','tow') for p in pair[array]['points']]}]}
+            for name,value in [('model_final_answer.txt',json.dumps(answer)),('calibration_context.json',context),
+                               ('backend_tracks.json',candidates),('inverse_fields.json',fields),('inverse_selection.json',selection),('execution_report.json',{'new_model_calls':1,'node_events':[]})]:
                 repo.save(source,name,value)
             original={p.name:p.read_bytes() for p in source.iterdir()}
             with patch('backend.app.infrastructure.llm.gateway.ConfiguredModelGateway.invoke',side_effect=AssertionError('no paid retry')):
@@ -100,9 +105,9 @@ class ModelTrajectoryTests(unittest.TestCase):
             self.assertEqual(result['new_model_calls'],0)
             self.assertEqual({p.name:p.read_bytes() for p in source.iterdir()},original)
             saved=repo.historical_result(result['result_id'])
-            self.assertEqual(saved['document']['tracks'][0]['points'],self.answer['tracks'][0]['points'])
+            self.assertEqual(saved['document']['tracks'][0]['points'],answer['tracks'][0]['points'])
 
-    def run_fusion(self,root,fail=False):
+    def run_fusion(self,root,fail=False,mismatch=False):
         paths=[root/'btr_A_hull.png',root/'btr_A_tow.png'];synthetic_images(self.context,paths)
         calls=[]
         def finalizer(images,prompt,directory):
@@ -112,6 +117,7 @@ class ModelTrajectoryTests(unittest.TestCase):
             self.assertEqual([m['kind'] for m in manifest['images']],['original_sonar']*2+['gaussian_measurements_overlay']*2+['numeric_primary_candidate','numeric_mirror_alternatives'])
             candidates=json.loads((directory/'backend_tracks.json').read_text(encoding='utf-8'))
             answer=copy.deepcopy(self.answer);answer['tracks'][0]['source_candidate_ids']=[candidates['tracks'][0]['id']]
+            answer['tracks'][0]['points']=[{'t':float(t),'x':600.+1.5*t+(2000. if mismatch else 0.),'y':1200.-.3*t} for t in (12,588)]
             calls.append(images)
             return {'answer':'not json' if fail else json.dumps(answer),'usage':{'total_tokens':123}}
         agent=ForwardInverseAgent(finalizer=finalizer)
@@ -123,21 +129,24 @@ class ModelTrajectoryTests(unittest.TestCase):
         from backend.app.repositories.result_repository import ResultRepository
         repo=ResultRepository(root/'outputs')
         self.assertTrue(repo.file(result['result_id'],'model_final_report.json').is_file())
-        if fail:
+        if fail or mismatch:
             self.assertIsNone(result['trajectory_image']);self.assertNotIn('tracks.json',result['downloads'])
             self.assertEqual(result['model_final']['status'],'failed')
             self.assertFalse((agent.directory/'estimated_track.png').exists())
         else:
             doc=json.loads((agent.directory/'tracks.json').read_text(encoding='utf-8'))
-            self.assertEqual(doc['tracks'][0]['points'][0]['x'],321)
+            self.assertEqual(doc['tracks'][0]['points'][0]['x'],618)
             self.assertEqual(doc['result_source'],'model_visual_fusion')
             self.assertEqual(result['model_final']['status'],'generated')
             self.assertEqual(repo.historical_result(result['result_id'])['usage']['total_tokens'],123)
         node=[e for e in result['node_events'] if e['node']=='inverse_model_final'][-1]
-        self.assertEqual(node['status'],'failed' if fail else 'completed')
+        self.assertEqual(node['status'],'failed' if fail or mismatch else 'completed')
 
     def test_full_fusion_uses_model_coordinates_and_preserves_numeric_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:self.run_fusion(Path(tmp))
+
+    def test_valid_json_with_bad_geometry_is_blocked_before_rendering(self):
+        with tempfile.TemporaryDirectory() as tmp:self.run_fusion(Path(tmp),mismatch=True)
 
     def test_invalid_model_answer_never_falls_back_to_numeric_final(self):
         with tempfile.TemporaryDirectory() as tmp:self.run_fusion(Path(tmp),fail=True)

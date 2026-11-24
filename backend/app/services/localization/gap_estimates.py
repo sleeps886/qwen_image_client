@@ -5,7 +5,7 @@ import numpy as np
 from backend.app.services.localization.batch_inverse import evaluate_path,reference_for
 
 
-def estimate_model_gaps(tracks,context,*,max_gap_s=90.):
+def estimate_model_gaps(tracks,context,*,max_gap_s=120.):
     groups=defaultdict(list)
     for track in tracks:
         if not track.get('model_parameters') or not track.get('association_hypothesis_id'):

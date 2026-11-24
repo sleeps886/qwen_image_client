@@ -53,7 +53,7 @@ def render_document(doc,directory,context=None,*,filename='estimated_track.png',
             if spatial:
                 side=tuple(track.get('handedness',()))
                 if 'mirror_variant' in track:
-                    alternative=track['mirror_variant'];side=('alternative',alternative)
+                    alternative=track.get('render_mirror_variant',track['mirror_variant']);side=('alternative',alternative)
                     linestyle=['-','--',':','-.'][alternative%4]
                     sides=f'alternative {alternative+1}'
                 else:
@@ -62,8 +62,13 @@ def render_document(doc,directory,context=None,*,filename='estimated_track.png',
                 key=(track['id'],side)
                 label='_nolegend_' if key in seen_labels else f"{track['id']} | {sides} (candidate)"
                 seen_labels.add(key)
-            ax.plot([p['x'] for p in pts],[p['y'] for p in pts],color=color,lw=1.4,
-                    linestyle=linestyle,marker='o' if endpoints else None,label=label)
+            segments=track.get('render_segments') or [pts]
+            for segment_index,segment in enumerate(segments):
+                ax.plot([p['x'] for p in segment],[p['y'] for p in segment],color=color,lw=1.4,
+                        linestyle=linestyle,marker='o' if endpoints else None,label=label if segment_index==0 else '_nolegend_')
+            for link in track.get('render_gap_links',[]):
+                ax.plot([p['x'] for p in link],[p['y'] for p in link],color=color,lw=1.4,
+                        linestyle='--',alpha=.8,label='_nolegend_')
             ax.plot(pts[0]['x'],pts[0]['y'],'o',color=color,ms=4)
             if endpoints:ax.plot(pts[-1]['x'],pts[-1]['y'],'x',color=color,ms=7)
         if frame!='bearing_time' and context.get('platforms'):

@@ -44,12 +44,13 @@ class InverseNodes:
             self.agent.control.check()
             stage='coordinate_validation'
             document=validate_final(answer,context,state['document'])
-            from backend.app.services.quality.model_final_quality import audit_geometry
+            from backend.app.services.quality.model_final_quality import audit_geometry,require_geometry
             stage='model_reprojection'
             quality=audit_geometry(document,state['document'],state['evidence'],context,state.get('selection'))
             self.agent.save('model_final_quality.json',quality)
+            self.agent.final_report['geometry_audit']=quality
             document['model_geometry_audit']=quality
-            if quality['warning_track_count']:document['warnings'].append('模型修订坐标回投检查有'+str(quality['warning_track_count'])+'条分支不匹配或观测不足；不能当作可靠位置。')
+            require_geometry(quality)
             stage='rendering'
             from backend.app.services.rendering.model_views import render_model_views
             render_model_views(document,directory,context,state['document'])
@@ -60,7 +61,7 @@ class InverseNodes:
             return {'document':document,'_summary':'已由大模型综合三类图输出最终轨迹点；已做逐身份覆盖审计和模型坐标回投；非真值验证'}
         except InversionStopped:raise
         except Exception as exc:
-            message=str(exc)[:250] if stage=='coordinate_validation' and isinstance(exc,ValueError) else '最终轨迹阶段失败：'+stage+'（'+type(exc).__name__+'）'
+            message=str(exc)[:250] if stage in ('coordinate_validation','model_reprojection') and isinstance(exc,ValueError) else '最终轨迹阶段失败：'+stage+'（'+type(exc).__name__+'）'
             self.agent.final_report.update(status='failed',error_type=type(exc).__name__,numeric_fallback=False,
                                            failed_stage=stage,error_message=message)
             self.agent.save('model_final_report.json',self.agent.final_report)
@@ -92,7 +93,17 @@ class InverseNodes:
     def paths_node(self,state):
         context=self.agent.state['context'];paths=self.agent.state['paths']
         result=ridge_hypotheses(state['evidence'],self.agent.control);self.agent.save('inverse_ridges.json',result)
-        return {'ridges':result,'_summary':f"{len(result['tracks'])}条路径候选，{len(result['crossing_regions'])}处竞争时刻；折叠处保留展开假设"}
+        from backend.app.services.association.gap_continuity import scan_gaps
+        result,report=scan_gaps(result,state['evidence'],self.agent.control)
+        self.agent.save('inverse_ridges.json',result);self.agent.save('inverse_gaps.json',report)
+        return {'ridges':result,'gap_report':report,'_summary':f"{len(result['tracks'])}条路径候选，{len(report['candidate_pairs'])}组待复核断段；缺口不生成观测"}
+
+    def gaps(self,state):
+        from backend.app.services.association.gap_continuity import review_gaps
+        result,report=review_gaps(state['ridges'],state['gap_report'],self.agent.control)
+        self.agent.save('inverse_ridges.json',result);self.agent.save('inverse_gaps.json',report)
+        return {'ridges':result,'gap_report':report,'evidence':{**state['evidence'],'gap_continuity':report},
+                '_summary':f"保留{report['retained_joined_hypotheses']}组跨缺口候选；双向外推仅用于关联，新增测量0个；仍需双阵拟合"}
 
 
     def associations(self,state):

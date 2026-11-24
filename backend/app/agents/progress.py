@@ -86,7 +86,7 @@ def observed(name,node,emit=None):
 
 
 INVERSE_NODES=[('inverse_input','反演输入与标定'),('inverse_field','完整亮带剖面测量'),
- ('inverse_paths','展开角路径与交叉假设'),('inverse_association','双阵轨迹级关联候选'),
+ ('inverse_paths','展开角路径与断段检测'),('inverse_gap','断段延续性复核'),('inverse_association','双阵轨迹级关联候选'),
  ('inverse_fit','批量运动模型反演'),('inverse_refine','全局归属与有界迭代'),
  ('inverse_review','可选模型假设复核'),('inverse_quality','正向BTR与可辨识性检查'),('inverse_render','空间候选绘图与汇总')]
 

@@ -56,3 +56,4 @@ class InverseState(TypedDict,total=False):
     document:dict
     rules:list
     profile_report:dict
+    gap_report:dict

@@ -140,7 +140,8 @@ class FullInverseWorkflowTests(unittest.TestCase):
         self.assertEqual(result['pipeline'],'forward_inverse_v1')
         statuses={e['node']:e['status'] for e in result['node_events']}
         self.assertEqual(statuses['inverse_review'],'skipped')
-        self.assertTrue(all(statuses[name]=='completed' for name,_ in INVERSE_NODES if name!='inverse_review'))
+        self.assertIn(statuses['inverse_gap'],('completed','skipped'))
+        self.assertTrue(all(statuses[name]=='completed' for name,_ in INVERSE_NODES if name not in ('inverse_review','inverse_gap')))
         self.assertGreaterEqual(result['target_count']['localized_target_count'],1)
         directory=self.root/'outputs'/result['result_id']
         self.assertTrue((directory/'expected_btr_0.png').is_file())

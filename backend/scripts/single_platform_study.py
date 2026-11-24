@@ -57,9 +57,10 @@ def cloud_round(source,paths,destination,truth=None):
     report={'prompt_version':PROMPT_VERSION,'new_model_calls':1,'usage':response.get('usage'),'truth_supplied':False}
     try:
         document=validate_final(answer,context,candidates)
-        from backend.app.services.quality.model_final_quality import audit_geometry
+        from backend.app.services.quality.model_final_quality import audit_geometry,require_geometry
         geometry=audit_geometry(document,candidates,fields,context,read(source/'inverse_selection.json') if (source/'inverse_selection.json').exists() else None)
         save(destination/'geometry_audit.json',geometry);report['geometry_audit']=geometry
+        require_geometry(geometry)
         render_document(document,destination,context)
         report.update(status='generated',identity_audit=document['model_identity_audit'])
         if truth:report['evaluation']=score(document,context,truth,destination/'evaluation_only')
@@ -78,7 +79,11 @@ def publish_round(trial,numeric,output_root):
     candidates=read(numeric/('backend_tracks.json' if (numeric/'backend_tracks.json').exists() else 'tracks.json'))
     answer=(trial/'answer.txt').read_text(encoding='utf-8')
     document=validate_final(answer,context,candidates)
-    document['model_geometry_audit']=report['geometry_audit']
+    from backend.app.services.quality.model_final_quality import audit_geometry,require_geometry
+    quality=audit_geometry(document,candidates,read(numeric/'inverse_fields.json'),context,read(numeric/'inverse_selection.json'))
+    require_geometry(quality)
+    report['geometry_audit']=quality
+    document['model_geometry_audit']=quality
     if report['geometry_audit']['warning_track_count']:document['warnings'].append('模型坐标回投有疑点；请查看model_final_quality.json。')
     repo=ResultRepository(output_root);run=repo.create_run()
     # Allowlist only inference artifacts. Neither truth nor generation configs enter results.
