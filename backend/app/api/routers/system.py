@@ -17,7 +17,7 @@ def page():return FileResponse(STATIC_DIR/'index.html')
 
 @router.get('/assets/{filename}',include_in_schema=False)
 def asset(filename:str):
-    if filename not in ('app.js','style.css'):raise NotFoundError('文件不存在')
+    if filename not in ('app.js','style.css','incremental.js'):raise NotFoundError('文件不存在')
     return FileResponse(STATIC_DIR/filename)
 
 

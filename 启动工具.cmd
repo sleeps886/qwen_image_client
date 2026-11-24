@@ -1,4 +1,5 @@
 @echo off
+setlocal
 cd /d "%~dp0"
-python -m backend.app.main
+python -u -m backend.app.main
 if errorlevel 1 pause

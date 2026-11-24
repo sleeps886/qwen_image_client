@@ -1,5 +1,7 @@
 # 千问图片接入台 · FastAPI
 
+新增一期独立入口：主页点击“纯点位增量预测”，或打开 `/incremental`。导入候选点，手选3～5个种子，逐轮调用模型预测下一段方位轨迹；不向模型发送图片。创建/加载免费，推进需费用确认；真实预测精度未验证。说明见[分阶段实施文档](docs/incremental-prediction.md)。
+
 独立项目：`C:\Users\LENOVO\Desktop\btr_gens\qwen_image_client`。
 网页上传hull/tow图片与可选已知平台参数 → FastAPI → 千问返回轨迹点JSON → 程序绘制估计轨迹PNG。
 不改原BTR仿真器。图片+平台参数模式已接入LangGraph、本地规则检索、像素候选与模型编号关联，然后进行双阵空间求交。已加入持续亮带数量线索、目标清单/定位覆盖复核、局部窗口连续估计与重投影检查；前端显示真实节点状态。真实模型准确率待验证。详见[Agent阶段说明](docs/agent-evidence.md)。
@@ -69,6 +71,9 @@ python -m backend.app.main
 ```
 
 也可以双击 `启动工具.cmd`（需要先安装上述依赖）。
+启动窗口会先列出网页访问地址。若日志显示 `Uvicorn running on http://0.0.0.0:8870`，
+其中 `0.0.0.0` 仅表示监听所有网卡，请在本机打开 `http://127.0.0.1:8870/`，不要点击该监听地址；
+直接访问 `0.0.0.0` 会被 Host 白名单拒绝并返回 `400 Invalid host header`。
 - 网页：http://127.0.0.1:8870
 - Swagger交互API文档：http://127.0.0.1:8870/docs
 - OpenAPI契约：http://127.0.0.1:8870/openapi.json

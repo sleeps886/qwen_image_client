@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>纯点位增量预测 · 小怪</title>
+  <link rel="stylesheet" href="/assets/style.css"><script src="/assets/incremental.js" defer></script>
+</head>
+<body>
+  <header><div class="brand"><strong>纯点位增量预测 · 第一期</strong></div><a href="/">返回原有识别流程</a></header>
+  <main>
+    <section class="intro"><h1>逐轮加入点位，验证下一段预测。</h1><p>单目标假设、单阵列方位—时间预测；不向模型发送图片，不是空间定位，也尚未实现多目标交叉消歧。</p></section>
+    <section class="card">
+      <h2>01 导入候选点与初始化</h2>
+      <p class="note">支持已有 candidate_evidence.json（images结构）或 candidates数组。候选须包含id/candidate_id、t、bearing_deg、array、platform_id。只导入种子所属阵列/平台。早于种子末时刻的数据视为初始化已开放数据，后续点逐轮开放；源点提取若使用未来邻域，本模式不等于严格在线盲测。</p>
+      <label>候选数据文件<input id="datasetFile" type="file" accept=".json,application/json"></label>
+      <button id="example" type="button">载入本地点位示例（不调用模型）</button>
+      <label>3～5个种子编号，以逗号分隔<input id="seeds" type="text" placeholder="P0,P2,P4"></label>
+      <div class="comparison-controls">
+        <label>每轮开放时间切片数<input id="stride" type="number" min="1" max="8" value="1"></label>
+        <label>预测时长（秒）<input id="horizon" type="number" min="0.1" max="600" value="20"></label>
+        <label>最大模型调用次数<input id="maxCalls" type="number" min="1" max="100" value="20"></label>
+      </div>
+      <button id="create" type="button" class="primary">创建本地任务（免费）</button>
+      <details><summary>查看已导入点编号（仅供手工选种子，不发送模型）</summary><pre id="inventory">未导入</pre></details>
+    </section>
+    <section class="card">
+      <h2>02 单步预测与恢复</h2>
+      <label>任务编号<input id="sessionId" type="text" placeholder="创建后自动填写；可粘贴旧任务编号"></label>
+      <button id="reload" type="button">加载已保存任务（免费）</button>
+      <label class="check"><input id="predictionConsent" type="checkbox"><span>同意将已开放的点位和轨迹状态发送至后端模型服务，每次推进最多调用一次，可能产生API费用。</span></label>
+      <div class="actions"><button id="step" class="primary" type="button" disabled>执行初始化预测</button><button id="export" type="button" disabled>导出已开放结果</button></div>
+      <p class="note">单步模式不会后台自动推进，停止点击即暂停。请求最长等待约90秒，失败/超时不自动重试；pending或结果未知的任务禁止再次调用。调用上限不是精确金额上限。</p>
+      <p id="predictionStatus" role="status" aria-live="polite">等待导入点位数据。</p>
+    </section>
+    <section class="card">
+      <h2>03 方位轨迹与下一段预测</h2>
+      <p class="note">灰点：已开放候选；彩色点/实线：已接入点及其连线估计；蓝色虚线：模型未来预测；橙色虚线：后端线性参考。缺测轮次断开连线。未开放点不进入此图，线条不代表已验证身份。</p>
+      <svg id="predictionChart" viewBox="0 0 1000 420" width="100%" role="img" aria-label="时间—方位增量预测图"></svg>
+      <pre id="predictionSummary">尚无轨迹</pre>
+      <details><summary>逐轮输入、模型判断、用量与预测误差</summary><pre id="roundLog">尚未执行</pre></details>
+    </section>
+  </main>
+</body>
+</html>

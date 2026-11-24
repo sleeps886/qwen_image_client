@@ -36,7 +36,8 @@ class ArchitectureTests(unittest.TestCase):
                 '/api/logs/{request_id}/download','/api/recognize','/api/recognize/stream',
                 '/api/results/{result_id}/{filename}','/api/history','/api/history/{result_id}',
             '/api/comparisons/{result_id}/{comparison_id}/{filename}','/api/compare','/api/evaluate',
-            '/api/invert','/api/invert/stream'})
+            '/api/invert','/api/invert/stream','/api/incremental/sessions',
+            '/api/incremental/sessions/{session_id}','/api/incremental/sessions/{session_id}/step'})
             self.assertEqual(api.get('/assets/config.py').status_code,404)
 
     def test_paths_remain_compatible_with_existing_runtime_data(self):

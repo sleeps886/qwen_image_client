@@ -1,4 +1,6 @@
 import os
+import io
+from contextlib import redirect_stdout
 from pathlib import Path
 import tempfile
 import unittest
@@ -45,8 +47,28 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(api.get('/openapi.json',headers={'host':'untrusted.local'}).status_code,400)
                 self.assertEqual(api.post('/api/recognize',headers={'origin':'http://other.local'}).status_code,403)
             with patch.object(module.uvicorn,'run') as run,patch.object(module,'configure_access_logging'):
-                module.main()
+                output=io.StringIO()
+                with redirect_stdout(output):module.main()
                 run.assert_called_once_with(module.app,host='0.0.0.0',port=9001)
+                self.assertIn('http://sonar.local:9001/',output.getvalue())
+                self.assertNotIn('http://0.0.0.0:',output.getvalue())
+
+    def test_launcher_prints_browser_urls_without_relaxing_host_validation(self):
+        import importlib
+        from fastapi.testclient import TestClient
+        module=importlib.import_module('backend.app.main')
+        custom=Settings(host='0.0.0.0',port=9002)
+        with patch.object(module,'settings',custom):
+            with TestClient(module.create_app(),base_url='http://127.0.0.1:9002') as api:
+                self.assertEqual(api.get('/').status_code,200)
+                response=api.get('/',headers={'host':'0.0.0.0:9002'})
+                self.assertEqual(response.status_code,400)
+                self.assertEqual(response.text,'Invalid host header')
+            output=io.StringIO()
+            with patch.object(module.uvicorn,'run'),redirect_stdout(output):module.main()
+            for host in ('127.0.0.1','localhost','[::1]'):
+                self.assertIn(f'http://{host}:9002/',output.getvalue())
+            self.assertNotIn('http://0.0.0.0:',output.getvalue())
 
     def test_reasoning_effort(self):
         with patch.dict(os.environ,{'MODEL_REASONING_EFFORT':'low'}):

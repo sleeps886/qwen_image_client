@@ -28,6 +28,13 @@ app=create_app()
 
 def main():
     configure_access_logging()
+    print('\n网页访问地址（服务启动完成后打开）：',flush=True)
+    for host in settings.allowed_hosts:
+        if host in ('0.0.0.0','::','[::]'):
+            continue
+        authority=f'[{host}]' if ':' in host and not host.startswith('[') else host
+        print(f'  http://{authority}:{settings.port}/',flush=True)
+    print('注意：Uvicorn 下方显示的是监听地址；0.0.0.0 / :: 不能作为网页访问地址。\n',flush=True)
     uvicorn.run(app,host=settings.host,port=settings.port)
 
 
