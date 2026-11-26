@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000061\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"本组观测时间t=97.0，方位角hull约179.2°、tow约179.2°。与已有目标B000001的末段观测（t=74.0时方位角约174.8°-174.7°）相比，方位随时间呈现连续且平滑的增大趋势（从~162°逐渐扫至~180°），符合慢速移动目标的几何演化规律。此外，该组的信号强度特征（strength≈0.1789）及Hull/Tow阵列间的固定偏差模式（在此扇区表现为极小差异或特定交叉点附近特性，但在整体序列中与B000001保持一致的能量级和波动范围）均指向同一目标。排除B000002（强度显著更高，约0.2438）和B000003（方位主要在140-150度区间且强度为0.2893）。因此判定归属于B000001。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_28324397-97d4-4fad-9703-d5cf31a2a987",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 290,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007132"
+  }
+}

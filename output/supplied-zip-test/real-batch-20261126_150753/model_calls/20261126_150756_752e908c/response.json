@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000048\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无历史轨迹（targets为空）。U000048在t=530.0s时，hull bearing约150°，tow bearing约148°，强度0.24。虽然与同强度的其他单元（如U000043/U000044）有相似的信号特征，但缺乏连续的时间序列和空间运动一致性证据来将其归入任何现有或推测的目标群。且其时间戳较晚，孤立出现，无法确认是否为既有目标的延续或新目标的一部分。为避免错误关联，判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_579d4eb5-be82-4425-a0d3-ebaf56977cb4",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 173,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004806"
+  }
+}

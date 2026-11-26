@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000043\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照无已有轨迹。在联合背景中，强度为0.1789的观测群（如U000001至U000022等）方位随时间单调增加，构成一条独立目标航迹；而U000043位于t=68时刻，其方位约173.7°明显偏离该组在该时刻外推的预期值（应接近175°以上）。同时，U000043与同批次中强度为0.2438（如U000044，方位~104.7°）及0.2893（如U000045，方位~145.5°）的目标在方位和强度上均有显著差异，且平台处于静止状态排除自身运动导致的几何混淆。因此判定U000043不属于上述任何已知集群，建议建立新目标。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5180c6ba-0d5e-4d5a-95d9-9cd8cd6d2737",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 254,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005426"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000060\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该单元包含t=90.0的hull和tow观测，方位角分别约为149.59°和148.25°。对比历史轨迹片段，目标B000001（hull约174.8°, tow约174.7°）和目标B000002（hull约104.7°, tow约101.9°）在该时刻均不存在接近此大角度值的航迹点。而目标B000003的历史轨迹在t=72.0时已延伸至hull约146.25°, tow约144.78°，且呈现明显的正向增长趋势。本单元位于时间序列之后，其方位角数值符合B000003的运动外推规律，属于向末尾接续的情况。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_db966246-0f42-4936-8ae6-cc02793c71aa",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 236,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049634"
+  }
+}

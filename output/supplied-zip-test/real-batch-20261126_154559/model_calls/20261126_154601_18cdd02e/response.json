@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000039\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无已确认轨迹。该观测强度与方位变化模式无法匹配既有目标，且仅有单点数据不足以建立连续航迹，故暂存为新目标候选。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_e7d03bc0-e687-47ab-a8a2-cbf828724ef5",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 81,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005208"
+  }
+}

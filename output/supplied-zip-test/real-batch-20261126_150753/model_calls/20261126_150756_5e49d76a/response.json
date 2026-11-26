@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000045\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹。在当前批次联合背景下，该单元特征为强度约0.289、方位约167°（t=497s）。同强度组的其他单元方位呈现明显的连续漂移趋势：低时段集中在143-154°（如U000004/05/09/10），高时段集中在171-176°（如U000019/20/24/25）及170-173°（如U000034/35）。虽然存在个别接近值（U000040在169°），但缺乏紧密的时间邻接观测支持其构成一条完整且平滑的航迹（例如从143°到167°或167°到176°之间均存在显著断档）。鉴于无法将其稳健地插入现有隐含序列或作为已有目标的接续点，判定其为独立的新目标起始段更为合理。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_330380f6-1187-4aff-8e49-12386cb887ce",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 271,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00507"
+  }
+}

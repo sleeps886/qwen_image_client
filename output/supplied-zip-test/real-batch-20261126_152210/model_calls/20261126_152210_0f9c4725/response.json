@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000010\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组观测（t=35.0）位于舷侧阵列方位约167°处，其强度（~0.179）和角度特征与本批次中早期出现的连续序列（如U000001至U000004）一致，但无法直接判定为同一物理目标。依据协议，在缺乏确凿的跨时间关联证据且禁止仅凭强度/峰宽认定身份的前提下，将其视为一个待确认的新目标轨迹起点更为稳妥。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_1210026f-0317-4a33-bd18-e07739bc2fe9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 157,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034014"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000047\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组为平台A在t=72.0时的双阵观测。强度约0.2438，与历史中另一条轨迹（由单元U000005至U000023等构成）的特征一致，但该轨迹在t=54.0后已无后续观测，存在时间断档。同时，本批次中存在强度特征完全不同（约0.1789和0.2893）的其他目标活动。由于缺乏连续性证据且无法排除是新出现的目标，依据协议不凭强度相似性强行归属旧迹，判定为新目标。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2d1cab29-4970-4d16-8c43-51cb9efca3d6",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 180,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005226"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000062\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"该组观测（O000121/O000124）方位角约为104.78°和101.76°，与历史轨迹片段F003/F004的目标B000002在t=97时刻的预测趋势完全一致；且其信号强度(0.24)及拖曳阵测量误差特征均符合该目标的长期统计特性。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_defbd673-fa47-4c99-ae25-55f399c853af",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 150,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006754"
+  }
+}

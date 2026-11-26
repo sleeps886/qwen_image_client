@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000017\",\n\"target_ref\": \"unassigned\",\n\"reason\": \"该组为独立观测点，与前后时刻方位角跳变显著且无连续轨迹衔接，缺乏运动一致性证据，暂归为未分配。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2bfe88e9-62b4-4eb0-a9c2-5dcfc17c2686",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 73,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005186"
+  }
+}

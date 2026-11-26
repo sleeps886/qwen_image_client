@@ -1,0 +1,370 @@
+{
+  "format": "live-offline-evaluation-v1",
+  "records": [
+    {
+      "scene": "separated",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.7668,
+      "evidence_seconds": 1.1972,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "separated",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.121,
+      "evidence_seconds": 0.089,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "separated",
+      "arrival_seed": 37,
+      "batch_size": 64,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0161,
+      "evidence_seconds": 0.0891,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "crossing",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.7432,
+      "evidence_seconds": 0.0849,
+      "candidate_coverage": {
+        "candidate_covered": 62,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "crossing",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.134,
+      "evidence_seconds": 0.0823,
+      "candidate_coverage": {
+        "candidate_covered": 62,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "crossing",
+      "arrival_seed": 37,
+      "batch_size": 64,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0159,
+      "evidence_seconds": 0.0881,
+      "candidate_coverage": {
+        "candidate_covered": 62,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "gap",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 44,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.505,
+      "evidence_seconds": 0.0651,
+      "candidate_coverage": {
+        "candidate_covered": 44,
+        "total": 44
+      },
+      "conflict_sets": 22,
+      "strict_sync_groups": 11,
+      "model_calls": 0
+    },
+    {
+      "scene": "gap",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 44,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.086,
+      "evidence_seconds": 0.0629,
+      "candidate_coverage": {
+        "candidate_covered": 44,
+        "total": 44
+      },
+      "conflict_sets": 22,
+      "strict_sync_groups": 11,
+      "model_calls": 0
+    },
+    {
+      "scene": "gap",
+      "arrival_seed": 37,
+      "batch_size": 44,
+      "points": 44,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0114,
+      "evidence_seconds": 0.0621,
+      "candidate_coverage": {
+        "candidate_covered": 44,
+        "total": 44
+      },
+      "conflict_sets": 22,
+      "strict_sync_groups": 11,
+      "model_calls": 0
+    },
+    {
+      "scene": "turn",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.7395,
+      "evidence_seconds": 0.0863,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "turn",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.1259,
+      "evidence_seconds": 0.0896,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "turn",
+      "arrival_seed": 37,
+      "batch_size": 64,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0161,
+      "evidence_seconds": 0.0931,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 16,
+      "model_calls": 0
+    },
+    {
+      "scene": "array_delay",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.7332,
+      "evidence_seconds": 0.0916,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "array_delay",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.1255,
+      "evidence_seconds": 0.0874,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "array_delay",
+      "arrival_seed": 37,
+      "batch_size": 64,
+      "points": 64,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0151,
+      "evidence_seconds": 0.0864,
+      "candidate_coverage": {
+        "candidate_covered": 64,
+        "total": 64
+      },
+      "conflict_sets": 32,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "single_array",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 32,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.3718,
+      "evidence_seconds": 0.0473,
+      "candidate_coverage": {
+        "candidate_covered": 32,
+        "total": 32
+      },
+      "conflict_sets": 16,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "single_array",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 32,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0621,
+      "evidence_seconds": 0.05,
+      "candidate_coverage": {
+        "candidate_covered": 32,
+        "total": 32
+      },
+      "conflict_sets": 16,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "single_array",
+      "arrival_seed": 37,
+      "batch_size": 32,
+      "points": 32,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0141,
+      "evidence_seconds": 0.0531,
+      "candidate_coverage": {
+        "candidate_covered": 32,
+        "total": 32
+      },
+      "conflict_sets": 16,
+      "strict_sync_groups": 0,
+      "model_calls": 0
+    },
+    {
+      "scene": "sparse_random",
+      "arrival_seed": 0,
+      "batch_size": 1,
+      "points": 33,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.3653,
+      "evidence_seconds": 0.0758,
+      "candidate_coverage": {
+        "candidate_covered": 33,
+        "total": 33
+      },
+      "conflict_sets": 8,
+      "strict_sync_groups": 10,
+      "model_calls": 0
+    },
+    {
+      "scene": "sparse_random",
+      "arrival_seed": 19,
+      "batch_size": 7,
+      "points": 33,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0636,
+      "evidence_seconds": 0.0783,
+      "candidate_coverage": {
+        "candidate_covered": 33,
+        "total": 33
+      },
+      "conflict_sets": 8,
+      "strict_sync_groups": 10,
+      "model_calls": 0
+    },
+    {
+      "scene": "sparse_random",
+      "arrival_seed": 37,
+      "batch_size": 33,
+      "points": 33,
+      "all_measurements_retained": true,
+      "same_measurement_candidate_support": true,
+      "ingestion_seconds": 0.0142,
+      "evidence_seconds": 0.074,
+      "candidate_coverage": {
+        "candidate_covered": 33,
+        "total": 33
+      },
+      "conflict_sets": 8,
+      "strict_sync_groups": 10,
+      "model_calls": 0
+    }
+  ],
+  "real_model_calls": 0,
+  "scope": "工程留存、候选支持复现和耗时；不是模型身份识别准确率评估",
+  "unverified": [
+    "真实模型误合并/误拆分/身份切换率",
+    "异步空间解算",
+    "硬件流量SLA",
+    "误差与不确定性标定"
+  ]
+}

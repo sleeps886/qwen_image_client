@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-25",
+  "scope": "live tracking v2 M1-M4 engineering",
+  "backend_regression": {
+    "passed": 479,
+    "subtests_passed": 120,
+    "deselected_legacy_assertions": 3,
+    "unrun_heavy_files": 3
+  },
+  "latest_v2_tests": 31,
+  "node_test_groups": 4,
+  "browser_scripts": [
+    "check_live_tracking.js",
+    "check_live_tracking_recovery.js",
+    "check_live_import.js"
+  ],
+  "offline_scenario_arrival_cases": 21,
+  "real_model_calls": 0,
+  "production_restarted": false,
+  "spatial_capability": "bearing_only_in_live_v2",
+  "limitations": [
+    "real_model_accuracy_not_verified",
+    "asynchronous_spatial_not_validated",
+    "calibration_multiworker_SLA_not_verified"
+  ]
+}

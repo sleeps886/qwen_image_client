@@ -1,0 +1,19 @@
+{
+  "source_session": "20261126_155305_ae94247e",
+  "new_model_calls": 1,
+  "worker_requests_repeated": 0,
+  "status": "paused",
+  "processed_groups": 50,
+  "snapshots": 1,
+  "target_hypotheses": 3,
+  "last_error": null,
+  "warnings": [
+    {
+      "code": "worker_unit_echo_mismatch",
+      "unit_id": "U000041",
+      "model_echoed_unit_id": "U00041",
+      "reason": "单组回复已按实际请求绑定；错误回显原文保留。该建议必须由归并模型重新核对绑定组观测，未直接写入归属。"
+    }
+  ],
+  "production_state_unchanged": true
+}

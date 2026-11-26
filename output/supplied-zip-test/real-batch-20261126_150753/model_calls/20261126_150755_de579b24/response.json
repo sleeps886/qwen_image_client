@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n    \"snapshot_version\": 0,\n    \"unit_id\": \"U000034\",\n    \"target_ref\": \"new\",\n    \"reason\": \"该单元（t=385.0）方位角约171°，强度0.289。在联合背景中，存在两个同强度的独立候选航迹段：一段为t=224~296期间从171.7°缓慢增加至176.7°的上升趋势；另一段为t=435~550期间从168.9°变化至165.3°且呈下降趋势的片段。若将当前观测归入前者，则要求目标在后续时间内大幅回转或速度突变以衔接时间不连续的后者，缺乏连续运动学证据支持；若归入后者，虽然方向看似吻合（171->168），但中间缺失了t=385到435之间长达50秒的关键数据点，无法排除其他干扰或假设其静止。鉴于没有已确立的单一轨迹能同时满足平滑性和连续性约束来解释这种大跨度的时空分布，判定其为新目标起点更为稳妥，避免强行合并导致轨迹失真。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_422e6e5a-a926-4b65-bc55-3abc614fbab7",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 271,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00507"
+  }
+}

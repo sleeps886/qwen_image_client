@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000073\",\"target_ref\":\"B000001\",\"reason\":\"本单元观测（t=101）为hull方位179.97°、tow方位179.97°，强度0.1789与历史轨迹B000001的特征一致。在时间上紧随该目标最后一组已知观测（t=74, hull 174.84°, tow 174.69°），且方位变化平滑连续；平台处于静止状态，无几何矛盾，故判定为该目标的延续点。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_4b6acff3-3e81-4417-b9eb-2aad413bb98a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 141,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006728"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000017\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照初始状态为空，无历史轨迹可关联。U000017的观测（t=47）在方位上介于早期单元组（如U000005 t=26, bearing≈104°）与后期同强度单元组（如U000023 t=54, bearing≈104.6°）之间，且具备相同的特征参数（strength≈0.2438, sigma_deg≈5.76）。该时间戳位于本批次已存在的时间序列间隙中，符合“插入已有轨迹中间”或作为新目标起始点的条件，因此判定为新目标以建立独立航迹。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5d7b5309-9cc3-4295-b7e1-46f43f1a3928",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 195,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005266"
+  }
+}

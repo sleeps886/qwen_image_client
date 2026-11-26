@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000039\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无已存在的目标（targets为空），且该组观测时间t=430.0、方位角约164度、强度约0.244与之前处理的任意单点观测在时空连续性上均无法构成有效关联。鉴于缺乏历史轨迹可供接续或插入，依据协议将其判定为新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a284035c-e5f0-4ebf-b562-ea925fb18567",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 112,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00464"
+  }
+}

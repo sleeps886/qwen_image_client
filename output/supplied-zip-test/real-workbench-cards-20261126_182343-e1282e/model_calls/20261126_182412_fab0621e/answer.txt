@@ -1,0 +1,1 @@
+{"snapshot_version":7,"partition_ref":"P001","chain_bindings":[{"chain_ref":"C01","target_ref":"B000001"},{"chain_ref":"C02","target_ref":"B000002"},{"chain_ref":"C03","target_ref":"B000003"}]}

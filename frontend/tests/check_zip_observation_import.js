@@ -1,0 +1,34 @@
+async page=>{
+  const assert=(value,message)=>{if(!value)throw Error(message);};
+  await page.goto('http://127.0.0.1:8891/incremental?empty=1');
+  await page.waitForFunction(()=>document.querySelector('#backendReadiness').textContent.includes('已就绪'));
+  let modelRequests=0;
+  page.on('request',request=>{if(request.method()==='POST'&&/mixed-sessions/.test(request.url()))modelRequests++;});
+  await page.locator('#pointFileImport').setInputFiles(['output/playwright/target-package-1.zip','output/playwright/target-package-2.zip']);
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('已导入 2个文件'));
+  assert((await page.locator('#batchSource').textContent()).includes('保留24点'),'observations not displayed');
+  assert(await page.locator('#targetTrackSelect option').count()===3,'source groups missing');
+  await page.locator('#targetTrackSelect').selectOption({index:1});
+  assert((await page.locator('#chatPayloadSummary').textContent()).includes('当前浏览 12点'),'group filter incorrect');
+  const saved=await page.evaluate(async()=>WorkspaceCache.get('mixed-workspace'));
+  assert(saved.dataset.candidates.length===24,'wrong saved point count');
+  assert(new Set(saved.dataset.candidates.map(p=>p.candidate_id)).size===24,'duplicate IDs');
+  assert(saved.dataset.platform_config.platforms.length===2,'platforms missing');
+  assert(!JSON.stringify(saved.dataset).includes('latitude'),'reference truth imported');
+  await page.goto('http://127.0.0.1:8891/incremental');
+  await page.waitForFunction(()=>document.querySelector('#chatPayloadSummary').textContent.includes('全批 24点'));
+  const before=(await page.locator('#pointFileList').textContent());
+  await page.locator('#pointFileImport').setInputFiles({name:'reference.json',mimeType:'application/json',buffer:Buffer.from('{"evaluation_only":true,"points":[]}')});
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.startsWith('导入失败'));
+  assert((await page.locator('#chatPayloadSummary').textContent()).includes('全批 24点'),'bad input replaced workspace');
+  assert(await page.locator('#pointFileList').textContent()===before,'bad input persisted');
+  await page.locator('#pointFileImport').setInputFiles('output/playwright/target-package-1.zip');
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('已导入 1个文件'));
+  assert((await page.locator('#batchSource').textContent()).includes('保留12点'),'single ZIP failed');
+  const raw=saved.dataset;
+  await page.locator('#pointFileImport').setInputFiles({name:'observations.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(raw))});
+  await page.waitForFunction(()=>document.querySelector('#batchSource').textContent.includes('保留24点'));
+  assert(modelRequests===0,'import called model/session API');
+  await page.screenshot({path:'output/playwright/zip-observation-import.png',fullPage:true});
+  return {multiZip:true,singleZip:true,jsonCompatible:true,sourceGroups:true,uniqueIds:true,reload:true,truthRejected:true,modelCalls:0};
+}

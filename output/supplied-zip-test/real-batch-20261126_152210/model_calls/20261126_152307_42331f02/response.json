@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000097\",\"target_ref\":\"B000001\",\"reason\":\"观测O000195和O000198的方位角（约175.2°）与强度（0.1789）及sigma参数完全匹配已有轨迹B000001的特征。该目标此前持续出现在高舷侧角度区域，且时间序列上t=131s紧接在上一批t=128s之后，符合连续运动趋势，故归入现有目标B000001作为末尾接续。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_de274e2b-8887-4502-9d5d-a2e06dc7c2a0",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 141,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006728"
+  }
+}

@@ -1,0 +1,6 @@
+{
+"snapshot_version": 0,
+"unit_id": "U000032",
+"target_ref": "new",
+"reason": "快照中无有效历史轨迹，且本组观测时间独立，无法建立连续航迹，故判定为新目标。"
+}

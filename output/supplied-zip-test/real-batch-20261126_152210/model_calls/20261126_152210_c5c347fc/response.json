@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000013\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前为初始批次（processed_unit_count=0），snapshot.targets为空，无历史轨迹可供匹配。观察本批batch_units整体数据，存在三组明显的方位角聚类：第一组约162°-174°（强度~0.179），第二组约102°-105°（强度~0.244），第三组从t=54开始出现在141°-146°（强度~0.289）。Focus单元U000013的时间戳为t=40.0，其观测值Hull: 104.60°, Tow: 102.12°完全落在第二组方位角范围内且强度一致。然而，该第二组目标在时间序列上最早出现于t=26.0（U000005），晚于focus单元所在的t=40.0之前的其他潜在起始点（如果有的话，但此处主要依据现有簇判断）。更重要的是，由于没有已有的track列表作为归属基础，根据协议要求，不能仅凭背景信息强行插入不存在的旧轨迹或假设其为某未知目标的延续。鉴于这是一个独立的、具有稳定特征（特定方位角区间和恒定强度）但在本快照中尚未建立正式跟踪航迹的新发现集群成员，应将其判定为新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_0cfdefb7-850b-4d90-83b0-fe6f40f720df",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 333,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.03449"
+  }
+}

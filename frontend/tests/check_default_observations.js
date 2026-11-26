@@ -1,0 +1,43 @@
+// Default checks are browser-only browsing aids, not model seeds or identities.
+async page=>{
+ const base=new URL(page.url()).origin,assert=(v,m)=>{if(!v)throw new Error(m);};
+ assert((await (await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'fake server required');
+ let posts=0;const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/api/**',async route=>{if(route.request().method()==='POST'){posts++;await route.abort();return;}await route.continue();});
+ await page.setViewportSize({width:1600,height:1100});await page.goto(base+'/incremental?empty=1');
+ await page.waitForFunction(()=>document.querySelector('#backendReadiness').textContent.includes('已就绪'));
+ assert(await page.locator('#selectInitialPoints').isDisabled(),'preset enabled without a dataset');
+ await page.getByText('导入数据与参数（免费）',{exact:true}).click();
+ const candidates=[['a3',4,'hull'],['c0',100,'hull'],['a0',1,'hull'],['b3',6,'tow'],['a2',3,'hull'],['b2',5,'hull'],['b0',0,'tow'],['a1',1,'tow']].map(([candidate_id,t,array])=>({candidate_id,t,array,platform_id:'A',bearing_deg:30+t*.1}));
+ const data={candidates,target_catalog:[{target_id:'A038',candidate_ids:['a3','a2','a0','a1','missing']},{target_id:'A034',candidate_ids:['b3','b2','a0','a0','b0']},{target_id:'A048',candidate_ids:['c0']}]};
+ const chosen=async()=>await page.locator('#selectedPoints>div>span').evaluateAll(nodes=>nodes.map(n=>n.textContent.split(' · ')[1]).sort());
+ const expected=['a0','a1','a2','b0','b2','c0'];
+ const upload=async d=>{await page.locator('#datasetFile').setInputFiles({name:'group-defaults.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(d))});await page.waitForFunction(()=>!document.querySelector('#datasetFile').disabled);};
+ await upload(data);assert(JSON.stringify(await chosen())===JSON.stringify(expected),'not the first three distinct observations per group');
+ assert((await page.locator('#chatQuestion').inputValue()).includes('6个观测点，分布在5个时刻'),'selected rows were mistaken for individual points');
+ assert(await page.locator('#predictionChart polyline').count()===0,'preset observations became a trajectory');
+ assert(await page.locator('#sessionId').inputValue()==='','default selection created an analysis session');
+ assert(!await page.locator('#chatConsent').isChecked(),'default selection authorised a model call');
+ await page.locator('#targetTrackSelect').selectOption('A034');assert(JSON.stringify(await chosen())===JSON.stringify(expected),'switching group replaced defaults');
+ await page.locator('.mixed-row').filter({has:page.locator('input[data-candidate-id="b0"]')}).locator('details > summary').click();
+ await page.locator('input[data-candidate-id="b0"]').uncheck();assert((await chosen()).length===5,'preset point cannot be removed');
+ await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.selected.length===5;});
+ await page.goto(base+'/incremental');await page.waitForFunction(()=>document.querySelector('#selectedSummary').textContent.includes('5点'));
+ assert(!(await chosen()).includes('b0'),'reload silently reselected removed point');
+ await page.locator('#clearSelection').click();await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.selected.length===0;});
+ await page.goto(base+'/incremental');await page.waitForFunction(()=>document.querySelectorAll('#targetTrackSelect option').length===4);
+ assert((await chosen()).length===0,'reload restored defaults after explicit clear');
+ await page.locator('#targetTrackSelect').selectOption('A034');
+ await page.locator('.mixed-row').filter({has:page.locator('input[data-candidate-id="b3"]')}).locator('details > summary').click();await page.locator('input[data-candidate-id="b3"]').check();
+ await page.locator('#selectInitialPoints').click();assert((await chosen()).length===7,'supplement button erased existing selection');
+ await page.locator('#selectInitialPoints').click();assert((await chosen()).length===7,'supplement button duplicated IDs');
+ await page.locator('#openNewConversation').click();await page.waitForFunction(()=>document.querySelector('#selectedSummary').textContent.includes('6点'));
+ assert(JSON.stringify(await chosen())===JSON.stringify(expected),'new session preset differs');
+ await page.getByText('导入数据与参数（免费）',{exact:true}).click();
+ await upload({...data,candidates:[...candidates].reverse()});assert(JSON.stringify(await chosen())===JSON.stringify(expected),'input order changed defaults');
+ await upload({candidates});assert(JSON.stringify(await chosen())===JSON.stringify(['a0','a1','b0']),'ungrouped dataset did not select its first three points');
+ assert(posts===0,'preset selection invoked backend/model');assert(!errors.length,errors.join('\n'));
+ await page.unroute('**/api/**');
+ await page.screenshot({path:'output/playwright/default-first-three-observations.png',fullPage:true});
+ return {perGroupFirstThree:true,chronological:true,uniqueIDs:true,shortGroupSupported:true,individualPointsNotRows:true,groupSwitchRetention:true,manualRemovalAndClearRetained:true,supplementPreservesSelection:true,noBackendPosts:true,realModelCalls:0};
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000087\",\"target_ref\":\"B000003\",\"reason\":\"该单元观测强度(≈0.289)与sigma特征严格匹配已知目标B000003（区别于其他目标的0.179/0.244），且方位角在时间序列上连续平滑：从上一帧t=111的~153°推进至本帧t=117的~154.5°，符合既有航迹演化趋势，无断裂或异常跳变，故判定为接续。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_89e6f19c-cbbd-4335-be9c-deaf798ae42d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 135,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006712"
+  }
+}

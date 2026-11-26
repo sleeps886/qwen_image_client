@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000037\",\"target_ref\":\"new\",\"reason\":\"快照中无已有目标或轨迹。该单元属于本批次最早出现的独立方位序列之一（t=13起），其方位随时间呈现连续、单调且平滑的变化趋势（如从约162.6°逐步增至174.8°），具备稳定的几何运动特征，符合新目标初始化的条件，故判定为新建轨迹起点。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_9fab21b5-aabc-4586-8094-9f4a96372c3c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 103,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.033868"
+  }
+}

@@ -1,0 +1,8 @@
+```json
+{
+  "snapshot_version": 0,
+  "unit_id": "U000050",
+  "target_ref": "new",
+  "reason": "snapshot为空，无历史轨迹可比对。U000050包含t=550时刻的hull+tow双阵观测（方位约165度），在缺乏先前状态估计且不可仅凭特征相似性关联的情况下，判定为新目标起始点。"
+}
+```

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000018\",\n  \"target_ref\": \"T_B\",\n  \"reason\": \"当前快照无预置轨迹，依据本批数据聚类分析：存在一组方位角稳定在100-110度区间（右舷侧）、强度约0.24的连续观测序列。该序列包含 t=35 (U000002), t=90 (U000007), t=99 (U000008), t=139 (U000012), t=154 (U000013) 以及当前单元 U000018 (t=214)。虽然时间跨度较大且中间有间隔，但方位角特征高度一致（Hull ~104-105° 或缓慢漂移至105.6°，Tow ~100-102°），符合同一目标的运动学趋势。相比之下，其他单元分为两组主要集群：一是大角度/船尾方向（~140-175°）的高/低强度混合群，二是早期出现的大角度弱信号群。U000018 明显属于右舷侧中等强度目标群，因此建议归属为新建目标 T_B（代表该特定航向簇）。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5fb2c39c-b94c-430e-b050-e1c84c079677",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 313,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.027762"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "groups": 200,
+  "positions": 193,
+  "missingPositions": 7,
+  "modelLines": 188,
+  "sourceCheckAfterInference": {
+    "B000001": {
+      "I01": 72,
+      "I02": 1
+    },
+    "B000002": {
+      "I02": 68
+    },
+    "B000003": {
+      "I03": 59
+    }
+  }
+}

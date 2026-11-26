@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000025\",\"target_ref\":\"new\",\"reason\":\"平台A静止，hull与tow在x轴方向分离约106m。该组(t=55.0)双阵方位差约0.26°，结合几何约束解算出的目标位置(x≈3040, y≈-2140)，位于tow后方且相对于hull更靠右（东南象限），符合两阵列对同一目标的视差规律，判定为单点源而非伪像。虽其强度(0.1789)、峰宽(sigma 5.37/1.69)与批次中另一持续航迹群(U000001-U000049部分单元)完全一致，但对比同批次其他高相似度单元的时空连续性发现：此组所在方位带(bearing~171°)在前后时刻缺乏连续观测支持，无法构成平滑轨迹；而具有相同信号特征的其余单元构成了独立、稳定的运动趋势。因此不能仅凭特征匹配归入已有轨迹，应视为该信号类型下的离散检测或未形成稳定航迹的新目标。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_abef8f5d-70c4-4a9d-aeb7-9178e60dd5c2",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 254,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005426"
+  }
+}

@@ -102,6 +102,22 @@ class ProfileInverseTests(unittest.TestCase):
             excluded=(4,6) if model['parameter_family']=='latitude_harmonic' else (5,7)
             self.assertTrue(all(model['parameters'][index]==0 for index in excluded))
 
+    def test_curved_observations_can_escape_an_initial_cv_model(self):
+        context,selection,_,_=self.fixture();candidate=selection['selected'][0]
+        _,pair,_=inverse_fixture(kind='harmonic')
+        images=[{'array':a,'candidates':pair[a]['points']} for a in ('hull','tow')]
+        frozen=copy.deepcopy(images);model=candidate['variants'][0]
+        seeds=family_seeds(model,[model],candidate,images,context,lambda:None)
+        families={m['parameter_family'] for m,_ in seeds}
+        self.assertTrue({'cv','latitude_harmonic','longitude_harmonic'}<=families)
+        self.assertEqual(images,frozen)
+        for image in images:
+            for p in image['candidates']:
+                if p['sample_index']%5==0:p['bearing_deg']+=20
+        after=family_seeds(model,[model],candidate,images,context,lambda:None)
+        self.assertEqual([(m['parameters'],i.tolist()) for m,i in seeds],
+                         [(m['parameters'],i.tolist()) for m,i in after])
+
     def test_harmonic_radial_seeds_preserve_period_and_input(self):
         context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
         model={**candidate['variants'][0],'model':'harmonic','parameter_family':'harmonic',
@@ -125,6 +141,28 @@ class ProfileInverseTests(unittest.TestCase):
             _,report=refine_profiles(selection,evidence,context,InversionControl(),rounds=1)
         tests=report['updates'][0]['motion_family_tests']
         self.assertGreaterEqual(sum(t['family']==family for t in tests),2)
+
+    def test_base_family_pass_precedes_optional_expensive_restarts(self):
+        context,selection,evidence,_=self.fixture()
+        with patch('backend.app.services.localization.profile_inverse.family_seeds',wraps=family_seeds) as seeds:
+            _,report=refine_profiles(selection,evidence,context,InversionControl(),rounds=2,profile_rows=33)
+        self.assertEqual(report['status'],'completed')
+        self.assertEqual(len(seeds.call_args_list),2)
+        first,second=seeds.call_args_list
+        self.assertFalse(first.kwargs['explore_curvature'])
+        self.assertEqual(first.kwargs['radial_scales'],())
+        self.assertTrue(second.kwargs['explore_curvature'])
+        self.assertTrue(second.kwargs['radial_scales'])
+
+    def test_base_only_seeds_do_not_spend_budget_on_radial_or_curvature_restarts(self):
+        context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]
+        _,pair,_=inverse_fixture(kind='harmonic')
+        images=[{'array':a,'candidates':pair[a]['points']} for a in ('hull','tow')]
+        model=candidate['variants'][0]
+        seeds=family_seeds(model,[model],candidate,images,context,lambda:None,
+                           explore_curvature=False,radial_scales=())
+        self.assertTrue(seeds)
+        self.assertTrue(all(m['model']=='cv' and 'radial_seed_scale' not in m for m,_ in seeds))
 
     def test_single_array_late_peak_does_not_extend_visibility_window(self):
         context,selection,evidence,_=self.fixture();candidate=selection['selected'][0]

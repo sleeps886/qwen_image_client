@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000019\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无已有轨迹可供关联。该单元位于t=50时刻，方位角约104.6°（Hull）和102.1°（Tow），强度约为0.244。虽然与后续时间点出现的同方向观测在几何趋势上可能存在延续性，但由于缺乏历史先验信息且不能仅凭属性相似进行猜测，依据保守归属原则，将其判定为新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_59a2833d-211f-4051-bf2b-566b21ca619d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 136,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005106"
+  }
+}

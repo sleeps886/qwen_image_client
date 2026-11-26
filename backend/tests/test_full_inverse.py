@@ -112,6 +112,18 @@ class BatchInverseTests(unittest.TestCase):
         control=InversionControl();control.cancelled.set()
         with self.assertRaises(InversionStopped):control.check()
 
+    def test_independently_supported_five_targets_are_not_capped_at_four(self):
+        candidates=[{'id':f'A{k}','variants':[{'parameters':[0]*4}]} for k in range(5)]
+        supports={c['id']:[f"{c['id']}_{i}" for i in range(20)] for c in candidates}
+        evidence={'images':[{'array':array,'candidates':[{'id':p} for ids in supports.values()
+                              for i,p in enumerate(ids) if i%2==index]}
+                            for index,array in enumerate(('hull','tow'))]}
+        with patch('backend.app.services.localization.batch_inverse.support_for',
+                   side_effect=lambda c,*args:(supports[c['id']],.05)):
+            result=select_exclusive({'candidates':candidates},evidence,{},InversionControl())
+        self.assertEqual({c['id'] for c in result['selected']},set(supports))
+        self.assertFalse(result['uncovered_ids'])
+
     def test_review_cannot_invent_ids_coordinates_or_share_measurements(self):
         selection={'candidates':[{'id':'A','supported_measurement_ids':['p1']},{'id':'B','supported_measurement_ids':['p1']}]}
         ridges={'crossing_regions':[{}]}

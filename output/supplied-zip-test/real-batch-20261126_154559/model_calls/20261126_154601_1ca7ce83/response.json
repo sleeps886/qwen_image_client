@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000050\",\n\"target_ref\": \"new\",\n\"reason\": \"快照无历史轨迹。该单元方位角约165度，与左舷侧（~105度）及近尾向（~175度）的既有候选群均不匹配，判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f9df94aa-7fce-4c91-a3ee-234f3f49d34b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 89,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00523"
+  }
+}

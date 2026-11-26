@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000027\",\n  \"target_ref\": \"new\",\n  \"reason\": \"强度与方位均不匹配现有轨迹，孤立观测无法建立连续航迹\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3ea3608c-4620-4e79-bc2b-e875d91a500e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 65,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005164"
+  }
+}

@@ -1,0 +1,417 @@
+{
+  "model": "qwen3.8-omni-flash",
+  "run_id": "c9a3e7a29529479888d6d1b1a060b13a",
+  "status": "result_unknown",
+  "processed_groups": 50,
+  "real_model_requests": 102,
+  "elapsed_seconds": 160.25,
+  "targets": 3,
+  "snapshots": 1,
+  "unassigned_raw": 0,
+  "last_error": "UpstreamTimeout：归并调用结果未知，可能已计费；未自动重试",
+  "automatic_retries": 0,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "workers": [
+    {
+      "unit_id": "U000014",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000027",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000001",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000019",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000024",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000016",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000045",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000012",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000003",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000047",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000011",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000026",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000029",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000017",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000015",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000002",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000032",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000010",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000009",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000041",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000042",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000021",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000020",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000008",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000035",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000030",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000007",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000022",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000050",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000034",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000039",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000018",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000005",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000028",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000006",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000044",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000037",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000043",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000033",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000031",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000013",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000025",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000004",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000048",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000036",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000040",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000038",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000049",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000023",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000046",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000051",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000054",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000052",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000077",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000060",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000053",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000072",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000059",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000056",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000057",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000087",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000078",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000055",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000097",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000091",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000062",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000073",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000063",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000082",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000079",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000081",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000085",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000090",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000067",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000088",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000099",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000075",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000083",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000065",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000080",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000093",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000068",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000061",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000076",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000058",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000071",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000100",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000094",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000098",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000066",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000084",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000070",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000064",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000069",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000074",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000095",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000092",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000089",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000086",
+      "status": "returned"
+    },
+    {
+      "unit_id": "U000096",
+      "status": "returned"
+    }
+  ]
+}

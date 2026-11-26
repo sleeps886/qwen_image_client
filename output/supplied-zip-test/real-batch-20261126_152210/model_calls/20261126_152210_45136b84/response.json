@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000016\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照历史为空（targets=[]），无可接续的既有轨迹。聚焦单元U000016的时间戳t=47.0，其方位角约为169度，强度为0.1789，与批次中较早出现的另一类信号特征（如t=26时的约104度、强度0.2438）在空间分布和幅度上均不一致，无法合并至同一潜在目标组；且无其他历史观测支持该单元属于已存在的目标序列。因此判定为新目标的起始观测。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f46d8dcf-307b-4101-a286-004a289f0bab",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 161,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005174"
+  }
+}

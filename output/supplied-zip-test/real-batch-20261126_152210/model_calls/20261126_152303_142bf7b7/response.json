@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000052\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"U000052的方位角为176.2°（hull）和176.1°（tow），其方向与历史中B000001在t=74时的方位角174.8°（O000099/O000102）非常接近，且符合B000001随时间推移方位缓慢增大的趋势（从t=54的170.9°到t=74的174.8°）。此外，强度特征（约0.179）也与该目标保持一致。因此判定其归属于已有轨迹B000001并作为后续观测插入末尾。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_4096e0d1-8670-4160-9b98-91e4dff0bf55",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 211,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006918"
+  }
+}

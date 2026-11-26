@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000025\",\n  \"target_ref\": \"new\",\n  \"reason\": \"无历史轨迹可接续。方位角176°至176°变化极小，符合静止平台正前方特征，建议新建目标跟踪该疑似静止源。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a5312208-5edb-483e-93c0-95c581816525",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 81,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034058"
+  }
+}

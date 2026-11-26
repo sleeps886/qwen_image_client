@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000036\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组方位随时间连续递减（140°→127°），呈现典型的过顶穿越特征，且强度处于较低档位，与现有高稳定度轨迹不匹配。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a8775f8e-a990-43af-a949-70cea64aec7a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 89,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.03408"
+  }
+}

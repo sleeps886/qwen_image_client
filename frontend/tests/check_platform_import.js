@@ -1,0 +1,45 @@
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};let paid=0;
+  page.on('request',r=>{if(r.method()==='POST'&&/\/(step|plot-step)$/.test(r.url()))paid++;});
+  await page.goto(base+'/incremental?empty=1');
+  await page.waitForFunction(()=>!document.querySelector('#platformFileImport').disabled);
+  const config={platforms:[{name:'P',start_ll:[30.0623,122.0415],heading_deg:30,speed_kn:0,hull_m:[0,0],tow_m:[-150,0],color:'#ffd900'}]};
+  const upload=async data=>{
+    await page.locator('#platformFileImport').setInputFiles({name:'platform.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});
+    await page.waitForFunction(()=>!document.querySelector('#platformFileImport').disabled);
+  };
+  await upload(config);
+  assert((await page.locator('#platformImportStatus').textContent()).includes('等待导入观测'),'platform-first failed');
+  assert(await page.getByRole('textbox',{name:'平台1 经度 °E',exact:true}).inputValue()==='122.0415','longitude swapped');
+  assert(await page.getByRole('textbox',{name:'平台1 纬度 °N',exact:true}).inputValue()==='30.0623','latitude swapped');
+  assert(await page.getByRole('textbox',{name:'平台1 名称',exact:true}).getAttribute('readonly')!==null,'editable field');
+  assert(await page.locator('.platform-data-card input[type=color]').inputValue()==='#ffd900','color missing');
+  await page.goto(base+'/incremental?empty=1');
+  await page.waitForFunction(()=>document.querySelectorAll('.platform-data-card').length===1);
+  const fixture=await(await page.request.get(base+'/api/test-mixed-fixture')).json();
+  await page.locator('#pointFileImport').setInputFiles({name:'observations.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(fixture))});
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('已导入'));
+  await page.waitForFunction(async()=>!!(await WorkspaceCache.get('mixed-workspace'))?.dataset.platform_config);
+  const snapshot=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  assert(snapshot.dataset.platform_config.platforms[0].name==='P','pending config not applied');
+  await upload({...config,platforms:[{...config.platforms[0],name:'Wrong'}]});
+  assert((await page.locator('#platformImportStatus').textContent()).includes('缺少观测使用的平台'),'platform mismatch accepted');
+  assert(await page.getByRole('textbox',{name:'平台1 名称',exact:true}).inputValue()==='P','failed import replaced config');
+  await page.locator('#chatPrepare').click();
+  await page.waitForFunction(()=>!!document.querySelector('#sessionId').value&&!document.querySelector('#chatPrepare').disabled);
+  const oldSid=await page.locator('#sessionId').inputValue();
+  await upload({...config,platforms:[{...config.platforms[0],speed_kn:8}]});
+  assert((await page.locator('#platformImportStatus').textContent()).includes('已另建会话'),'old analysis config silently mutated');
+  assert(await page.locator('#sessionId').inputValue()==='','old backend session reused');
+  const old=await(await page.request.get(base+'/api/incremental/mixed-sessions/'+oldSid)).json();
+  assert(old.calls===0,'unexpected model call');
+  await page.goto(base+'/incremental');
+  await page.waitForFunction(()=>document.querySelector('.platform-data-card input[aria-label="平台1 航速 kn"]')?.value==='8');
+  await upload({evaluation_only:true,points:[]});
+  assert((await page.locator('#platformImportStatus').textContent()).startsWith('导入失败'),'truth accepted');
+  await page.setViewportSize({width:1440,height:1000});
+  await page.locator('.sidebar-platform').scrollIntoViewIfNeeded();
+  await page.screenshot({path:'output/playwright/platform-import-fields.png'});
+  assert(paid===0,'paid request made');
+  return {platformFirst:true,jsonImport:true,fieldDisplay:true,readonly:true,longitudeLatitude:true,color:true,mismatchRejected:true,oldSessionPreserved:true,reload:true,truthRejected:true,modelCalls:0};
+}

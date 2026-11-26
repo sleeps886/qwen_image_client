@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000085\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"U000085观测(t=117)的方位角(约177.1°/177.0°)、强度(0.179)及Sigma与目标B000001的历史轨迹(F001/F002)高度一致。相比同批次其他单元，其数值特征排除了B000002(~104°)和B000003(~154°)，且符合B000001随时间推移方位角缓慢增大的趋势，故判定为向该轨迹末尾接续。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_b549c009-3935-4d10-9467-b868f9d90271",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 182,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.00684"
+  }
+}

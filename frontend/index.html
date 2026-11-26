@@ -6,19 +6,34 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>模型接入台</title>
     <link rel="stylesheet" href="/assets/style.css">
+    <script src="/assets/workspace-cache.js" defer></script>
     <script src="/assets/app.js" defer></script>
 </head>
 
-<body>
+<body class="has-app-navigation">
+<aside class="app-navigation" aria-label="主导航">
+  <a class="app-nav-brand" href="/" aria-label="小怪工作空间"><span class="app-nav-mark">小</span><strong>小怪工作空间</strong></a>
+  <span class="app-nav-caption">工作空间</span>
+  <nav class="app-nav-links" aria-label="页面导航">
+    <a href="/" aria-current="page"><span aria-hidden="true">▧</span><span>图片识别</span></a>
+    <a id="predictionNav" href="/incremental" ><span aria-hidden="true">⌁</span><span>轨迹工作台</span></a>
+    <a href="/generator"><span aria-hidden="true">⚒</span><span>数据生成工具</span></a>
+  </nav>
+  <a class="app-nav-docs" href="/docs" target="_blank" rel="noopener">API 文档 ↗</a>
+</aside>
+
     <header>
         <div class="brand"><span class="logo">Q</span>
             <div><strong>千问视觉接入台</strong><small>图片上传 · 模型调用 · Agent API</small></div>
-        </div><nav><a href="/incremental">纯点位增量预测（一期）</a> · <a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a></nav>
+        </div>
     </header>
     <main>
         <section class="intro"><span class="eyebrow">BAILIAN / VISION WORKSPACE</span>
             <h1>图片或目标数据，一键生成轨迹图。</h1>
             <p>支持声呐图片识别，或单份数据文件绘图。模型整理轨迹点，程序校验并生成图片。</p>
+            <p id="workspaceCacheStatus" class="note" role="status">图片、参数和最近结果自动保存在此浏览器，刷新后恢复；费用确认不会保存。</p>
+            <button id="clearWorkspaceCache" type="button">清除此页保存（不删除后端结果）</button>
+
         </section>
         <div class="layout">
             <div class="agent-inputs">
@@ -75,6 +90,12 @@
                 </section>
                 <figure id="trackFigure" hidden><img id="trackImage" alt="模型估计轨迹图"><figcaption id="trackCaption"></figcaption></figure>
                 <nav id="downloads" class="result-downloads" aria-label="常用结果下载"></nav>
+                <section id="gaussianTransfer" class="node-panel" hidden aria-label="高斯点位批次传递">
+                    <h3>本批高斯亮点 → 点位预测</h3>
+                    <p class="note">原有绘图流程不变。将本次已保存的高斯测量中心、时间、阵列及质量标记载入预测页面，不传图片、不调用模型。像素候选不作为高斯点替代；模型最终绘图失败时，已提取的测量仍可使用。</p>
+                    <div class="actions"><a id="sendGaussianToPrediction" target="_blank" rel="noopener">将本批高斯点送入预测 ↗</a><a id="downloadGaussianBatch" download>下载高斯点位批次 JSON</a></div>
+                    <p id="gaussianTransferStatus" class="note" role="status">待发送；以预测页面实际接收校验结果为准。</p>
+                </section>
                 <details id="evidenceSection" class="result-detail" hidden open><summary>像素候选、Agent选择与重投影 · 原图核对</summary><p class="note">白框为自动绘图区，粉点为程序候选，绿圈为Agent选点；reprojection图的青圈为重投影点、红叉为未通过观测。已加入局部窗口连续估计，不补缺测。镜像与错误关联仍可能通过一致性检查，不代表定位正确。下方可下载跟踪、重投影报告与知识来源。</p><div id="evidenceImages" class="compare-pair"></div></details>
                 <div id="usage" class="usage-grid" aria-label="本次调用用量"></div>
                 <details id="warningsDetails" class="result-detail" hidden><summary>结果说明与告警 <span id="warningCount"></span></summary><div id="trackWarnings" role="status"></div></details>

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000012\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无已存在目标(targets为空)。在联合背景中，该组位于方位约168°序列上（同序列含t=13至74多个单元），与另一稳定序列(约102-105°)及后来出现的第三序列(约141-146°, t≥54)区分明显；强度~0.179、hull/tow一致性支持其为同一物理源。但平台静止且仅凭方位连续性无法证实身份，故按规则创建新目标而非并入未定义轨迹。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_404b3744-c097-4344-9728-754ee4d17abe",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 164,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005182"
+  }
+}

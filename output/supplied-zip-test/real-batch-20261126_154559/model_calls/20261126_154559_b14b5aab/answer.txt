@@ -1,0 +1,8 @@
+```json
+{
+"snapshot_version": 0,
+"unit_id": "U000009",
+"target_ref": "unassigned",
+"reason": "快照无历史轨迹，本组为首次观测且坐标未收敛，无法确认身份，暂不归属。"
+}
+```

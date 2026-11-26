@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000024\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无已有轨迹或目标，本单元为t=285.0s的孤立观测点。其方位（约176°）及强度特征与时间上邻近的其他单元存在显著差异：例如前一时刻t=271.0的单元位于左侧舷角（~107°），而后一时刻t=296.0虽在右后方但间隔较长且无法单独确证连续性。由于缺乏连续的时间序列支持以构建平滑航迹，且不能仅凭单一观测断言其为其他目标的插值或延续，故将其判定为新目标起始点或独立检测，暂不归属任何现有轨迹。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a67f5987-0e20-4e98-a7ec-c800e2866901",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 179,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004822"
+  }
+}

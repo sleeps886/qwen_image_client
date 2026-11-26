@@ -1,0 +1,37 @@
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};let paid=0;
+  page.on('request',r=>{if(r.method()==='POST'&&/\/(step|plot-step)$/.test(new URL(r.url()).pathname))paid++;});
+  await page.goto(base+'/incremental?empty=1');await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  const p=(candidate_id,t,array='hull',platform_id='A')=>({candidate_id,t,array,platform_id,bearing_deg:30});
+  const upload=async data=>{await page.locator('#pointFileImport').setInputFiles({name:'sparse-m0.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({candidates:data}))});await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);};
+  const chosen=()=>page.locator('#selectedPoints>div').count();
+  await upload([p('one',37,'tow')]);
+  assert((await page.locator('#batchSource').textContent()).includes('已保留1点'),'single point rejected');
+  assert(await chosen()===1,'single point not selectable');assert(await page.locator('#chatPrepare').isEnabled(),'single point cannot prepare');
+  await page.locator('#chatPrepare').click();await page.waitForFunction(()=>!document.querySelector('#chatPrepare').disabled);
+  assert((await page.locator('#chatNotice').textContent()).includes('完整保留1点'),'single preview lost point');
+  const data=[p('h1',1),p('h2',1),p('t1',1,'tow'),p('h3',3),p('t3',3,'tow'),p('sparse',2,'tow'),p('async-h',7),p('async-t',7.001,'tow')];
+  await upload(data);assert((await page.locator('#batchSource').textContent()).includes('已保留8点'),'sparse points dropped');
+  await page.locator('#selectAllPoints').click();assert(await chosen()===8,'not all raw points selectable');
+  assert((await page.locator('#selectionDiagnostics').textContent()).includes('严格同步双阵2组'),'diagnostic count incorrect');
+  await page.locator('#samplePointMode').selectOption('synchronous_groups');await page.locator('#samplePointCount').fill('2');await page.locator('#samplePoints').click();
+  assert(await chosen()===5,'group mode must retain every same-time candidate');
+  assert((await page.locator('#pointSamplingStatus').textContent()).includes('2组同步时刻、实际5点'),'group/point units missing');
+  await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.selected.length===5&&s.sampleMode==='synchronous_groups';});
+  await page.goto(base+'/incremental');await page.waitForFunction(()=>document.querySelectorAll('#selectedPoints>div').length===5);assert(await page.locator('#samplePointMode').inputValue()==='synchronous_groups','group mode not restored');
+  await page.locator('#samplePointMode').selectOption('points');await page.locator('#samplePointCount').fill('4');await page.locator('#samplePoints').click();
+  assert(await chosen()===4,'point mode no longer exact');
+  const snapshot=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));assert(snapshot.dataset.candidates.length===8,'sampling changed original data');
+  await upload([p('late',40),p('early',3,'tow'),p('middle',10)]);await page.locator('#selectAllPoints').click();
+  assert(await chosen()===3,'shuffled single-array batch rejected');
+  await page.locator('#samplePointMode').selectOption('synchronous_groups');await page.locator('#samplePointCount').fill('1');await page.locator('#samplePoints').click();
+  assert(await chosen()===3,'failed optional group selection changed existing selection');
+  assert((await page.locator('#pointSamplingStatus').textContent()).includes('单阵/异步点仍保留'),'group-mode failure implies data invalid');
+  await page.locator('#samplePointMode').selectOption('points');await page.locator('#samplePointCount').fill('2');await page.locator('#samplePoints').click();
+  await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.selected.length===2&&s.sampleMode==='points';});
+  await page.goto(base+'/incremental');await page.waitForFunction(()=>document.querySelectorAll('#selectedPoints>div').length===2);
+  assert(await page.locator('#samplePointMode').inputValue()==='points','sampling mode not restored');
+  assert(paid===0,'M0 selection/prepare made paid request');
+  await page.locator('.point-sampling').scrollIntoViewIfNeeded();await page.screenshot({path:'output/playwright/sparse-input-m0.png'});
+  return {singlePoint:true,allSparsePointsRetained:true,asynchronousAccepted:true,optionalGroupSampling:true,unitsExplicit:true,sourceUnchanged:true,reload:true,realModelCalls:0};
+}

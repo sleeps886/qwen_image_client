@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000072\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该单元包含两个阵列在t=100.0s的观测，其方位角（hull: 151.42°, tow: 150.16°）与已有轨迹B000003在此时刻的运动趋势高度一致。历史数据表明，B000003自t=54.0s起出现，方位角从约143°平稳递增至t=98.0s时的约151°。U000072作为紧随t=98.0s的下一个采样点，延续了这一平滑变化规律，且强度特征与该目标完全吻合，故判定为向末尾接续。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_b4d5d460-9456-4521-9c8e-cbf8ccbf467e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 199,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006886"
+  }
+}

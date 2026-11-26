@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000066\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该观测组（t=98.0）的方位角与强度特征均符合已知目标 B000003 的轨迹演化规律。具体而言：1) **时间连续性**：上一批次单元 U000063 (t=97.0) 已确立为 B000003，本单元 t=98.0 紧随其后；2) **几何一致性**：在 Hull 阵列上，方位从 150.87° (t=97) 平滑过渡至 151.05° (t=98)，变化率约为 0.18°/s，符合平台运动模型预测；Tow 阵列同样呈现一致的趋势（149.59° -> 149.78°）。3) **属性匹配**：强度值保持恒定，且双阵间的固定偏置关系稳定。因此判定该组属于已有轨迹 B000003 的中段延续。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_e9293faf-bc66-49da-99e5-4d62852c6631",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 273,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007086"
+  }
+}

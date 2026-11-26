@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000053\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"观测时间t=81.0与已有轨迹B000002在快照中的最后记录（t=74.0）存在约7秒的时间间隔，属于合理的数据更新周期。方位角特征高度吻合：当前单元hull阵列测得104.72°，tow阵列测得101.87°；而B000002的历史数据中，其对应时间点的测量值分别稳定在104.5-104.7度区间和101.9-102.1度区间。强度特征完全匹配：当前单元的强度为0.2437...，该数值精确对应于B000002在整个观测历史中的所有记录点，且显著区别于其他目标（如B000001的~0.17或B000003的~0.28）。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a6412b54-7922-4ab7-a942-fc2cd3e57e32",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 252,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007028"
+  }
+}

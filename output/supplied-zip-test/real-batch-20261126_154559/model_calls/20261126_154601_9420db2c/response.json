@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000042\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无其他目标，无法进行归属比对。作为首个观测单元，暂定为独立新目标的初始航迹点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_87e31fa4-35a9-4501-a7fd-f530f2989830",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 71,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00518"
+  }
+}

@@ -1,0 +1,199 @@
+#sharedTrajectoryScene {padding:16px;border-top:1px solid var(--border,#ddd);flex-shrink:0}
+#predictionChart {width:100%;min-height:230px} #platformScene svg{width:100%;max-height:200px}
+#candidateGroupList{max-height:45vh;overflow:auto} .mixed-row{border-bottom:1px solid #dce5ef;padding:7px 0}.mixed-row>label{display:flex;gap:8px;align-items:center;margin:2px}.mixed-row input[type=checkbox]{width:auto}.mixed-row details{padding-left:22px}.mixed-row details label{display:flex;gap:6px;font-size:12px;align-items:center}.mixed-row small{color:#68758a}
+#selectedPoints{max-height:240px;overflow:auto}#selectedPoints>div{display:flex;align-items:center;justify-content:space-between;font-size:12px;border-bottom:1px solid #ddd;padding:4px}#selectedPoints button{padding:2px 5px}.mixed-review{padding:15px;background:#fff7e6;border:1px solid #f1bf60;margin:10px;border-radius:8px}#chatInput,#roundLog{max-height:320px;overflow:auto;white-space:pre-wrap}#associationResults{font-size:13px}#associationResults section{border-bottom:1px solid #ddd;padding:8px 0}#chatPointTable{max-height:220px;overflow:auto;font-size:12px}#targetTrackSelect{width:100%}.prediction-chat{overflow:visible!important}#chatMessages{min-height:90px;max-height:300px;overflow:auto}#backendReadiness{margin-bottom:12px}.prediction-main{min-width:0}
+/* Keep the existing dark three-column chat desk; the center scrolls as one workspace. */
+.prediction-app .prediction-main{overflow-y:auto}.prediction-app .prediction-chat{flex:none;min-height:100%;overflow:visible}.prediction-app #chatMessages{flex:none;max-height:300px;min-height:90px;padding:18px 26px}.prediction-app #chatMessages:empty::before{content:'自由勾选混合观测，目标归属由 Agent 分析';font-size:15px;padding:24px}.prediction-app #sharedTrajectoryScene{background:#222;border-color:#444}.prediction-app #sharedTrajectoryScene h3{font-size:14px}.prediction-app #predictionChart{background:#1c222b;border-radius:8px}.prediction-app #chatQuestion{width:100%}.prediction-app .mixed-review{background:#352e20;border-color:#6c5832}.prediction-app .mixed-row{border-color:#424242}.prediction-app .mixed-row small{color:#aaa}.prediction-app #selectedPoints>div{border-color:#444}.prediction-app #backendReadiness{padding:8px 16px;font-size:12px;margin:0;border:0;border-radius:0;background:#242a2d}.prediction-app #predictionSummary{font-size:12px;color:#aaa}.prediction-app #platformScene{font-size:12px}.prediction-app #associationResults section{border-color:#444}.prediction-app #associationResults{overflow-wrap:anywhere}.prediction-app #sharedTrajectoryScene text{paint-order:stroke;stroke:#1c222b;stroke-width:2px}.prediction-app #chatMessages p{white-space:pre-wrap}
+.association-collection{margin:12px 0}.association-collection h4{margin:8px 0;font-size:13px;font-weight:500}.association-table-scroll{overflow:auto;max-height:260px}.association-table-scroll table{width:100%;font-size:11px}.association-table-scroll th,.association-table-scroll td{padding:6px;white-space:nowrap}.association-warning{color:#e9b965;border-left:2px solid #a27a32;padding-left:8px}.prediction-app #chatMessages:has(.association-collection){max-height:55dvh}.prediction-app #chatMessages .association-collection p{font-size:11px;line-height:1.6}
+.node-evidence{margin-top:10px;max-height:360px;overflow:auto}.node-evidence summary{font-size:11px;cursor:pointer}.node-evidence .association-collection{min-width:0}.node-evidence .association-table-scroll{max-height:200px}.node-evidence .track-comparison{min-width:600px}.node-point-data{font-size:11px;max-height:200px;overflow:auto;margin:6px 0 12px;white-space:nowrap}.node-live-draft{font-size:12px;white-space:pre-wrap;max-height:160px;overflow:auto;color:#b8d6d0}#modelPlotPanel{margin:12px 24px}#recoverAssociation{align-self:center;margin:10px}.prediction-app #chatMessages{max-height:240px!important}
+@media(min-width:1101px){.prediction-app .prediction-workspace{grid-template-columns:270px minmax(0,1fr) 320px}}
+/* Execution tools live in the chat, not in a separate right sidebar. */
+.prediction-app .prediction-workspace{grid-template-columns:270px minmax(0,1fr)}
+.prediction-app.points-collapsed .prediction-workspace{grid-template-columns:0 minmax(0,1fr)}
+.prediction-app #chatMessages{max-height:none!important;overflow:visible;gap:20px}
+.chat-execution{width:100%;min-width:0;align-self:stretch;color:#c8c8c8}
+.chat-execution>summary{list-style-position:inside;cursor:pointer;width:fit-content;max-width:100%;padding:5px 9px;border:1px solid #464646;border-radius:7px;background:#242424;font-size:12px;overflow-wrap:anywhere}
+.chat-execution>summary [data-execution-role="badge"]{margin-left:12px;color:#aaa;font-size:11px}
+.chat-execution[data-status="running"]>summary{border-color:#58796e}
+.chat-execution[data-status="failed"]>summary{border-color:#9c5960}
+.chat-execution-body{padding:10px 2px 4px;min-width:0}
+.chat-execution-body>[data-execution-role="current"]{font-size:11px;color:#aaa;margin:0 0 8px}
+.chat-execution-body>progress{width:180px;max-width:100%;height:5px}
+.chat-execution [data-execution-role="nodes"]{list-style:none;padding:0;margin:12px 0}
+.prediction-app .chat-execution .execution-node{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;background:transparent;border:0;border-radius:0;box-shadow:none;padding:8px 0;margin:0;border-bottom:1px solid #303030}
+.chat-execution .execution-node:not(:last-child)::after{display:none}
+.chat-execution .execution-node>strong{font-size:12px;font-weight:500}
+.chat-execution .execution-node>span{margin:0;font-size:11px;align-self:start}
+.chat-execution .execution-node>details,.chat-execution .execution-node>p,.chat-execution .execution-node>small{grid-column:1/-1;min-width:0}
+.chat-execution .node-evidence{max-height:440px;margin-top:5px}
+.chat-execution .node-point-data{max-height:220px}
+.chat-execution .association-table-scroll{max-height:300px}
+.prediction-ledger{font-size:11px;margin-top:10px}
+@media(max-width:760px){.prediction-app .prediction-workspace,.prediction-app.points-collapsed .prediction-workspace{grid-template-columns:0 minmax(0,1fr)}.chat-execution>summary{font-size:11px}.chat-execution .execution-node>span{white-space:normal}.prediction-app .chat-execution .execution-node{grid-template-columns:minmax(0,1fr)}}
+.prediction-app #sharedTrajectoryScene{padding:10px 16px;background:transparent;border-color:#333;font-size:12px}.bearing-preview>summary{cursor:pointer;color:#b3c4d7}.bearing-preview-body{padding-top:8px}.prediction-app #predictionChart{width:100%;height:250px;min-height:0;max-height:250px}.spatial-result{padding:16px;border-top:1px solid #333}.spatial-result h3{font-size:14px}.spatial-result .heading{gap:8px;flex-wrap:wrap}.spatial-result .actions{flex-wrap:wrap}#spatialChart{display:block;width:100%;height:clamp(280px,42vw,440px);background:#0a0f1f;border-radius:8px;touch-action:none;cursor:grab}#spatialChart[hidden]{display:none}#spatialChart text{font-family:inherit}.spatial-result .note{font-size:12px;line-height:1.7}.spatial-result button{padding:5px 10px;font-size:12px}#recoverPlot{align-self:center;margin:10px}
+/* Charts are bounded chat content, never full-width empty workspace panels. */
+.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{box-sizing:border-box;width:calc(100% - 32px);max-width:900px;margin:12px auto;align-self:center;border:1px solid #333;border-radius:8px;padding:12px 16px;flex:none}
+.prediction-app #sharedTrajectoryScene[hidden],.prediction-app #spatialTrajectoryScene[hidden],.prediction-app #spatialChart[hidden]{display:none!important}
+.prediction-app #predictionChart{height:210px;max-height:210px;min-height:0}
+.prediction-app #spatialChart{height:auto;aspect-ratio:25/12;min-height:220px;max-height:360px}
+.prediction-app .spatial-result>.heading{padding:0;margin-bottom:8px}
+@media(max-width:760px){.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{width:calc(100% - 24px);padding:10px 12px}.prediction-app #spatialChart{min-height:220px;max-height:300px}.spatial-result .actions{gap:6px}}
+/* One restrained content column for conversation and analytical figures. */
+.prediction-app .prediction-chat{--content-width:860px}
+.prediction-app #chatMessages,.prediction-app .prediction-chat>.heading,.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{box-sizing:border-box;width:calc(100% - 40px);max-width:var(--content-width);margin-left:auto;margin-right:auto}
+.prediction-app .prediction-chat>.heading{padding:20px 0 10px;border:0;color:#89959d}
+.prediction-app .prediction-chat>.heading h2{font-size:12px;font-weight:500;letter-spacing:.04em}
+.prediction-app #chatMessages{padding:10px 0 14px;gap:14px;min-height:0;margin-bottom:0}
+.prediction-app #chatMessages .prediction-message{padding:8px 0;max-width:100%;margin:0;border:0;box-shadow:none}
+.prediction-app #chatMessages .prediction-message.assistant{width:100%;background:transparent}
+.prediction-app #chatMessages .prediction-message strong{display:flex;align-items:center;gap:7px;color:#a7b6bc;font-size:11px;font-weight:500}
+.prediction-app #chatMessages .prediction-message.assistant>strong::before{content:'';width:6px;height:6px;border-radius:50%;background:#50c6ad}
+.prediction-app #chatMessages .prediction-message p{font-size:13px;line-height:1.85;margin-top:7px;color:#d4dcdf}
+.prediction-app #chatMessages .prediction-message .note{font-size:11px;color:#829198;margin-top:5px}
+.prediction-app #chatMessages .prediction-message.user{padding:12px 16px;max-width:88%;background:#242b2e;border:1px solid #333d42;border-radius:14px}
+.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{margin-top:10px;margin-bottom:14px;padding:16px 18px;border:1px solid #303b41;border-radius:14px;background:linear-gradient(145deg,#1b2227,#191f23);box-shadow:0 3px 16px #0000000a}
+.prediction-app #sharedTrajectoryScene>summary{font-size:12px;font-weight:500;color:#c4d2d8;letter-spacing:.02em;padding-bottom:4px}
+.prediction-app #sharedTrajectoryScene text{stroke:none;paint-order:normal}
+.prediction-app #predictionChart,.prediction-app #spatialChart{background:#161e24;border:1px solid #2b363d;border-radius:9px;box-sizing:border-box}
+.prediction-app #spatialChart{max-height:320px}
+.prediction-app .spatial-result h3{display:flex;align-items:center;gap:10px;font-size:14px;color:#d7e2e7;font-weight:550;margin:0}
+.chart-status-badge{font-size:10px;font-weight:400;letter-spacing:0;color:#8fb9ad;border:1px solid #3d5a50;background:#21322c;padding:3px 7px;border-radius:5px;white-space:nowrap}
+.prediction-app .spatial-result .heading{margin-bottom:9px;align-items:center}
+.prediction-app .spatial-result .actions{gap:6px}
+.prediction-app .spatial-result button,.prediction-app #downloadSpatial{border:1px solid #39464c;background:#252e33;color:#bdcbd2;border-radius:7px;min-height:28px;padding:4px 9px;font-size:11px;text-decoration:none}
+.prediction-app #downloadSpatial{color:#7dd3bd;border-color:#36564c;background:#22332d}
+.prediction-app .spatial-result .note{font-size:11px;line-height:1.6;color:#81939c;margin:8px 0}
+.prediction-app .spatial-result>p:last-child{margin:9px 0 0;font-size:10px;color:#71848d}
+.chart-legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding-top:9px}
+.legend-item{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#a4b5bd}
+.legend-item::before{content:'';width:16px;height:2px;background:var(--legend-color);border-radius:2px}
+.prediction-app #predictionSummary{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;color:#81939b;font-size:10px}
+.chart-metric{padding:3px 7px;border:1px solid #303e45;border-radius:5px;background:#202a30}
+.bearing-extra{font-size:10px;color:#758a94;padding-top:1px}.bearing-extra>summary{cursor:pointer}.bearing-extra .note{font-size:11px;line-height:1.7}
+.prediction-app #modelPlotPanel,.prediction-app #trajectoryReview{box-sizing:border-box;width:calc(100% - 40px);max-width:var(--content-width);margin:10px auto}
+@media(max-width:760px){.prediction-app #chatMessages,.prediction-app .prediction-chat>.heading,.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{width:calc(100% - 24px)}.prediction-app #sharedTrajectoryScene,.prediction-app #spatialTrajectoryScene{padding:12px}.prediction-app .spatial-result h3{font-size:12px;gap:6px}.chart-status-badge{font-size:9px}.prediction-app .spatial-result .note{font-size:10px}.prediction-app #chatMessages .prediction-message p{font-size:12px}}
+/* Conversation-style activity disclosure: quiet summary, compact real tool rows. */
+.prediction-app .chat-execution{color:#a1a6aa;font-size:13px;margin:4px 0 8px}
+.prediction-app .chat-execution>summary{display:flex;align-items:center;gap:9px;list-style:none;border:0!important;border-radius:0;background:transparent!important;padding:6px 0;width:fit-content;color:#969b9e;font-size:14px;line-height:1.5;font-weight:400}
+.chat-execution>summary::-webkit-details-marker{display:none}
+.chat-execution>summary::after{content:'⌄';order:1;font-size:15px;line-height:1;transform:rotate(-90deg);transition:transform .15s;color:#737b80}
+.chat-execution[open]>summary::after{transform:rotate(0)}
+.prediction-app .chat-execution>summary [data-execution-role="badge"]{order:2;font-size:11px;color:#757e83;margin-left:2px}
+.prediction-app .chat-execution-body{padding:10px 0 4px;border-top:1px solid #2c3033;margin-top:2px}
+.prediction-app .chat-execution-body>[data-execution-role="current"]{font-size:13px;line-height:1.8;color:#bfc5c8;margin:0 0 10px}
+.chat-execution [data-execution-role="progress"]{display:none!important}
+.prediction-app .chat-execution [data-execution-role="nodes"]{margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.prediction-app .chat-execution .execution-node{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:3px 9px;padding:7px 0;border:0!important;background:transparent!important;box-shadow:none;margin:0;min-width:0;align-items:center}
+.prediction-app .chat-execution .execution-node>.execution-tool-icon{grid-column:1;align-self:center;margin:0;font:11px Consolas,monospace;color:#8f989d;border:1px solid #626a6e;border-radius:3px;width:16px;height:15px;display:flex;align-items:center;justify-content:center}
+.prediction-app .chat-execution .execution-node>.execution-tool-title{grid-column:2;font-size:12px;font-weight:400;color:#a4adb2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.6}
+.prediction-app .chat-execution .execution-node>.execution-tool-time{grid-column:3;margin:0;color:#626d74;font:10px ui-monospace,Consolas,monospace;white-space:nowrap}
+.prediction-app .chat-execution .execution-node.running>.execution-tool-title{color:#d6dedf}
+.prediction-app .chat-execution .execution-node.running>.execution-tool-icon{color:#72bfae;border-color:#4f8c7d}
+.prediction-app .chat-execution .execution-node.failed>.execution-tool-title{color:#dca298}
+.prediction-app .chat-execution .execution-node.waiting_for_user>.execution-tool-title{color:#bdad89}
+.prediction-app .chat-execution .execution-node.pending,.prediction-app .chat-execution .execution-node.skipped,.prediction-app .chat-execution .execution-node.waiting_for_user[data-node="predict"]{display:none}
+.prediction-app .chat-execution .execution-node>details,.prediction-app .chat-execution .execution-node>p,.prediction-app .chat-execution .execution-node>small{grid-column:2/-1}
+.prediction-app .chat-execution .node-evidence{margin:2px 0 3px;max-height:320px;padding:0}
+.prediction-app .chat-execution .node-evidence>summary{font-size:11px;color:#78858d;padding:4px 0;cursor:pointer}
+.prediction-app .chat-execution .node-live-draft{font-size:13px;line-height:1.8;color:#c8d1d5;margin:5px 0 9px;max-height:120px;overflow:auto;background:transparent}
+.execution-footnote{font-size:10px!important;color:#657078!important;margin:10px 0 0!important;line-height:1.6!important}
+@media(max-width:760px){.prediction-app .chat-execution>summary{font-size:13px;flex-wrap:wrap;gap:7px}.prediction-app .chat-execution>summary [data-execution-role="badge"]{font-size:10px}.prediction-app .chat-execution .execution-node{grid-template-columns:16px minmax(0,1fr) auto;gap:3px 7px}.prediction-app .chat-execution .execution-node>.execution-tool-title{font-size:11px}}
+.prediction-app .chat-execution .execution-node>.execution-tool-time{opacity:0;transition:opacity .15s}
+.prediction-app .chat-execution .execution-node:hover>.execution-tool-time,.prediction-app .chat-execution .execution-node:focus-within>.execution-tool-time,.prediction-app .chat-execution .execution-node.running>.execution-tool-time{opacity:1}
+.prediction-app .rerun-panel{box-sizing:border-box;width:calc(100% - 40px);max-width:var(--content-width);margin:10px auto 14px;padding:14px 16px;border:1px solid #3d514a;border-radius:10px;background:#1f2a26}
+.rerun-panel h3{font-size:13px;font-weight:500;color:#c1d7cd;margin:0 0 7px}.rerun-panel .note{font-size:11px;color:#92a99e;line-height:1.7;margin:0 0 10px}.rerun-panel .actions{gap:8px;flex-wrap:wrap}.rerun-panel button{font-size:12px;padding:7px 12px}.rerun-panel .check{font-size:11px;line-height:1.6;margin-bottom:12px;color:#d6bb90}.prediction-app #rerunPanel[hidden],#rerunUnknownWarning[hidden]{display:none!important}
+@media(max-width:760px){.prediction-app .rerun-panel{width:calc(100% - 24px);padding:12px}}
+
+/* Actual observation inspection; never changes selection or association. */
+#predictionChart circle[role="button"]{cursor:pointer;pointer-events:all;stroke-width:2.5}
+#predictionChart circle[role="button"]:hover,#predictionChart circle.point-active,#predictionChart circle:focus{stroke:#f2d18c;stroke-width:4;outline:none}
+.point-hover{font-size:12px;color:#c4d9d3;padding:7px 10px;background:#24322f;border-radius:6px}
+.point-card{margin:10px 0;padding:12px 14px;border:1px solid #3e5b54;border-radius:9px;background:#192522;font-size:12px}
+.point-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.point-card-head button{font-size:11px;padding:4px 9px}
+.point-card dl{display:grid;grid-template-columns:minmax(100px,1fr) 2fr;gap:7px 14px;margin:12px 0}.point-card dt{color:#8fa7a0}.point-card dd{margin:0;overflow-wrap:anywhere;color:#d1dfda}
+.point-card pre,#importFilterReport pre{max-height:220px;overflow:auto;white-space:pre-wrap;font-size:11px}
+#candidateGroupList label.point-highlight{background:#293f37;box-shadow:inset 3px 0 #70cfb3;border-radius:5px}
+#importFilterReport{font-size:11px;color:#a8bdb5;margin:8px 0}#pointHover[hidden],#pointCard[hidden],#importFilterReport[hidden]{display:none!important}
+
+.prediction-app .conversation-item{display:flex;align-items:center;gap:3px;min-width:0}.prediction-app .conversation-item .conversation-entry{flex:1;min-width:0;width:0}.prediction-app .conversation-entry[aria-current="true"]{border-color:#50c6ad;background:#243a33}.prediction-app .conversation-delete{flex:none;width:25px;height:27px;padding:0;border-color:transparent;background:transparent;font-size:18px;color:#7e8c88;line-height:1}.prediction-app .conversation-delete:hover:not(:disabled){background:#432c2c;color:#e5a5a0;border-color:#67413c}.prediction-app .conversation-delete:focus-visible{outline:2px solid #d99a94;outline-offset:1px}
+
+.point-file-library{padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid #353e3b}.point-file{padding:10px 0;border-bottom:1px solid #303a36}.point-file strong{display:block;font-size:11px;overflow-wrap:anywhere}.point-file small{display:block;color:#8ba198;margin:4px 0 7px}.point-file .actions{gap:5px;flex-wrap:wrap}.prediction-app .point-file button,.prediction-app #refreshPointFiles{font-size:10px;padding:5px 7px}.point-file-library h2{font-size:13px}
+.point-file-drop-zone{display:flex;flex-direction:column;gap:8px;padding:14px 10px;border:1px dashed #5a766b;border-radius:8px;background:#202a25;transition:background .15s,border-color .15s}
+.point-file-drop-zone>strong{font-size:12px;color:#c5e6d7}.point-file-drop-zone>span{font-size:11px;color:#99afa4;line-height:1.6}.point-file-drop-zone .point-file-picker{font-size:11px;min-width:0}.point-file-drop-zone input{max-width:100%;box-sizing:border-box;font-size:11px}.point-file-drop-zone.drag-active{border-color:#8be7bc;background:#2c4638}.point-file-drop-zone[aria-busy="true"]{opacity:.6}#pointFileImportStatus{overflow-wrap:anywhere}
+.sidebar-platform #platformFileImport{max-width:100%;box-sizing:border-box;font-size:11px}.platform-data-card{padding:12px 9px;margin:12px 0;border:1px solid #354454;border-radius:8px;background:#1e2835;min-width:0}.platform-data-card h3{font-size:13px;margin:0 0 12px;color:#e3edf7}.prediction-app .platform-data-field{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);align-items:center;gap:6px;margin:7px 0;font-size:10px;color:#9bb1c8}.prediction-app .platform-data-field input{width:100%;min-width:0;box-sizing:border-box;margin:0;padding:6px;font-size:11px;color:#dceafa;background:#101824;border:1px solid #354454;border-radius:5px}.platform-data-field input[readonly]{cursor:text}.prediction-app .platform-data-field input[type="color"]{width:40px;height:28px;padding:2px;opacity:1}.platform-data-field small{grid-column:2;font-size:10px;color:#9bb1c8}#platformImportStatus{overflow-wrap:anywhere}
+.prediction-app .point-sampling{margin:12px 0;padding:10px;border:1px solid #35453e;border-radius:8px;background:#202823}.prediction-app .point-sampling>label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;margin:0 0 8px}.prediction-app #samplePointCount{width:88px;min-width:0;margin:0;padding:6px 8px;box-sizing:border-box;font-size:12px}.prediction-app #samplePoints{font-size:11px;padding:7px 10px}.point-sampling .note{font-size:10px;line-height:1.6;margin:8px 0 0}#pointSamplingStatus:empty{display:none}
+.prediction-app .point-sampling>label:first-child{display:block}.prediction-app #samplePointMode{display:block;box-sizing:border-box;width:100%;min-width:0;font-size:11px;margin-top:6px;padding:6px 4px}#selectionDiagnostics{font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.execution-stream-output{margin:12px 0;padding:12px;border:1px solid #35433e;border-radius:8px;min-width:0;background:#19211e}.execution-stream-output[hidden]{display:none!important}.execution-stream-output h4{margin:0 0 6px;font-size:12px;color:#c5d9ce}.execution-stream-output .execution-stream-status{font-size:11px;margin:0 0 8px;line-height:1.6}.prediction-app .execution-stream-body{display:block;box-sizing:border-box;max-width:100%;max-height:360px;min-height:80px;margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font:12px/1.7 Consolas,monospace;background:#111916;color:#c9ded3;border-radius:5px;tab-size:2}.execution-stream-body:focus-visible{outline:1px solid #79baa1;outline-offset:2px}
+.workspace-input label{display:grid;gap:4px;margin:10px 0}
+.workspace-input input,.workspace-input textarea{width:100%;min-width:0;box-sizing:border-box}
+.workspace-input>pre{max-height:180px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px}
+.selected-source-preview{box-sizing:border-box;width:calc(100% - 40px);max-width:var(--content-width,860px);margin:16px auto;padding:16px;border:1px solid #35453e;border-radius:12px;background:#19221f;min-width:0;align-self:center;flex:none}
+@media(max-width:760px){.selected-source-preview{width:calc(100% - 24px);padding:12px}}
+.selected-source-preview h3{margin:0;font-size:14px}.selected-source-preview .heading>span{color:#9eafa8;font-size:12px}
+#selectedSourceChart{display:block;width:100%;min-height:180px;border:1px solid #2e3e37;border-radius:8px;background:#18211e}
+.selected-source-preview>details{margin-top:12px;font-size:12px}.selected-source-table-scroll{max-height:300px;overflow:auto;margin-top:10px}
+.selected-source-hover{position:fixed;z-index:1000;box-sizing:border-box;width:460px;max-width:calc(100vw - 16px);max-height:65vh;padding:12px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#111c18;color:#e2eee8;border:1px solid #6e9985;border-radius:8px;box-shadow:0 8px 28px #0008;font:12px/1.5 Consolas,monospace;pointer-events:none;margin:0}
+.selected-source-hover[hidden]{display:none!important}
+.point-hover{white-space:pre-wrap;overflow-wrap:anywhere;max-height:65vh;overflow:auto}
+/* Dedicated, independently scrolling chart rail; center remains the chat desk. */
+.prediction-app{--chart-sidebar-width:460px;--point-sidebar-width:270px}
+.prediction-app.points-collapsed{--point-sidebar-width:0px}
+.prediction-app .prediction-workspace,.prediction-app.points-collapsed .prediction-workspace,.prediction-app.execution-collapsed .prediction-workspace,.prediction-app.points-collapsed.execution-collapsed .prediction-workspace{grid-template-columns:var(--point-sidebar-width) minmax(0,1fr) var(--chart-sidebar-width)}
+.prediction-app.charts-collapsed .prediction-workspace{grid-template-columns:var(--point-sidebar-width) minmax(0,1fr) 0}
+.chart-sidebar-shell{grid-column:3;position:relative;min-width:0;min-height:0;height:100%;border-left:1px solid #35433e;background:#171d1b}
+.chart-sidebar{box-sizing:border-box;height:100%;overflow:auto;overscroll-behavior:contain;padding:12px 12px 24px 16px;min-width:0;scrollbar-width:thin}
+.chart-sidebar-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#b3c7bf;font-size:12px;padding:2px 0 8px}
+.chart-sidebar-heading button{padding:4px 8px;font-size:11px}
+.chart-sidebar-resize{position:absolute;inset:0 auto 0 0;width:7px;z-index:5;cursor:col-resize;touch-action:none;background:transparent}
+.chart-sidebar-resize:hover,.chart-sidebar-resize:focus-visible,.chart-sidebar-resize.dragging{background:#65b79b80;outline:none}
+body.resizing-chart-sidebar{cursor:col-resize;user-select:none}
+.prediction-app.charts-collapsed .chart-sidebar-shell{display:none}
+.prediction-app .chart-sidebar #sharedTrajectoryScene,.prediction-app .chart-sidebar #selectedSourcePreview{box-sizing:border-box;width:100%;max-width:none;margin:10px 0;padding:12px;border-radius:10px}
+.prediction-app .chart-sidebar #predictionChart{height:210px;max-height:210px}
+.chart-sidebar .selected-source-preview h3{font-size:12px}.chart-sidebar .note{font-size:10px;line-height:1.6}
+.chart-sidebar .selected-source-preview .heading{flex-wrap:wrap;gap:6px}
+@media(max-width:1100px){
+ .prediction-app .prediction-workspace,.prediction-app.points-collapsed .prediction-workspace,.prediction-app.execution-collapsed .prediction-workspace,.prediction-app.points-collapsed.execution-collapsed .prediction-workspace,.prediction-app.charts-collapsed .prediction-workspace{grid-template-columns:var(--point-sidebar-width) minmax(0,1fr)}
+ .prediction-app .chart-sidebar-shell{display:none}
+ .prediction-app.charts-open .chart-sidebar-shell{display:block;position:fixed;inset:58px 0 0 auto;height:auto;width:var(--chart-sidebar-width);max-width:calc(100vw - 16px);z-index:25;box-shadow:-12px 0 35px #0007}
+}
+@media(max-width:760px){.prediction-app{--point-sidebar-width:0px}.prediction-app>header .actions{gap:4px}.prediction-app>header button{font-size:10px;padding:6px 5px}}
+/* Reserve bottom space instead of covering messages with a fixed overlay. */
+.prediction-app .prediction-main{height:100%;min-height:0;overflow:hidden}
+.prediction-app .prediction-chat{flex:1;min-height:0;height:100%;max-height:100%;overflow:hidden!important}
+.prediction-app .prediction-chat>.heading{flex:none}
+.chat-scroll-stage{flex:1 1 0;min-height:60px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:16px}
+.prediction-app .chat-scroll-stage #chatMessages{flex:none;min-height:0;max-height:none!important;overflow:visible}
+.chat-bottom-dock{flex:0 1 auto;min-height:0;max-height:58dvh;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;display:flex;flex-direction:column;box-sizing:border-box;padding:8px 0 max(8px,env(safe-area-inset-bottom));border-top:1px solid #303a35;background:#191919}
+.prediction-app .chat-bottom-dock .chat-composer{box-sizing:border-box;width:calc(100% - 32px);max-width:var(--content-width);margin:4px auto 0;max-height:none;overflow:visible}
+.prediction-app .chat-bottom-dock>section{flex:none}
+.prediction-app .chat-bottom-dock>button{align-self:center;max-width:calc(100% - 32px);margin:5px auto;white-space:normal}
+.prediction-app .chat-bottom-dock #chatNotice{margin:8px auto 0;max-height:44px}
+.prediction-app .chat-bottom-dock #chatPointTable,.prediction-app .chat-bottom-dock #chatInput{max-height:140px;overflow:auto}
+@media(max-width:760px){.chat-bottom-dock{max-height:60dvh}.prediction-app .chat-bottom-dock .chat-composer{width:calc(100% - 24px);padding:10px 12px}.prediction-app .chat-bottom-dock #chatQuestion{min-height:64px;max-height:120px}}
+.sequence-panel{box-sizing:border-box;width:calc(100% - 32px);max-width:var(--content-width);margin:6px auto;padding:10px 12px;border:1px solid #3c5147;border-radius:10px;background:#202a25;font-size:11px}
+.sequence-panel .actions{flex-wrap:wrap;gap:6px;margin:6px 0}.sequence-panel .check{font-size:11px;line-height:1.6}.sequence-panel .actions>label{display:flex;gap:5px;align-items:center}.sequence-panel input[type=number]{width:65px;margin:0;padding:4px}.sequence-panel select{max-width:210px;font-size:11px}.prediction-app .sequence-panel button{font-size:11px;padding:5px 8px}
+.sequence-panel .note{font-size:10px;line-height:1.6;overflow-wrap:anywhere}.sequence-panel pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#111916;padding:8px;color:#c9ded3}.sequence-panel details{margin-top:6px}.sequence-panel[hidden]{display:none!important}
+.prediction-app .chat-bottom-dock [hidden]{display:none!important}
+.sequence-history{box-sizing:border-box;width:calc(100% - 40px);max-width:var(--content-width);margin:12px auto;color:#bdcec6;font-size:12px}
+.sequence-history[hidden]{display:none!important}.sequence-history details{margin:10px 0}.sequence-history pre{max-height:300px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;line-height:1.65;background:#111916;color:#c9ded3;padding:10px;border-radius:6px}
+.prediction-app #chatStage:has(#sequenceHistory:not([hidden])) #chatMessages:empty::before{display:none}
+.sequence-working-preview{box-sizing:border-box;margin:10px 0;padding:12px;border:1px solid #3c5147;border-radius:10px;background:#1c2722;min-width:0}
+.sequence-working-preview[hidden]{display:none!important}.sequence-working-preview .heading{flex-wrap:wrap;gap:6px}.sequence-working-preview h3{font-size:12px;margin:0}.sequence-working-preview .heading>span{font-size:10px;color:#adbbb5}
+#sequenceWorkingChart{display:block;box-sizing:border-box;width:100%;border:1px solid #34443d;border-radius:8px;background:#17211c}#sequenceWorkingChart[hidden]{display:none!important}
+#sequenceSpatialChart{display:block;box-sizing:border-box;width:100%;height:320px;touch-action:none;border:1px solid #34443d;border-radius:8px;background:#0d1322;cursor:grab}
+#sequenceSpatialChart[hidden]{display:none!important}
+#sequenceSpatialDiagnostics{max-height:180px;overflow:auto;white-space:pre-wrap;font-size:11px}
+#sequenceSpatialGroupList{max-height:280px;overflow:auto;font-size:11px;margin-top:6px}
+#sequenceSpatialGroupList details{padding:5px 0;border-bottom:1px solid #34443d}
+#sequenceSpatialGroupList pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px}
+#sequenceSpatialGroupList [data-position-status="position_ready"]>summary{color:#8dd7ba}
+#sequenceSpatialGroupList details:not([data-position-status="position_ready"])>summary{color:#e6b566}
+#sequenceSpatialLinkChanges{max-height:260px;overflow:auto;font-size:11px}
+#sequenceSpatialLinkChanges pre{max-height:200px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.context-copy-toolbar{display:flex;gap:8px;align-items:center;margin:6px 0}
+.prediction-app .context-copy-toolbar button,.prediction-app .context-copy-button{display:inline-flex;align-items:center;gap:5px;width:auto;padding:4px 7px;border:0;background:transparent;color:#9caeaa;font-size:11px}
+.prediction-app .context-copy-toolbar button:hover,.prediction-app .context-copy-button:hover{color:#d7eee5;background:#2b3933}
+.context-copy-button svg{width:17px;height:17px;flex:none}
+#contextCopyDialog{width:min(800px,90vw);background:#17211c;color:#d0e3db;border:1px solid #4a6457;border-radius:10px}
+#contextCopyDialog textarea{box-sizing:border-box;width:100%;height:min(55vh,450px);font:12px/1.6 monospace;white-space:pre;overflow:auto}

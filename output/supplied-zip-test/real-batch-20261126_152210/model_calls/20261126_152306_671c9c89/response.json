@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000089\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"当前单元包含t=119.0的hull观测O000175（方位约104.87度）和tow观测O000178（方位约101.57度），其强度特征与历史轨迹B000002一致。对比已知片段：F003/F004属于目标B000002，最近的历史观测时间为t=101.0左右（例如O000097在t=74.0，但后续有延续至更晚时间的同系列数据逻辑）。虽然快照中明确列出的最后一条该系列观测为O000097/O000100 (t=74)，但在batch_units中存在大量中间时间点的同类信号（如U000074 t=101等，虽未在snapshot.tracks显式列出所有分段，但根据bearing趋势判断）。观察B000002的历史航向趋势：Hull阵列方位从t=26的~104.5度缓慢变化到t=74的~104.7度；Tow阵列方位从t=26的~102.1度缓慢变化到t=74的~101.9度。当前t=119.0时，Hull方位104.87度，Tow方位101.57度，符合该目标的持续漂移规律（Hull微增，Tow微减）。相比之下，B000001的方位角在160-175度区间，B000003的方位角在140-150度区间，均不匹配。因此，将U000089归属为B000002的延伸轨迹。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f04b2611-1dcb-44a6-961f-1dc58fb840a5",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 455,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007576"
+  }
+}

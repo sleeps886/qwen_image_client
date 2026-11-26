@@ -1,0 +1,7 @@
+```json
+{
+"snapshot_version": 4,
+"hypothesis_ref": "L019",
+"reason_code": "continuity"
+}
+```

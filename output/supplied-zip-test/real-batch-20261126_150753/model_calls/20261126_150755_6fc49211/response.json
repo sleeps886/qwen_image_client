@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000035\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该单元观测方位角约为170.6度（拖曳阵精度更高，约170.4度），信号强度处于较高水平（~0.29）。在提供的批次历史中，此前时间点出现的相似高强度轨迹段（如t=58至t=117的143-154度区间）随后均出现了向大角度方向演变的连续点。本单元t=394与紧随其后的U000036 (t=399) 形成了从170度附近向更低角度（最终降至127度左右）平滑过渡的趋势起点，符合一个完整机动目标的早期特征。由于快照初始状态为空（无既有轨迹列表），且缺乏足以证明其为孤立杂波或重复检测的多维一致性证据（仅有单时刻双阵数据不足以判定为虚假配对，需结合时间连续性排除），依据保守原则将其作为新目标的起始锚点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_467e9d3d-b652-48b3-bb23-4ba5b530be5d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 246,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.005002"
+  }
+}

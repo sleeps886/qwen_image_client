@@ -1,0 +1,5 @@
+{
+  "snapshot_version": 6,
+  "hypothesis_ref": null,
+  "reason_code": "insufficient"
+}

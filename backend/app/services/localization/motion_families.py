@@ -5,7 +5,7 @@ from backend.app.services.localization.batch_inverse import evaluate_path,predic
 from backend.app.services.localization.forward_observation import array_location
 
 
-def family_seeds(model,variants,candidate,images,context,check):
+def family_seeds(model,variants,candidate,images,context,check,*,explore_curvature=True,radial_scales=(.5,.75,1.5,2.)):
     reference=reference_for(context);platform=context['platforms'][0]
     ids=set(candidate['supported_measurement_ids'])
     records=[(image['array'],p) for image in images for p in image['candidates']
@@ -17,17 +17,26 @@ def family_seeds(model,variants,candidate,images,context,check):
     candidates=[]
     families=[('cv','cv',()),('cv','constant_latitude',(3,)),('cv','constant_longitude',(2,))]
     if model['model']=='harmonic':families=[('harmonic','latitude_harmonic',(4,6)),('harmonic','longitude_harmonic',(5,7))]
+    # A centroid-selected CV is an initialization, not a permanent model lock.
+    # Decide whether to explore curvature using TRAINING observations only.
+    promote=False
     # Multiple existing geometric branches seed the search; no reference path is supplied.
     for kind,family,excluded in families:
         seeds=[]
+        starts=[]
         for previous in [model,*variants]:
             if kind=='harmonic':
-                if previous['model']!='harmonic':continue
-                initial=np.array(previous['parameters'],dtype=float)
+                if previous['model']=='harmonic':starts.append(np.array(previous['parameters'],dtype=float))
+                elif promote:
+                    xy=evaluate_path(previous['parameters'],times,previous['model'],previous['t0'],previous['span'])
+                    design=np.array([np.ones(len(times)),(times-model['t0'])/model['span']]).T
+                    cv=np.linalg.lstsq(design,xy/1000,rcond=None)[0].ravel()
+                    starts.extend(np.r_[cv,0.,0.,0.,0.,period] for period in (.5,.8,1.5))
             else:
                 xy=evaluate_path(previous['parameters'],times,previous['model'],previous['t0'],previous['span'])
                 design=np.array([np.ones(len(times)),(times-model['t0'])/model['span']]).T
-                initial=np.linalg.lstsq(design,xy/1000,rcond=None)[0].ravel()
+                starts.append(np.linalg.lstsq(design,xy/1000,rcond=None)[0].ravel())
+        for initial in starts:
             initial[list(excluded)]=0
             active=np.array([i for i in range(len(initial)) if i not in excluded])
             lo=np.full(len(initial),-100.);hi=np.full(len(initial),100.)
@@ -47,13 +56,22 @@ def family_seeds(model,variants,candidate,images,context,check):
                 parameters=expand(fit.x)
                 item={**model,'model':kind,'parameter_family':family,'parameters':parameters.tolist()}
                 if all(np.linalg.norm(parameters-np.array(old['parameters']))>.01 for old in seeds):seeds.append(item)
+        if explore_curvature and family=='cv' and seeds and len(records)>=30:
+            errors=[]
+            for item in seeds:
+                xy=evaluate_path(item['parameters'],times,'cv',model['t0'],model['span'])
+                delta=predicted_bearings(xy,centers,platform['heading_deg'],reference)-angles
+                errors.append(float(np.sqrt(np.mean(delta**2))))
+            promote=min(errors)>.25
+            if promote:
+                families += [('harmonic','latitude_harmonic',(4,6)),('harmonic','longitude_harmonic',(5,7))]
         if kind in ('cv','harmonic') and abs(platform['speed_kn'])<1e-8:
             # Bearing-only short-baseline ranges have shallow local minima.
             # Search bounded radial scales before image optimization, using
             # the same observations (not a geographic target-location prior).
             base=list(seeds)
             for item in base:
-                for factor in (.5,.75,1.5,2.):
+                for factor in radial_scales:
                     values=np.array(item['parameters'],dtype=float)
                     tail=values[-1:].copy() if kind=='harmonic' else np.zeros(0)
                     parameters=(values[:-1] if len(tail) else values).reshape(-1,2).copy()

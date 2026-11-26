@@ -1,0 +1,1 @@
+{"snapshot_version":0,"unit_id":"U000048","target_ref":"new","reason":"无有效历史轨迹参考，且该组方位与强度特征独立显著，不足以归并至既有目标。"}

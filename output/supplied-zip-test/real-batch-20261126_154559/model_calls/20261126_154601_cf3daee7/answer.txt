@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000033",
+  "target_ref": "new",
+  "reason": "历史轨迹为空且该单元方位与现有观测差异显著，无法关联至已知目标，故判定为新目标。"
+}

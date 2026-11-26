@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000044\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前批次无历史轨迹可匹配（targets为空）。聚焦单元 U000044 在 t=68.0s 处的方位角约为 hull:104.68° / tow:101.96°，强度为 0.243756。该观测特征与本批次中从 t=26.0s 开始出现的另一组连续观测序列（如 U000005, U000007...）完全吻合：时间上连续推进，方位角随目标运动平滑变化（从约 104.57°/102.19° 渐变至 104.68°/101.96°），且强度保持一致。因此，U000044 应归属于这一新建立的独立航迹，而非已有的其他目标簇（如强度~0.17或~0.29的序列）。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_51740ac0-f321-4415-a31e-1072e1bfafe3",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 251,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005416"
+  }
+}

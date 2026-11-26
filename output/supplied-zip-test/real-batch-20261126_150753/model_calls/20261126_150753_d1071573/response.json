@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000005\",\n  \"target_ref\": \"new\",\n  \"reason\": \"Snapshot为空且当前批次中无其他有效轨迹，缺乏历史关联依据。该单元(t=65.0s)的方位角(约144°)与同强度组前序观测(U000004, t=58.0s, 约143°)连续变化，但在无法确认是否延续未知历史或排除新目标的情况下，遵循保守原则判定为新目标起始点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_d8f305b6-6caa-4946-bea1-490e684a8a1e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 140,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004716"
+  }
+}

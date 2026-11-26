@@ -1,0 +1,212 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_model_or_state": false,
+  "session": "20261126_165116_46a434cd",
+  "run": "cbfe2ec2f7db4fec9d72c9bf4a160a45",
+  "status": "result_unknown",
+  "calls": 494,
+  "validated_groups": 450,
+  "pending_groups": 33,
+  "mirror_side": "left",
+  "confusion": {
+    "B000001": {
+      "I01": 103,
+      "I03": 33
+    },
+    "B000002": {
+      "I02": 136,
+      "I01": 1
+    },
+    "B000003": {
+      "I03": 110,
+      "I01": 51,
+      "I02": 16
+    }
+  },
+  "best_one_to_one_correct_groups": 349,
+  "same_time_target_collisions": [
+    {
+      "target": "B000003",
+      "t": 99,
+      "units": [
+        "U000067",
+        "U000069"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 102,
+      "units": [
+        "U000076",
+        "U000078"
+      ]
+    },
+    {
+      "target": "B000002",
+      "t": 259,
+      "units": [
+        "U000203",
+        "U000202"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 266,
+      "units": [
+        "U000207",
+        "U000206",
+        "U000205"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 267,
+      "units": [
+        "U000208",
+        "U000209",
+        "U000210"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 271,
+      "units": [
+        "U000213",
+        "U000212",
+        "U000211"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 274,
+      "units": [
+        "U000214",
+        "U000216",
+        "U000215"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 282,
+      "units": [
+        "U000217",
+        "U000219",
+        "U000218"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 285,
+      "units": [
+        "U000222",
+        "U000221",
+        "U000220"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 288,
+      "units": [
+        "U000224",
+        "U000225",
+        "U000223"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 294,
+      "units": [
+        "U000226",
+        "U000227",
+        "U000228"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 296,
+      "units": [
+        "U000229",
+        "U000231",
+        "U000230"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 297,
+      "units": [
+        "U000232",
+        "U000233",
+        "U000234"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 303,
+      "units": [
+        "U000237",
+        "U000235",
+        "U000236"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 305,
+      "units": [
+        "U000238",
+        "U000239",
+        "U000240"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 310,
+      "units": [
+        "U000241",
+        "U000243",
+        "U000242"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 311,
+      "units": [
+        "U000245",
+        "U000244",
+        "U000246"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 313,
+      "units": [
+        "U000247",
+        "U000248",
+        "U000249"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 316,
+      "units": [
+        "U000251",
+        "U000250"
+      ]
+    },
+    {
+      "target": "B000003",
+      "t": 418,
+      "units": [
+        "U000349",
+        "U000351"
+      ]
+    }
+  ],
+  "rendered_edges": 402,
+  "cross_reference_source_edges": 20,
+  "max_apparent_speed_mps": 2480.871518105028,
+  "selected_position_rmse_m": 1028.0626410049592,
+  "nearest_candidate_rmse_m_evaluation_only": 5.748032890956162,
+  "selected_positions_over_100m_from_reference": 210,
+  "production_state_unchanged": true,
+  "real_model_calls": 0
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000005\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组为批次中最早出现的独立方位特征簇之一。在 t=26.0s 时刻，其 Hull/Tow 阵列联合测得方位约 (104.57°, 102.19°)，强度稳定在 ~0.244，与同刻另一强信号簇 U000004 (~165°) 以及后续出现的新簇 U000024 (~143°) 存在显著的几何隔离（方位差 >60°），且各簇内部的时间演化趋势单调一致，表明它们代表空间上分离的不同声源。由于 Snapshot.targets 列表为空，无任何已登记轨迹可供关联或插接；同时依据平台配置及 position_candidates 中的镜像候选分析，无法通过简单的对称性将本单元归并至其他观测序列。因此，必须将其判定为新目标起始点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_df2a1a88-5572-4d81-99d4-26fb98f940b0",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 238,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034234"
+  }
+}

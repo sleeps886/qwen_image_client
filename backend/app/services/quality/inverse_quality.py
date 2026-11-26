@@ -9,6 +9,21 @@ from backend.app.services.localization.forward_observation import array_location
 from backend.app.services.measurements.btr_measurements import PALETTE
 
 
+def profile_raster(expected,profiles,height,context):
+    """Place sampled profiles at their actual times, not stretched ROI edges."""
+    times=np.array([p['t'] for p in profiles],dtype=float)
+    order=np.argsort(times);times=times[order];expected=np.asarray(expected)[order]
+    raster_times=np.linspace(0,context['T_MAX'],height)
+    if context.get('image_time_axis','bottom_to_top')=='bottom_to_top':raster_times=raster_times[::-1]
+    values=np.stack([np.interp(raster_times,times,column,left=np.nan,right=np.nan)
+                     for column in expected.T],axis=1)
+    valid=np.isfinite(values)
+    db=np.clip(10*np.log10(np.maximum(np.nan_to_num(values,nan=.0001),.0001)),-5,16)
+    pixels=PALETTE[np.clip(((db+5)/21*255).round().astype(int),0,255)]
+    pixels[~valid]=0  # No profile evidence at the unobserved time margins.
+    return pixels
+
+
 def check_and_preview(selection,evidence,context,paths,directory,control):
     reference=reference_for(context);platform=context['platforms'][0];lookup={p['id']:(im,p) for im in evidence['images'] for p in im['candidates']}
     reports=[];rows=[];colors=['#ffa600','#f000d0','#00d9e8','#a2ff00','#6aa5ff','#ff6d7c']
@@ -49,8 +64,7 @@ def check_and_preview(selection,evidence,context,paths,directory,control):
         reports.append({'image_index':image['image_index'],'array':image['array'],
                         'expected_btr_db_rmse':float(np.sqrt(np.mean(delta**2))),
                         'random_noise_reproduced':False,'comparison_is_independent_truth':False})
-        pixels=PALETTE[np.clip(((np.clip(10*np.log10(np.maximum(expected,.0001)),-5,16)+5)/21*255).round().astype(int),0,255)]
-        if context.get('image_time_axis','bottom_to_top')=='bottom_to_top':pixels=pixels[::-1]
+        pixels=profile_raster(expected,image['profiles'],bottom-top+1,context)
         raster=Image.fromarray(pixels).resize((right-left+1,bottom-top+1),Image.Resampling.BILINEAR)
         prediction=Image.new('RGB',canvas.size,'black');prediction.paste(raster,(left,top))
         prediction.save(Path(directory)/f"expected_btr_{image['image_index']}.png")

@@ -79,12 +79,12 @@ def load_image(path):
     return raw, mime
 
 
-def build_request(images, prompt, model, *, allow_text_only=False,api_format='openai'):
+def build_request(images, prompt, model, *, allow_text_only=False,api_format='openai',max_prompt_chars=50000):
     if api_format not in ('openai','anthropic'):raise ClientError('接口协议必须为openai或anthropic')
     if not model.strip() or not prompt.strip():
         raise ClientError('模型名称和提示词不能为空。')
-    if len(prompt)>50000:
-        raise ClientError('提示词超过本工具50000字符限制。')
+    if max_prompt_chars is not None and len(prompt)>max_prompt_chars:
+        raise ClientError(f'提示词超过本工具{max_prompt_chars}字符限制。')
     if not (0 if allow_text_only else 1) <= len(images) <= MAX_IMAGES:
         raise ClientError(f'请选择1～{MAX_IMAGES}张图片。')
     contents, metadata, total = [], [], 0
@@ -157,7 +157,7 @@ def answer_text(response):
 
 
 def send_images(images, prompt=DEFAULT_PROMPT, model=DEFAULT_MODEL,
-                base_url=DEFAULT_BASE_URL, api_key=None, output_dir=None, timeout=None, *, allow_text_only=False,api_format=None):
+                base_url=DEFAULT_BASE_URL, api_key=None, output_dir=None, timeout=None, *, allow_text_only=False,api_format=None,max_prompt_chars=50000):
     key=(api_key or model_settings().api_key).strip()
     if not key:
         raise ClientError('请在后端.env配置MODEL_API_KEY。')
@@ -167,7 +167,7 @@ def send_images(images, prompt=DEFAULT_PROMPT, model=DEFAULT_MODEL,
     url=endpoint(base_url,api_format)
     if timeout is not None and (type(timeout) not in (int,float) or not 1<=timeout<=600):
         raise ClientError('显式网络超时参数应为None或1～600秒。')
-    body,metadata=build_request(images,prompt,model,allow_text_only=allow_text_only,api_format=api_format)
+    body,metadata=build_request(images,prompt,model,allow_text_only=allow_text_only,api_format=api_format,max_prompt_chars=max_prompt_chars)
     # Check local output access before spending on inference.
     out=Path(output_dir or OUTPUTS_DIR)
     run=ResultRepository(out).create_run()
@@ -188,10 +188,15 @@ def send_images(images, prompt=DEFAULT_PROMPT, model=DEFAULT_MODEL,
         raise ClientError(f'模型服务HTTP {exc.code}：{hints.get(exc.code,"服务请求失败")}。未自动重试。') from None
     except (urllib.error.URLError,TimeoutError,OSError) as exc:
         timed_out=isinstance(exc,TimeoutError) or isinstance(getattr(exc,'reason',None),TimeoutError)
+        cause=getattr(exc,'reason',exc)
+        code=getattr(cause,'winerror',None) or getattr(cause,'errno',None)
+        diagnostic={'cause_type':type(cause).__name__,'errno':code if type(code) is int else None,'timed_out':timed_out}
         if timed_out:
             reason=f'网络等待超过显式设定的{timeout}秒。' if timeout is not None else '本地未设置等待时限，但上游或网络报告了超时。'
-            raise UpstreamTimeout(reason+'请查看中转站调用记录；请求可能已计费，不会自动重试。') from None
-        raise UpstreamConnectionError('无法连接模型服务或连接中断。请求可能已被处理，请核对中转站调用记录，不会自动重试。') from None
+            error=UpstreamTimeout(reason+'请查看中转站调用记录；请求可能已计费，不会自动重试。')
+        else:error=UpstreamConnectionError('无法连接模型服务或连接中断。请求可能已被处理，请核对中转站调用记录，不会自动重试。')
+        error.transport_diagnostic=diagnostic  # Safe enum/numeric data only, never raw URLs/headers/errors.
+        raise error from None
     except (json.JSONDecodeError,UnicodeDecodeError):
         raise ClientError('服务未返回有效JSON。请核对官方接口地址；未自动重试。') from None
     record=dict(created_at=datetime.now(timezone.utc).isoformat(),endpoint=url,model=model,

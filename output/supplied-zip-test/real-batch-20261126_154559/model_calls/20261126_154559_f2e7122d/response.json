@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000010\",\"target_ref\":\"new\",\"reason\":\"首单元无历史轨迹，且存在双阵配对镜像候选导致几何歧义，无法排除多解风险，暂建为新目标。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_33bb6aa1-8a22-401a-98e5-3071073a1ab4",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 55,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005138"
+  }
+}

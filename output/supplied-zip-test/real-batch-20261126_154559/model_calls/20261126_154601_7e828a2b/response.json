@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000040\",\n  \"target_ref\": \"new\",\n  \"reason\": \"无历史轨迹可供关联，该观测组作为独立新目标处理。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_48375814-66dc-4de6-8382-550e98e43749",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 59,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005148"
+  }
+}

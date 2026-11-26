@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"tracks\": [\n    {\n      \"target_ref\": \"N1\",\n      \"hypothesis_refs\": [\"L002\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N2\",\n      \"hypothesis_refs\": [\"L004\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N3\",\n      \"hypothesis_refs\": [\"L005\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N4\",\n      \"hypothesis_refs\": [\"L008\"],\n      \"extra_points\": []\n    }\n  ],\n  \"unassigned_units\": [\n    \"U000001\",\n    \"U000004\",\n    \"U000005\",\n    \"U000006\",\n    \"U000009\",\n    \"U000010\",\n    \"U000011\",\n    \"U000012\",\n    \"U000013\",\n    \"U000016\",\n    \"U000017\",\n    \"U000018\",\n    \"U000019\",\n    \"U000023\"\n  ]\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_ac22bba8-b5a3-4c6a-8745-9e4a6b146603",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 19712,
+    "input_tokens": 527,
+    "output_tokens": 340,
+    "prompt_tokens_details": {
+      "cached_tokens": 19712
+    },
+    "cost": "¥0.00331"
+  }
+}

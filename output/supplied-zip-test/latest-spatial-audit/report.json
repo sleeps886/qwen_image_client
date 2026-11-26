@@ -1,0 +1,68 @@
+{
+  "evaluation_only": true,
+  "truth_or_source_used_for_model": false,
+  "validated_groups": 450,
+  "pending_groups": 33,
+  "confusion": {
+    "B000001": {
+      "I01": 103,
+      "I03": 33
+    },
+    "B000002": {
+      "I02": 136,
+      "I01": 1
+    },
+    "B000003": {
+      "I03": 110,
+      "I01": 51,
+      "I02": 16
+    }
+  },
+  "localized_validated": 442,
+  "current_selected_rmse_m": 2571.3590925041744,
+  "nearest_candidate_rmse_m_evaluation_only": 5.748032890956162,
+  "selected_over_100m_from_reference": 227,
+  "candidate_over_1m_from_reference": 258,
+  "selected_branch_counts": [
+    {
+      "source": "I01",
+      "handedness": [
+        1,
+        1
+      ],
+      "count": 147
+    },
+    {
+      "source": "I02",
+      "handedness": [
+        1,
+        1
+      ],
+      "count": 151
+    },
+    {
+      "source": "I03",
+      "handedness": [
+        1,
+        1
+      ],
+      "count": 142
+    },
+    {
+      "source": "I03",
+      "handedness": [
+        -1,
+        -1
+      ],
+      "count": 1
+    },
+    {
+      "source": "I01",
+      "handedness": [
+        -1,
+        -1
+      ],
+      "count": 1
+    }
+  ]
+}

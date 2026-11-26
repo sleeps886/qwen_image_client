@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000009\",\n  \"target_ref\": \"new\",\n  \"reason\": \"本批次无历史轨迹可供匹配，故判定为新目标。在batch_units联合背景下，该单元（t=33.0）与同时间戳的U000008及后续单元的U000015、U000026等观测属于同一物理实体：其方位角变化规律（约104.5°~102.1°）、信号强度（0.2437）及噪声特征高度一致，且位置候选解均收敛于坐标系第一象限附近（x≈1604m, y≈1857m），明显区别于其他方位的目标群（如U000008位于第四象限）。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_4ca78602-9923-474f-a323-99712f2120b8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 201,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005282"
+  }
+}

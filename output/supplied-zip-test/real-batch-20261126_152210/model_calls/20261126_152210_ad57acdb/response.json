@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000011\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组观测（t=35.0）的方位角约104°，强度0.244，与批次中从t=26.0开始持续出现的另一类信号特征一致；而平台配置中的其他主要轨迹簇（如起始于t=13.0、方位角~162°且强度为0.179的信号）在时间序列和几何位置上均不匹配。由于snapshot.targets为空，无已有目标可供关联，故判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_44e80d4c-0c1d-4a71-bfa0-c542002ec030",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 152,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00515"
+  }
+}

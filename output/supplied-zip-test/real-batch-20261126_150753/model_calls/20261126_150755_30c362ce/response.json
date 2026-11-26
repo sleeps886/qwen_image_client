@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000040\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹（tracks为空），无法将当前观测归属于已有目标。U000040位于t=435.0，方位角约168.9°，与同强度的其他候选组在时间上不连续且缺乏足够的空间关联证据以建立唯一归属。为避免误判或强行拼接孤立点，判定为新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3db58930-b5be-4447-a7c8-6539dac6df1e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 122,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004668"
+  }
+}

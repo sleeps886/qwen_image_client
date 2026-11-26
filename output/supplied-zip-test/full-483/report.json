@@ -1,0 +1,26 @@
+{
+  "groups": 483,
+  "raw_observations": 966,
+  "status": "paused",
+  "processed_groups": 42,
+  "blocked": {
+    "step": 43,
+    "reason": "可疑片段复核范围82条超过上限80；已暂停，未调用模型，未自动截断历史"
+  },
+  "fake_calls": 41,
+  "real_model_calls": 0,
+  "budget_rejections": {
+    "20": "本队列最多需要482次关联调用，超过授权预算或会话剩余调用数；未调用模型",
+    "482": "本队列最多需要482次关联调用，超过授权预算或会话剩余调用数；未调用模型"
+  },
+  "preparation_seconds": 0.0025,
+  "elapsed_seconds": 23.05,
+  "last_step_seconds": 1.025,
+  "max_step_seconds": 1.163,
+  "full_geometry_fixture_seconds": 0.009,
+  "full_geometry_fixture_is_model_result": false,
+  "future_measurements_leaked": false,
+  "silently_missing_processed_groups": 0,
+  "accuracy_evaluated": false,
+  "production_session_modified": false
+}

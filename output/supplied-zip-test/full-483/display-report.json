@@ -1,0 +1,10 @@
+{
+  "fixtureGroups": 483,
+  "mainPositionPoints": 475,
+  "noPositionGroups": 8,
+  "lines": 0,
+  "notice": "可见组超过本地暂接重算上限160组，本图仅保留Agent已校验接续；未将全部点强连。",
+  "elapsedMilliseconds": 5,
+  "modelAccuracyEvaluated": false,
+  "realModelCalls": 0
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000006\",\n\"target_ref\": \"new\",\n\"reason\": \"当前快照中无已确立轨迹（targets为空）。该组观测位于t=29.0，时间上处于早期孤立观测（U000001-U000003, t<=17）与后续连续观测序列（从U000004开始, t>=26）之间的空隙。虽然其方位角趋势（约165°-166°）与后续高强度目标群一致，但在缺乏历史轨迹且存在显著时间断点的情况下，依据保守原则不应强行关联到尚未建立的目标ID，故判定为新目标的起始候选或独立未归属单元。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3727da67-005f-4ef0-a875-324f2341fdbd",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 173,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034058"
+  }
+}

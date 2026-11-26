@@ -1,0 +1,8 @@
+```json
+{
+  "snapshot_version": 0,
+  "unit_id": "U000027",
+  "target_ref": "new",
+  "reason": "强度与方位均不匹配现有轨迹，孤立观测无法建立连续航迹"
+}
+```

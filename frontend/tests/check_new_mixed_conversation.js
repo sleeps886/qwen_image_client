@@ -1,0 +1,43 @@
+// Browser-local session lifecycle only. No paid/model requests allowed.
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};let posts=0;
+  assert((await(await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'isolated server required');
+  await page.route('**/api/**',async route=>{if(route.request().method()==='POST'&&!new URL(route.request().url()).pathname.endsWith('/import-observations')){posts++;await route.abort();}else await route.continue();});
+  await page.goto(base+'/incremental?empty=1');
+  const idle=()=>page.waitForFunction(()=>!document.querySelector('#openNewConversation').disabled);
+  await idle();await page.locator('#openNewConversation').click();await idle();
+  let first=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  assert(first?.conversationDraft&&!first.dataset,'empty new session not saved');
+  assert(await page.locator('.conversation-item').count()===1,'empty session not visible');
+  await page.locator('#openNewConversation').click();await idle();
+  const second=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  assert(second.conversationId!==first.conversationId,'new session reuses ID');
+  assert(await page.locator('.conversation-item').count()===2,'second draft missing');
+  await page.reload();await idle();
+  assert((await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'))).conversationId===second.conversationId,'draft not restored');
+  await page.locator(`[data-conversation-id="${first.conversationId}"] .conversation-entry`).click();await idle();
+  assert((await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'))).conversationId===first.conversationId,'cannot switch empty drafts');
+  const data={candidates:['hull','tow'].map((array,i)=>({candidate_id:array,t:1,platform_id:'A',array,bearing_deg:30+i}))};
+  await page.locator('#pointFileImport').setInputFiles({name:'draft-points.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});
+  await page.waitForFunction(()=>document.querySelector('#batchSource').textContent.includes('已保留2点'));await idle();
+  const imported=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  assert(imported.conversationId===first.conversationId&&!imported.conversationDraft,'import must fill current draft');
+  const files=await page.evaluate(()=>PointFiles.list());assert(files.length===1,'file missing');
+  await page.locator('#chatQuestion').fill('old question');await page.locator('#chatQuestion').dispatchEvent('input');
+  await page.locator('#openNewConversation').click();await idle();
+  const third=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  assert(third.conversationId!==first.conversationId&&!third.state&&!third.messages.length,'new data session retained old state');
+  assert(third.dataset.candidates.length===2,'current browsing data lost');
+  assert(!(await page.locator('#chatQuestion').inputValue()).includes('old question'),'question leaked');
+  assert(!await page.locator('#sequenceConsent').isChecked(),'consent copied');
+  assert(await page.locator('.conversation-item').count()===3,'previous sessions overwritten');
+  assert(new Set(await page.locator('.conversation-entry').allTextContents()).size===3,'session names indistinguishable');
+  assert((await page.evaluate(()=>PointFiles.list())).length===1,'session creation changed file library');
+  await page.reload();await idle();assert(await page.locator('.conversation-item').count()===3,'sessions lost on refresh');
+  await page.evaluate(()=>window.confirm=()=>true);
+  await page.locator(`[data-conversation-id="${second.conversationId}"] .conversation-delete`).click();await idle();
+  assert(await page.locator('.conversation-item').count()===2,'draft deletion failed');
+  assert((await page.evaluate(()=>PointFiles.list())).length===1,'draft deletion removed file');
+  assert(posts===0,'session management sent API POST');
+  return {emptyCreation:true,independentIDs:true,draftReloadAndSwitch:true,importFillsDraft:true,dataSessionReset:true,libraryPreserved:true,realModelCalls:0};
+}

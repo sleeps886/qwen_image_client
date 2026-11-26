@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000014\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组观测（t=44.0）的方位角约168-169度，与时间较早的连续观测序列（如U000001至U000003，t=13-17，方位角约162-163度）存在明显差异。由于平台A处于静止状态（speed_kn=0），这种方位角的剧烈跳变无法用目标的线性运动来解释。此外，本批次中不存在其他具有相似方位特征的已确认轨迹可供插入或接续。因此，将其判定为新目标更为合理。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_416d9b24-5efe-4da0-bdb7-be5b73c2407a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 177,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034068"
+  }
+}

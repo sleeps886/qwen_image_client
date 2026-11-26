@@ -1,0 +1,5 @@
+{
+"snapshot_version": 6,
+"hypothesis_ref": "L017",
+"reason_code": "continuity"
+}

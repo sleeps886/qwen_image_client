@@ -1,0 +1,17 @@
+{
+  "source_session": "20261126_132035_17aecde3",
+  "original_validated_units": 3,
+  "original_error": "双片段目标需同平台不同阵列",
+  "free_recovered_cursor": 4,
+  "original_answer_unchanged": true,
+  "final_cursor": 20,
+  "queue_units": 20,
+  "fake_continuation_calls": 16,
+  "new_real_model_calls": 0,
+  "visible_raw_observations": 40,
+  "visible_units": 20,
+  "spatial_points_including_mirrors": 40,
+  "root_projection_unchanged": true,
+  "note": "Continuation fixture explicitly leaves all editable observations unassigned. Completion/display test, not recognition accuracy.",
+  "production_files_unchanged": true
+}

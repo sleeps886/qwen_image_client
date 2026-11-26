@@ -2,6 +2,7 @@ import copy
 import unittest
 
 from backend.app.services.association.gap_continuity import scan_gaps,review_gaps
+from backend.app.services.association.ridge_hypotheses import propose_pairs
 from backend.app.services.jobs.inversion_control import InversionControl,InversionStopped
 
 
@@ -85,6 +86,27 @@ class GapContinuityTests(unittest.TestCase):
         self.assertEqual(report['status'],'no_candidate_gaps')
         control=InversionControl();control.cancelled.set()
         with self.assertRaises(InversionStopped):scan_gaps(ridges,evidence,control)
+
+    def test_gap_review_does_not_disable_adjacent_ridge_continuations(self):
+        a=fragment('a',range(0,101,10));b=fragment('b',range(110,211,10))
+        tow=fragment('tow',range(0,211,10),image=1)
+        ridges={'tracks':[a,b,tow],'gap_review_applied':True}
+        frozen=copy.deepcopy(ridges)
+        result=propose_pairs(ridges,InversionControl())
+        pair=next(p for p in result['pairs'] if p['hull']['id']=='a+b')
+        self.assertEqual(len(pair['common_rows']),22)
+        self.assertEqual(pair['hull']['adjacent_fragment_ids'],['a','b'])
+        audit=next(t for t in result['adjacent_continuations'] if t['id']=='a+b')
+        self.assertEqual(audit['synthetic_measurements'],0)
+        self.assertEqual(audit['observed_measurements'],22)
+        self.assertEqual({p['id'] for p in pair['hull']['points']},{p['id'] for t in (a,b) for p in t['points']})
+        self.assertEqual(ridges,frozen)
+
+    def test_adjacent_join_does_not_bypass_reviewed_long_gap_rejection(self):
+        a=fragment('a',range(0,101,10));b=fragment('b',range(130,231,10))
+        tow=fragment('tow',range(0,231,10),image=1)
+        result=propose_pairs({'tracks':[a,b,tow],'gap_review_applied':True},InversionControl())
+        self.assertFalse(any(p['hull']['id']=='a+b' for p in result['pairs']))
 
     def test_graph_conditional_routes_execute_gap_node_only_when_needed(self):
         from backend.app.agents.graphs.inverse import build_inverse_graph

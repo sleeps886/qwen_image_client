@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n    \"snapshot_version\": 0,\n    \"unit_id\": \"U000031\",\n    \"target_ref\": \"new\",\n    \"reason\": \"当前为首次处理该批次，无历史轨迹可匹配；强度与方位特征构成独立航迹起点，建议新建目标。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_8c85cf8d-d719-49d7-af92-e2fef3b14809",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 76,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034046"
+  }
+}

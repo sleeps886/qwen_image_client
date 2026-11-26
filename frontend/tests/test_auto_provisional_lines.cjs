@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict'),{spatialDisplayGroups:display}=require('../point-sampling.js');
+function fixture(bearings,times=bearings.map((_,i)=>i*10)){
+  const points=[],units=[],tracks=[];
+  bearings.forEach((b,i)=>{const ids=['h'+i,'w'+i],unit_id='U'+i;
+    units.push({unit_id,candidate_ids:ids,validated:true});
+    for(const [j,array] of ['hull','tow'].entries())points.push({candidate_id:ids[j],platform_id:'A',array,t:times[i],bearing_deg:b});
+    for(const side of [1,-1])tracks.push({id:`C${i}_${side}`,platform_id:'A',pair_fragments:[unit_id,unit_id],handedness:[side,side],points:[{unit_id,t:times[i],x:side*(100+i*10),y:300+i*5,candidate_ids:ids,stable:true,connect_previous:false}]});
+  });return {doc:{tracks},units,points};
+}
+const options={autoConnect:true,edges:[]};
+let f=fixture([40,60]),r=display(f.doc,f.units,f.points,options);
+assert.deepEqual(r.display_links.map(e=>[e.from,e.to]),[['U0','U1']]);
+assert.equal(r.display_links[0].basis,'local_provisional');assert.equal(r.tracks.flatMap(t=>t.points).filter(p=>p.connect_previous).length,1);
+f=fixture([40,60,61]);const before=JSON.stringify(f);r=display(f.doc,f.units,f.points,options);
+assert.deepEqual(r.display_links.map(e=>[e.from,e.to]),[['U1','U2']],'new group failed to retract misleading early edge');
+assert.equal(r.plotted,3);assert.equal(JSON.stringify(f),before);
+f=fixture([40,100,41,101]);r=display(f.doc,f.units,f.points,options);
+assert.deepEqual(new Set(r.display_links.map(e=>e.from+'>'+e.to)),new Set(['U0>U2','U1>U3']),'mixed targets all time-chained');
+assert.equal(r.alternatives.length,3);assert(r.tracks.flatMap(t=>t.points).filter(p=>p.connect_previous).every(p=>p.suspect));
+f=fixture([40,41]);f.units[1].validated=false;r=display(f.doc,f.units,f.points,options);assert.equal(r.display_links.length,0);
+f=fixture([40,41],[0,0]);r=display(f.doc,f.units,f.points,options);assert.equal(r.display_links.length,0);
+f=fixture([40,41],[0,1000]);r=display(f.doc,f.units,f.points,options);assert.equal(r.display_links.length,0);
+f=fixture([40,41]);f.points.filter(p=>p.candidate_id.endsWith('1')).forEach(p=>p.platform_id='B');r=display(f.doc,f.units,f.points,options);assert.equal(r.display_links.length,0);
+f=fixture([40,41]);const membership=Object.fromEntries(f.points.map(p=>[p.candidate_id,{target_id:p.candidate_id.endsWith('0')?'T1':'T2'}]));
+r=display(f.doc,f.units,f.points,{...options,membership});assert.equal(r.display_links.length,0);
+f=fixture([40,100,41]);const edges=[{from_id:'h0',to_id:'h1',status:'low_confidence'},{from_id:'w0',to_id:'w1',status:'low_confidence'}];
+r=display(f.doc,f.units,f.points,{autoConnect:true,edges});assert.equal(r.display_links.find(e=>e.to==='U1').basis,'agent_checked');
+assert.equal(r.display_links.filter(e=>e.from==='U0').length,1,'local branch overwrote/branched checked link');
+f=fixture([40,41]);r=display(f.doc,f.units,f.points,options);assert(r.groups.every(g=>g.selected.point.x>0));
+f=fixture([40,41,42]);f.doc.tracks=f.doc.tracks.filter(tr=>!(tr.points[0].unit_id==='U2'&&tr.handedness[0]===1));
+r=display(f.doc,f.units,f.points,options);assert(r.groups.every(g=>g.selected.point.x<0),'later unique candidate failed to revise earlier mirror choices');
+assert.equal(r.plotted,3);assert.equal(r.tracks.flatMap(t=>t.points).filter(p=>p.connect_previous).length,2);
+console.log('PASS: provisional line; later split/rewire; mixed-target alternatives; authoritative link priority; no same-time/cross-platform/known-target/invalid hard-links');

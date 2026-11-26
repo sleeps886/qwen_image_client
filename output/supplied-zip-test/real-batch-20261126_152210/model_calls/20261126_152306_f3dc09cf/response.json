@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000094\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"U000094包含t=125.0的hull/tow观测对，其方位角(约175.7°/175.6°)和强度特征与已确认轨迹B000001在t=74.0时的末尾状态(约174.8°/174.7°, strength≈0.179)高度一致且呈连续演化趋势；而该时刻其他已知目标(B000002位于~105°/102°, B000003位于~156°/155°)的方位差异显著，故判定为向B000001轨迹末尾接续。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_1fba1072-dd52-44d3-8448-9a686e1d23d9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 210,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049564"
+  }
+}

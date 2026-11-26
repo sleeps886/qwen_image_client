@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000041\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无已有轨迹或目标可供关联。本组观测方位约为129°（Hull）与128°（Tow），在联合背景中，其他相似强度组的方位多集中在136°以上或150°以上区间，且时间上不连续。缺乏匹配的历史航迹支持其延续性，因此建议将其初始化为一个新目标。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_4d9663a1-e8bf-42b8-8bc3-610cd1c062c6",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 130,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00469"
+  }
+}

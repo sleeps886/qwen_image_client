@@ -1,0 +1,8 @@
+```json
+{
+"snapshot_version": 0,
+"unit_id": "U000042",
+"target_ref": "new",
+"reason": "快照中无其他目标，无法进行归属比对。作为首个观测单元，暂定为独立新目标的初始航迹点。"
+}
+```

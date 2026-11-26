@@ -1,0 +1,33 @@
+async page=>{
+  const assert=(v,m)=>{if(!v)throw Error(m);};let paidCalls=0;
+  page.on('request',r=>{if(r.method()==='POST'&&/\/(step|plot-step)$/.test(new URL(r.url()).pathname))paidCalls++;});
+  await page.setViewportSize({width:1700,height:950});
+  await page.goto('http://127.0.0.1:8891/incremental');await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  await page.locator('#pointFileImport').setInputFiles([1,2,3].map(i=>`C:/Users/LENOVO/AppData/Local/Temp/btr_target_00${i} (6).zip`));
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('966个原始观测'));
+  await page.locator('#samplePointCount').fill('20');await page.locator('#samplePoints').click();
+  await page.locator('#useSequential').uncheck();await page.locator('#chatPrepare').click();await page.waitForFunction(()=>!!document.querySelector('#sessionId').value&&!document.querySelector('#chatPrepare').disabled);
+  const sid=await page.locator('#sessionId').inputValue();
+  await page.evaluate(async()=>{const saved=await WorkspaceCache.get('mixed-workspace');saved.messages=Array.from({length:30},(_,i)=>({role:i%2?'assistant':'user',text:`布局验证消息 ${i}\n`+'这是本地滚动测试，不是模型回答。'.repeat(25)}));await WorkspaceCache.set('mixed-workspace',saved);});
+  await page.reload();await page.waitForFunction(()=>document.querySelectorAll('#chatMessages article').length===30);
+  const stage=page.locator('#chatStage'),dock=page.locator('#chatDock'),before=await dock.boundingBox();
+  assert(before.y>400&&Math.abs(before.y+before.height-950)<3,'composer not pinned to bottom');
+  assert(await stage.evaluate(n=>n.scrollHeight>n.clientHeight+400),'message region not independently scrollable');
+  await stage.evaluate(n=>{n.scrollTop=n.scrollHeight;});const after=await dock.boundingBox();
+  assert(Math.abs(before.y-after.y)<1,'message scrolling moves composer');
+  await page.locator('#chatAttachmentSummary').click();
+  const expanded=await dock.boundingBox();assert(Math.abs(expanded.y+expanded.height-950)<3,'expanded selection loses bottom anchor');
+  assert((await stage.boundingBox()).height>=60,'selection expansion hides all messages');
+  assert(await page.locator('#chatDock #chatPointTable').count()===1,'selected points not in bottom dock');
+  assert(await page.locator('#chatDock #chatSend').isVisible(),'send control inaccessible');
+  await page.screenshot({path:'output/supplied-zip-test/bottom-chat-dock.png'});
+  await page.route('**/mixed-sessions/'+sid,async route=>{const response=await route.fetch(),state=await response.json();state.status='invalid_response';state.manual_rerun={phase:'association',available:true,reason:'本地布局测试：保存回复待复核'};await route.fulfill({json:state});});
+  await page.reload();await page.waitForFunction(()=>!document.querySelector('#rerunPanel').hidden);
+  assert(await page.locator('#chatDock #recoverAssociation').isVisible(),'failure recovery not in bottom dock');
+  const failed=await dock.boundingBox();assert(Math.abs(failed.y+failed.height-950)<3,'failed-state action panel not anchored');
+  await page.setViewportSize({width:390,height:680});
+  const narrow=await dock.boundingBox();assert(narrow.y>=0&&narrow.y+narrow.height<=681,'narrow dock exceeds viewport');
+  assert((await stage.boundingBox()).height>=60,'narrow layout loses message region');
+  assert(paidCalls===0,'layout called paid model');
+  return {composerBottomAnchored:true,selectionBottomAnchored:true,independentMessageScroll:true,expandedSelectionBounded:true,failureRecoveryDocked:true,narrowViewportFits:true,modelCalls:paidCalls};
+}

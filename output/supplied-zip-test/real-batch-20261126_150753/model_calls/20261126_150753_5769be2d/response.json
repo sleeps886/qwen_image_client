@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000004\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹（targets为空），无法进行匹配或接续。该单元包含两个阵列在t=58.0s的同步观测，方位角约143°/142°且强度一致（0.289）。由于缺乏先验航迹信息以排除其他可能性或确认延续性，依据保守原则将其判定为新目标起始点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_b5793796-1537-4d59-a171-7052fc3debd9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 124,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.027252"
+  }
+}

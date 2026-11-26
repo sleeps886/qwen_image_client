@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"new_target\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2533bdc8-5395-45dd-b94f-dd294582f861",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 8960,
+    "input_tokens": 247,
+    "output_tokens": 37,
+    "prompt_tokens_details": {
+      "cached_tokens": 8960
+    },
+    "cost": "¥0.001194"
+  }
+}

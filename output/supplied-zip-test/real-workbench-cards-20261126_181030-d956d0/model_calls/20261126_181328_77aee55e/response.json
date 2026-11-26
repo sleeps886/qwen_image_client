@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":5,\"hypothesis_ref\":\"L019\",\"reason_code\":\"continuity\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f6d6fa19-f5e2-44cc-be97-4d82566456f0",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 89600,
+    "input_tokens": 1239,
+    "output_tokens": 23,
+    "prompt_tokens_details": {
+      "cached_tokens": 89600
+    },
+    "cost": "¥0.010014"
+  }
+}

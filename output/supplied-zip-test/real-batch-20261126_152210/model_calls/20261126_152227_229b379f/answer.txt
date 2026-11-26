@@ -1,0 +1,256 @@
+{
+    "snapshot_version": 0,
+    "assignments": [
+        {
+            "unit_id": "U000001",
+            "target_ref": "N1",
+            "reason": "首个观测，建立第一目标序列（方位角~162°-174°）。"
+        },
+        {
+            "unit_id": "U000002",
+            "target_ref": "N1",
+            "reason": "t=15.0，方位角平滑延续至163°，符合N1轨迹特征。"
+        },
+        {
+            "unit_id": "U000003",
+            "target_ref": "N1",
+            "reason": "t=17.0，方位角163.4°，属于N1连续运动序列。"
+        },
+        {
+            "unit_id": "U000004",
+            "target_ref": "N1",
+            "reason": "t=26.0，方位角165.2°，处于N1早期间断后的合理位置。"
+        },
+        {
+            "unit_id": "U000005",
+            "target_ref": "N2",
+            "reason": "同时刻出现另一强信号源（方位~104°），与N1分离，建立第二目标序列。"
+        },
+        {
+            "unit_id": "U000006",
+            "target_ref": "N1",
+            "reason": "t=29.0，方位角165.8°，符合N1随时间缓慢递增的趋势。"
+        },
+        {
+            "unit_id": "U000007",
+            "target_ref": "N2",
+            "reason": "t=29.0，方位角稳定在104°附近，符合N2的静态/慢变特征。"
+        },
+        {
+            "unit_id": "U000008",
+            "target_ref": "N1",
+            "reason": "t=33.0，方位角166.6°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000009",
+            "target_ref": "N2",
+            "reason": "t=33.0，方位角104.5°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000010",
+            "target_ref": "N1",
+            "reason": "t=35.0，方位角167.0°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000011",
+            "target_ref": "N2",
+            "reason": "t=35.0，方位角104.5°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000012",
+            "target_ref": "N1",
+            "reason": "t=40.0，方位角168.0°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000013",
+            "target_ref": "N2",
+            "reason": "t=40.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000014",
+            "target_ref": "N1",
+            "reason": "t=44.0，方位角168.8°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000015",
+            "target_ref": "N2",
+            "reason": "t=44.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000016",
+            "target_ref": "N1",
+            "reason": "t=47.0，方位角169.4°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000017",
+            "target_ref": "N2",
+            "reason": "t=47.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000018",
+            "target_ref": "N1",
+            "reason": "t=50.0，方位角170.0°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000019",
+            "target_ref": "N2",
+            "reason": "t=50.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000020",
+            "target_ref": "N1",
+            "reason": "t=51.0，方位角170.2°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000021",
+            "target_ref": "N2",
+            "reason": "t=51.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000022",
+            "target_ref": "N1",
+            "reason": "t=54.0，方位角170.8°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000023",
+            "target_ref": "N2",
+            "reason": "t=54.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000024",
+            "target_ref": "N3",
+            "reason": "t=54.0，出现第三个独立方位簇（~143°）且强度不同（0.289），建立新目标N3。"
+        },
+        {
+            "unit_id": "U000025",
+            "target_ref": "N1",
+            "reason": "t=55.0，方位角171.0°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000026",
+            "target_ref": "N2",
+            "reason": "t=55.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000027",
+            "target_ref": "N3",
+            "reason": "t=55.0，方位角143.0°，符合N3刚出现的趋势。"
+        },
+        {
+            "unit_id": "U000028",
+            "target_ref": "N1",
+            "reason": "t=58.0，方位角171.6°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000029",
+            "target_ref": "N2",
+            "reason": "t=58.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000030",
+            "target_ref": "N3",
+            "reason": "t=58.0，方位角143.6°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000031",
+            "target_ref": "N1",
+            "reason": "t=59.0，方位角171.8°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000032",
+            "target_ref": "N2",
+            "reason": "t=59.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000033",
+            "target_ref": "N3",
+            "reason": "t=59.0，方位角143.8°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000034",
+            "target_ref": "N1",
+            "reason": "t=64.0，方位角172.8°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000035",
+            "target_ref": "N2",
+            "reason": "t=64.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000036",
+            "target_ref": "N3",
+            "reason": "t=64.0，方位角144.7°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000037",
+            "target_ref": "N1",
+            "reason": "t=65.0，方位角173.0°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000038",
+            "target_ref": "N2",
+            "reason": "t=65.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000039",
+            "target_ref": "N3",
+            "reason": "t=65.0，方位角144.9°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000040",
+            "target_ref": "N1",
+            "reason": "t=66.0，方位角173.2°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000041",
+            "target_ref": "N2",
+            "reason": "t=66.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000042",
+            "target_ref": "N3",
+            "reason": "t=66.0，方位角145.1°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000043",
+            "target_ref": "N1",
+            "reason": "t=68.0，方位角173.6°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000044",
+            "target_ref": "N2",
+            "reason": "t=68.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000045",
+            "target_ref": "N3",
+            "reason": "t=68.0，方位角145.5°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000046",
+            "target_ref": "N1",
+            "reason": "t=72.0，方位角174.4°，归入N1序列。"
+        },
+        {
+            "unit_id": "U000047",
+            "target_ref": "N2",
+            "reason": "t=72.0，方位角104.6°，归入N2序列。"
+        },
+        {
+            "unit_id": "U000048",
+            "target_ref": "N3",
+            "reason": "t=72.0，方位角146.2°，归入N3序列。"
+        },
+        {
+            "unit_id": "U000049",
+            "target_ref": "N1",
+            "reason": "t=74.0，方位角174.8°，归入N1序列末尾。"
+        },
+        {
+            "unit_id": "U000050",
+            "target_ref": "N2",
+            "reason": "t=74.0，方位角104.7°，归入N2序列末尾。"
+        }
+    ],
+    "revisions": []
+}

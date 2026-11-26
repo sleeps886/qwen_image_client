@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000035\",\n\"target_ref\": \"new\",\n\"reason\": \"该组位于正后方且稳定度低，无历史轨迹匹配，建议作为新目标建立。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_b41cef5c-d415-4032-a548-6229c11ecf03",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 61,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034004"
+  }
+}

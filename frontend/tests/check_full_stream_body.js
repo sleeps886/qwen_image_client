@@ -1,0 +1,37 @@
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};
+  assert((await(await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'offline fake gateway required');
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(base+'/incremental?empty=1');await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  const candidates=Array.from({length:400},(_,i)=>({candidate_id:'P'+i,platform_id:'P',array:i%2?'tow':'hull',t:Math.floor(i/4)*10,bearing_deg:30+Math.floor(i/2)%2*80+Math.floor(i/4)*.01}));
+  await page.locator('#pointFileImport').setInputFiles({name:'full-stream.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({candidates}))});
+  await page.waitForFunction(()=>!document.querySelector('#selectAllPoints').disabled);await page.locator('#selectAllPoints').click();
+  const responsePromise=page.waitForResponse(r=>new URL(r.url()).pathname.endsWith('/step')&&r.status()===200);
+  await page.locator('#chatConsent').check();await page.locator('#chatSend').click();
+  const response=await responsePromise;
+  await page.waitForFunction(()=>document.querySelector('.execution-stream-body')?.textContent.length>100);
+  const pre=page.locator('#executionPanel .execution-stream-body');
+  const prefix=await pre.textContent();assert(prefix.startsWith('{'),'full JSON prefix not displayed');
+  assert(await page.locator('#executionPanel').getAttribute('open')!==null,'live stream not opened');
+  await page.waitForFunction(()=>{const p=document.querySelector('#executionPanel .execution-stream-body');return p&&p.scrollHeight-p.clientHeight>100;});
+  await pre.evaluate(n=>{n.scrollTop=0;n.dataset.scrollTest='preserve';});
+  await page.waitForTimeout(650);
+  assert(await pre.getAttribute('data-scroll-test')==='preserve','poll recreated the stream element');
+  assert(await pre.evaluate(n=>n.scrollTop)<10,'new chunks forced scroll away from earlier text');
+  assert((await pre.textContent()).startsWith(prefix),'earlier chunks were replaced');
+  const raw=await response.text();
+  const expected=raw.split(/\r?\n/).filter(l=>l.startsWith('data: ')).map(l=>JSON.parse(l.slice(6))).filter(e=>e.event==='delta').map(e=>e.text).join('');
+  await page.waitForFunction(()=>document.querySelector('#chatState').textContent==='等待数据集合确认');
+  assert(expected.length>2000,'fixture too short to cover old 2000-character clipping');
+  assert(await pre.textContent()===expected,'displayed stream differs from all actual deltas');
+  const sid=await page.locator('#sessionId').inputValue();
+  assert((await(await page.request.get(base+'/api/incremental/mixed-sessions/'+sid)).json()).calls===1,'fake call not exactly once');
+  await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.executionHistory.some(e=>e.streamed_status==='received'&&e.streamed_body.length>2000);});
+  await page.goto(base+'/incremental');await page.waitForFunction(()=>document.querySelector('.execution-stream-body')?.textContent.length>2000);
+  assert(await page.locator('.execution-stream-body').first().textContent()===expected,'full output lost on reload');
+  assert((await(await page.request.get(base+'/api/incremental/mixed-sessions/'+sid)).json()).calls===1,'viewing/reload called model again');
+  const block=page.locator('.chat-execution').first();await block.evaluate(n=>n.open=true);
+  await page.locator('.execution-stream-output').first().scrollIntoViewIfNeeded();
+  await page.screenshot({path:'output/playwright/full-stream-body.png'});
+  return {allChunksAppended:true,over2000Chars:true,noLastReasonReplacement:true,scrollStable:true,persistedAfterCompletion:true,reload:true,fakeGatewayCalls:1,realModelCalls:0};
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000047\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无已建立轨迹（targets为空）。该单元包含时间t=522.0的hull+tow观测对，方位角约115°（左舷后方），强度与之前的左侧目标群（如t=513的117°）接近但存在明显角度变化。由于缺乏历史轨迹参考且无法确认其连续性属于某个特定已知目标（在无历史情况下通常视为独立航迹起点或待分配的新目标），建议标记为新目标以启动跟踪流程。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_fd1208b3-4c58-4cf9-b27f-40c035602830",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 152,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004748"
+  }
+}

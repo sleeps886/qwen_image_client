@@ -85,14 +85,18 @@ def context_step(image):
 
 def propose_pairs(ridges,control):
     hull=[t for t in ridges['tracks'] if t['array']=='hull'];tow=[t for t in ridges['tracks'] if t['array']=='tow']
+    continuations=[]
     def combined(tracks):
-        if ridges.get('gap_review_applied'):return tracks
         joined=[]
         for i,first in enumerate(tracks):
             for second in tracks[i+1:]:
                 a,b=first,second
                 if a['start_t']>b['start_t']:a,b=b,a
                 if abs(a['end_t']-b['start_t'])>30:continue
+                # Gap review handles long missing intervals, not adjacent or
+                # slightly overlapping beam fragments. Do not disable those
+                # continuations merely because the gap node has run.
+                if ridges.get('gap_review_applied') and b['start_t']-a['end_t']>20:continue
                 overlap={p['sample_index'] for p in a['points']}&{p['sample_index'] for p in b['points']}
                 if len(overlap)>2:continue
                 if abs(nearest_unfolded(b['points'][0]['bearing_deg'],a['points'][-1]['unfolded_deg'])-a['points'][-1]['unfolded_deg'])>8:continue
@@ -103,7 +107,10 @@ def propose_pairs(ridges,control):
                 if valid:
                     points=[dict(rows[r]) for r in sorted(rows)]
                     for k in range(1,len(points)):points[k]['unfolded_deg']=nearest_unfolded(points[k]['bearing_deg'],points[k-1]['unfolded_deg'])
-                    joined.append({**a,'id':a['id']+'+'+b['id'],'points':points,'support':len(points),'end_t':points[-1]['t']})
+                    joined.append({**a,'id':a['id']+'+'+b['id'],'points':points,'support':len(points),'end_t':points[-1]['t'],
+                                   'adjacent_fragment_ids':[a['id'],b['id']]})
+        continuations.extend({'id':t['id'],'array':t['array'],'fragment_ids':t['adjacent_fragment_ids'],
+                              'observed_measurements':len(t['points']),'synthetic_measurements':0} for t in joined[:8])
         return tracks+joined[:8]
     hull=combined(hull);tow=combined(tow)
     proposals=[];rejected_sync=0
@@ -130,6 +137,7 @@ def propose_pairs(ridges,control):
                               'sparse_dual_support':sparse,'rank':len(common)-float(np.median(differences))*.2})
     proposals.sort(key=lambda p:p['rank'],reverse=True)
     return {'pairs':proposals[:24],'total_proposed':len(proposals),'budget_excluded':max(0,len(proposals)-24),
+            'adjacent_continuations':continuations,
             'rejected_sync_gate':rejected_sync,'retained_sparse_pairs':sum(p['sparse_dual_support'] for p in proposals[:24]),
             'sparse_policy':{'minimum_common_rows':4,'minimum_long_ridge':20,'maximum_short_long_ratio':1/3,'minimum_overlap_seconds':30},
             'max_median_parallax_deg':45.}

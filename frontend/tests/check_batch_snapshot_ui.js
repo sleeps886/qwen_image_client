@@ -1,0 +1,42 @@
+// Actual 483 groups, isolated fake gateway only. Confirms integration, not accuracy.
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};
+  const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
+  assert((await(await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'isolated fake required');
+  await page.setViewportSize({width:1800,height:1100});await page.goto(base+'/incremental');
+  await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  await page.locator('#pointFileImport').setInputFiles([1,2,3].map(i=>`C:/Users/LENOVO/AppData/Local/Temp/btr_target_00${i} (2).zip`));
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('966个原始观测'));
+  await page.locator('#sequenceRetryEnabled').uncheck();await page.locator('#samplePointCount').fill('483');await page.locator('#samplePoints').click();
+  await page.locator('#sequenceMode').selectOption('batch-snapshot-v1');
+  await page.locator('#sequenceBudget').fill('493');await page.locator('#sequenceBudget').dispatchEvent('change');
+  await page.locator('#prepareSequence').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已免费准备483组'));
+  assert((await page.locator('#sequenceStatus').textContent()).includes('最多493次'),'budget omits model merge');
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceNext').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已处理50/483组'),{},{timeout:90000});
+  assert((await page.locator('#sequenceWorkingStatus').textContent()).includes('尚未执行433组'),'future groups shown as processed');
+  await page.reload();await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已处理50/483组'));
+  assert(await page.locator('#sequenceMode').inputValue()==='batch-snapshot-v1','mode lost after refresh');
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceStart').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('completed_awaiting_review'),{},{timeout:180000});
+  const sid=await page.locator('#sessionId').inputValue(),rootUrl=base+'/api/incremental/mixed-sessions/'+sid;
+  const root=await(await page.request.get(rootUrl)).json();const run=await(await page.request.get(rootUrl+'/runs/'+root.active_sequential_run)).json();
+  const snapshots=await(await page.request.get(rootUrl+'/runs/'+root.active_sequential_run+'/snapshots')).json();
+  assert(run.cursor===483&&run.calls===493&&run.steps.length===10,'full batch run incomplete');
+  assert(snapshots.snapshots.length===10&&snapshots.snapshots.at(-1).observations.length===966,'snapshots not durable');
+  assert(run.working_view.units.length===483&&run.working_view.points.length===966,'full view dropped input');
+  assert(Object.keys(root.tracks).length===0,'provisional result adopted automatically');
+  assert(await page.locator('#sequenceSpatialGroupList>details').count()===483,'group list incomplete');
+  assert(await page.locator('#sequenceSpatialChart [data-line-basis="agent_checked"]').count()>0,'no model-based spatial lines');
+  await page.screenshot({path:'output/supplied-zip-test/batch-snapshot-483.png'});
+  await page.locator('#sequenceAdopt').click();await page.waitForFunction(()=>!document.querySelector('#chatNotice').textContent.includes('正在处理')&&document.querySelector('#sequenceAdopt').hidden);
+  const adopted=await(await page.request.get(rootUrl)).json();assert(adopted.status==='ready'&&adopted.submitted_ids.length===966,'cannot adopt completed snapshot');
+  await page.locator('#sequenceBudget').fill('100');await page.locator('#sequenceBudget').dispatchEvent('change');
+  await page.evaluate(()=>{window.confirm=message=>{window.__budgetConfirmation=message;return true;};});await page.locator('#sequenceApplyBudget').click();
+  await page.waitForFunction(()=>document.querySelector('#chatNotice').textContent.includes('预算已明确更新'));
+  const budget=await(await page.request.get(rootUrl)).json();assert(budget.calls===493&&budget.max_calls===593,'budget change sent calls or wrong total');
+  assert((await page.evaluate(()=>window.__budgetConfirmation)).includes('累计调用上限'),'budget change confirmation missing');
+  assert(pageErrors.length===0,'browser runtime errors: '+pageErrors.join(';'));
+  return {groups:483,rawObservations:966,batches:10,snapshots:10,fakeCalls:493,realCalls:0,modelLines:true,refreshRestored:true,adopted:true,budgetChangedWithoutCall:true};
+}

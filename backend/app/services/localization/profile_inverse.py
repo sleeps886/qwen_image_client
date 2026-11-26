@@ -58,6 +58,7 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
         'profile_rows_budget':profile_rows,'uses_reference_labels':False,'independent_accuracy_verified':False,
         'validation':'interleaved_raster_rows_not_independent_position_truth','status':'completed',
         'phase_seconds_budget':phase_seconds,'reserved_output_seconds':reserve_seconds}
+    report['seed_schedule']='base_motion_families_for_all_identities_before_optional_radial_and_curvature_search'
     if not selected:return selection,report
     # This first implementation retains the explicit collinear mirror family.
     platform=context['platforms'][0];reference=reference_for(context)
@@ -192,11 +193,16 @@ def refine_profiles(selection,evidence,context,control,rounds=2,profile_rows=257
                 effective_rows=max(10,sum(np.count_nonzero((times>=candidate['start_t'])&(times<=candidate['end_t'])) for _,times,_,_,_,_ in data))
                 def score(mse,count):return effective_rows*math.log(max(1e-12,mse))+count*math.log(effective_rows)
                 before_score=score(before,len(active));families=[(family or model['model'],initial,active,model)]
-                if iteration==0:
+                if iteration<2:
                     # Compare simpler motion and both independent-axis harmonic
                     # families AFTER identity selection. Initial centroid BIC must
                     # not permanently lock a high-dimensional, wrong-heading fit.
-                    seeds=family_seeds(model,candidate['variants'],candidate,images,context,check)
+                    # Finish a bounded base-family pass for EVERY identity
+                    # before spending the shared deadline on radial/curvature
+                    # restarts for the first identities. Otherwise later tracks
+                    # can keep coarse, wrong-heading fits solely due to order.
+                    seeds=family_seeds(model,candidate['variants'],candidate,images,context,check,
+                                       explore_curvature=iteration>0,radial_scales=() if iteration==0 else (.5,.75,1.5,2.))
                     chosen={}
                     for seed,indices in seeds:
                         name=seed['parameter_family']

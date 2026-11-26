@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000013\",\n  \"target_ref\": \"new\",\n  \"reason\": \"无历史轨迹可衔接；方位约105°稳定且强度恒定，几何特征独立，判定为新目标起点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_49f80aaa-56ce-4c04-b65c-1514f81b87df",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 75,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005192"
+  }
+}

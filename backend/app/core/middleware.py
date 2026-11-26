@@ -57,4 +57,6 @@ async def local_origin(request:Request,call_next):
     response.headers['Referrer-Policy']='no-referrer'
     if request.url.path not in ('/docs','/redoc','/docs/oauth2-redirect'):
         response.headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+    if request.url.path=='/generator':
+        response.headers['Content-Security-Policy']+="; frame-src http://127.0.0.1:8765"
     return response

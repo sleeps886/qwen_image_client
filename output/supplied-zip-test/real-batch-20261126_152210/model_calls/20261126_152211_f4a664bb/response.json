@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000026\",\n\"target_ref\": \"new\",\n\"reason\": \"当前快照中无已有目标（targets为空），该组无法归属到任何现有轨迹。观察数据显示该组与同一时间点的其他两组（U000025和U000027）具有完全不同的方位角特征：U000026位于约104°方向，而U000025在171°附近，U000027在143°附近；且其强度值(0.2438)显著区别于U000025的弱信号(0.1789)，表明这是三个独立的目标源。由于平台静止且无历史轨迹可供关联，依据协议禁止仅凭参数相似性猜测身份，故判定为建议建立新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2a383427-e29b-40b9-85c4-a8121f6ba94c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 204,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034142"
+  }
+}

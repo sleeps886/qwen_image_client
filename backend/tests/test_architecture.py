@@ -32,12 +32,42 @@ class ArchitectureTests(unittest.TestCase):
             paths=api.get('/openapi.json').json()['paths']
             self.assertEqual(api.get('/api/health').json()['workflow_engine'],'langgraph-evidence-v1')
             self.assertTrue(api.get('/api/health').json()['langgraph_enabled'])
-            self.assertEqual(set(paths),{'/api/data-example','/api/health','/api/logs/{request_id}',
+            self.assertEqual(set(paths),{'/api/generator/start','/api/data-example','/api/health','/api/logs/{request_id}',
                 '/api/logs/{request_id}/download','/api/recognize','/api/recognize/stream',
                 '/api/results/{result_id}/{filename}','/api/history','/api/history/{result_id}',
             '/api/comparisons/{result_id}/{comparison_id}/{filename}','/api/compare','/api/evaluate',
             '/api/invert','/api/invert/stream','/api/incremental/sessions',
-            '/api/incremental/sessions/{session_id}','/api/incremental/sessions/{session_id}/step'})
+            '/api/incremental/sessions/{session_id}','/api/incremental/sessions/{session_id}/step',
+            '/api/incremental/batches/{result_id}','/api/incremental/batches/{result_id}/debug-track','/api/incremental/sessions/{session_id}/preview',
+            '/api/incremental/sessions/{session_id}/execution','/api/incremental/sessions/{session_id}/review',
+            '/api/incremental/all-points-preview','/api/incremental/joint-sessions',
+            '/api/incremental/joint-sessions/{session_id}','/api/incremental/joint-sessions/{session_id}/preview',
+            '/api/incremental/joint-sessions/{session_id}/step','/api/incremental/joint-sessions/{session_id}/review',
+            '/api/incremental/mixed-sessions','/api/incremental/mixed-sessions/{session_id}',
+            '/api/incremental/mixed-sessions/{session_id}/preview','/api/incremental/mixed-sessions/{session_id}/step',
+            '/api/incremental/mixed-sessions/{session_id}/review','/api/incremental/mixed-sessions/{session_id}/execution',
+            '/api/incremental/mixed-sessions/{session_id}/catalog',
+            '/api/incremental/mixed-sessions/{session_id}/runs/preview','/api/incremental/mixed-sessions/{session_id}/runs',
+            '/api/incremental/mixed-sessions/{session_id}/runs/{run_id}',
+            '/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/next','/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/start',
+            '/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/pause','/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/recover',
+            '/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/review',
+            '/api/incremental/mixed-sessions/{session_id}/runs/{run_id}/extend-review',
+            '/api/incremental/mixed-sessions/{session_id}/recover-association',
+            '/api/incremental/mixed-sessions/{session_id}/plot-preview','/api/incremental/mixed-sessions/{session_id}/plot-step',
+            '/api/incremental/mixed-sessions/{session_id}/spatial-image','/api/incremental/mixed-sessions/{session_id}/recover-model-plot',
+            '/api/incremental/mixed-sessions/{session_id}/prepare-rerun','/api/incremental/mixed-sessions/{session_id}/enable-input','/api/incremental/mixed-sessions/{session_id}/observations','/api/incremental/mixed-sessions/{session_id}/export',
+            '/api/incremental/import-platform','/api/incremental/import-observations',
+            '/api/incremental/live-sessions','/api/incremental/live-sessions/migrate',
+            '/api/incremental/live-sessions/{sid}','/api/incremental/live-sessions/{sid}/observations',
+            '/api/incremental/live-sessions/{sid}/configuration','/api/incremental/live-sessions/{sid}/prepare',
+            '/api/incremental/live-sessions/{sid}/predictions/prepare','/api/incremental/live-sessions/{sid}/analyses',
+            '/api/incremental/live-sessions/{sid}/predictions','/api/incremental/live-sessions/{sid}/analyses/{rid}',
+            '/api/incremental/live-sessions/{sid}/analyses/{rid}/events','/api/incremental/live-sessions/{sid}/analyses/{rid}/review',
+            '/api/incremental/live-sessions/{sid}/export','/api/incremental/live-sessions/{sid}/predictions/{prediction_id}',
+            '/api/incremental/live-sessions/{sid}/retractions','/api/incremental/live-sessions/{sid}/snapshots/{snapshot_id}'})
+            for name in ('joint-prediction.js','joint-prediction.css','mixed-workspace.js','mixed-workspace.css','track-connections.js'):
+                self.assertEqual(api.get('/assets/'+name).status_code,200)
             self.assertEqual(api.get('/assets/config.py').status_code,404)
 
     def test_paths_remain_compatible_with_existing_runtime_data(self):

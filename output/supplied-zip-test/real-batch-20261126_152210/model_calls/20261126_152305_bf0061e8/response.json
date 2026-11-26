@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000071\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"当前组观测 O000139 (t=100.0, hull) 与 O000142 (t=100.0, tow) 的方位角分别约为 104.79° 和 101.74°，强度约为 0.2438。这与快照中目标 B000002 的历史轨迹特征高度一致：F003 (hull) 在 t=97.0 时方位为 104.78°、强度 0.2438；F004 (tow) 在 t=97.0 时方位为 101.76°、强度 0.2438。两组数据在时间序列上连续（97.0 -> 100.0），且物理属性（强度级）及双阵几何差值稳定匹配。相比之下，B000001 位于约 175°+ 区域且强度较低 (~0.17)，B000003 位于约 147°+ 区域且强度较高 (~0.28)，均不符合本组特征。因此判定该组归属于已有轨迹 B000002 并向末尾接续。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_d6fb0983-6168-4ce8-84e6-fb7642639f9b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 336,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007256"
+  }
+}

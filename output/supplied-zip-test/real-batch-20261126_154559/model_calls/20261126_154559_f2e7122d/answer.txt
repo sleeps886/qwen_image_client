@@ -1,0 +1,1 @@
+{"snapshot_version":0,"unit_id":"U000010","target_ref":"new","reason":"首单元无历史轨迹，且存在双阵配对镜像候选导致几何歧义，无法排除多解风险，暂建为新目标。"}

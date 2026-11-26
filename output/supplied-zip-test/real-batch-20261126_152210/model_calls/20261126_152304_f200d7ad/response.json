@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000054\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该单元包含两个阵列在t=81.0的同步观测，其方位角（Hull约147.9°，Tow约146.5°）、强度（0.289）及误差参数与目标B000003的历史轨迹特征完全一致。时间上位于B000003最后已知点（t=72.0）之后，且方位趋势符合该目标的运动连续性，故判定为该已有轨迹的后续接续。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_98c0b7ca-5971-41a4-94b0-07856aeac3d9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 162,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049436"
+  }
+}

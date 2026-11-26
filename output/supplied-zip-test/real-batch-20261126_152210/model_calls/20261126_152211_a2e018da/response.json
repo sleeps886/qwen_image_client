@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000034\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该单元与早期时间窗内的其他高相似度轨迹（如 U000001-U000004）在方位角演化趋势上高度一致，且均属于同一类弱信号持续源；但其在 t=64.0 时刻的位置候选明显偏离此前已观测到的空间分布连续性（x≈3533, y≈-1225），无法合理归入已有目标轨迹的任意一段。此外，当前 snapshot.targets 为空，无历史归属依据支持合并至任何已知 ID。因此判定为新增独立目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_75833701-5086-4380-97a7-3ada4d90a1ab",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 165,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005184"
+  }
+}

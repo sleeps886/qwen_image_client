@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict');
+const {groupDetail}=require('../point-sampling.js');
+const h={candidate_id:'h',t:139,platform_id:'A',array:'hull',bearing_deg:104,strength:.24,quality:'ideal',sigma_deg:5,meta:{a:1,b:[2]},only_hull:null};
+const t={candidate_id:'t',t:139,platform_id:'A',array:'tow',bearing_deg:101,strength:.24,quality:'ideal',sigma_deg:2,meta:{b:[2],a:1}};
+const before=JSON.stringify([h,t]),result=groupDetail([h,t]);
+assert.equal(result.t,139);assert.equal(result.strength,.24);assert.deepEqual(result.meta,h.meta);
+assert.equal(result.hull.bearing_deg,104);assert.equal(result.tow.bearing_deg,101);
+assert.ok(Object.hasOwn(result.hull,'only_hull'));assert.ok(!Object.hasOwn(result.tow,'only_hull'));
+assert.ok(!Object.hasOwn(result.hull,'t'));assert.ok(!Object.hasOwn(result.tow,'platform_id'));
+const {hull,tow,...common}=result;
+assert.deepEqual({...common,...hull,array:'hull'},h);assert.deepEqual({...common,...tow,array:'tow'},t);
+assert.deepEqual(groupDetail([t,h]),result);assert.equal(JSON.stringify([h,t]),before);
+assert.deepEqual(groupDetail([h]),h);
+const different=groupDetail([h,{...t,quality:'unknown',strength:null}]);assert.ok(!Object.hasOwn(different,'quality'));assert.equal(different.tow.strength,null);
+console.log('PASS: single object, identical fields hoisted, array differences preserved, lossless reconstruction, no input mutation');

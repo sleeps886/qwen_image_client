@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000007\",\n  \"target_ref\": \"new\",\n  \"reason\": \"首个有效观测(t=90)，无历史轨迹可关联，作为新目标初始参考点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_e0044e62-dac9-46f0-b7cc-c0ff1442f0f8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 70,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005178"
+  }
+}

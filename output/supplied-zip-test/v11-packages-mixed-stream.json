@@ -1,0 +1,21 @@
+{
+  "files": 3,
+  "raw_points": 966,
+  "selected_units": 20,
+  "selected_observations": 40,
+  "validated_steps": 20,
+  "fake_model_calls": 19,
+  "real_model_calls": 0,
+  "free_initializations": 1,
+  "future_leaks": 0,
+  "raw_facts_unchanged": true,
+  "confirmed_projection_unchanged_before_review": true,
+  "model_accuracy_evaluated": false,
+  "truth_read": false,
+  "scenario": "mixed-stream",
+  "mixed_stream_quarantined": 2,
+  "continuation_policy": "tentative-local-v1",
+  "revision_count": 20,
+  "local_review_steps": 16,
+  "note": "Scripted fake replies test execution and conservative validation only, not model identity accuracy."
+}

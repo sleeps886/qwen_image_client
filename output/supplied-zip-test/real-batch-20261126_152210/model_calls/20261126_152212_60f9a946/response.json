@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000048\",\n\"target_ref\": \"new\",\n\"reason\": \"本批次无历史轨迹（snapshot.targets为空），故无法归入已有目标。对U000048进行运动学一致性检验：该单元位于t=72.0s，方位角约146.25°（hull）/144.78°（tow）。观察其前后时刻同强度特征的目标序列：前序在t=68.0s时，存在两个独立信号源，分别对应方位角~173.67°和~104.68°；后序在t=74.0s时，也存在两个独立信号源，分别对应方位角~174.84°和~104.70°。然而，U000048的方位角（~145°）与上述两条既有航迹均不连续，且处于两者之间，表明这是一个新出现的第三类目标或原有目标发生了不可预测的剧烈机动。鉴于平台静止，且观测数据中出现了三个明显的分离方位簇（~174°, ~104°, ~145°），而前两簇构成了连续的时间序列，~145°簇仅在特定时间段出现或与主序列断裂，判定为新增目标更为合理。因此建议建立新轨迹以容纳此观测点及其所属的独立运动模式。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_071e1fa4-0e17-4a10-9fe6-0a8ed9856b27",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 326,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00562"
+  }
+}

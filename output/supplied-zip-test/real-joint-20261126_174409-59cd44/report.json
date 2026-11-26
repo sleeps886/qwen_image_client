@@ -1,0 +1,50 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_inference": false,
+  "assigned_groups": 50,
+  "target_hypotheses": 2,
+  "confusion": {
+    "None": {
+      "I01": 15,
+      "I03": 15
+    },
+    "T001": {
+      "I02": 18
+    },
+    "T002": {
+      "I01": 2
+    }
+  },
+  "unassigned_groups": 30,
+  "groups_with_selected_position": 20,
+  "selected_position_rmse_m": 2212.4675984519636,
+  "nearest_candidate_rmse_m_evaluation_only": 4.883464538163465,
+  "cross_source_edges": 0,
+  "edge_count": 18,
+  "max_apparent_speed_mps": 13.167325239264466,
+  "mirror_resolved_by_evidence": false,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "status": "budget_blocked",
+  "model": "qwen3.8-omni-flash",
+  "real_model_requests": 108,
+  "extra_retries": 6,
+  "snapshots": 1,
+  "elapsed_seconds": 69.01,
+  "protocol": "joint-spatial-experiment-v1",
+  "runtime_workbench_changed": false,
+  "partial_advisory_experiment": true,
+  "feature_fields_used": [
+    "t",
+    "platform_id",
+    "hull_deg",
+    "tow_deg",
+    "conditional_position_candidates"
+  ],
+  "mirror_invariant_rmse_m_evaluation_only": 647.9561784650489,
+  "last_validation_error": "工作接续超过实验100m/s上限：U000088->U000089=240.6m/s；复核归属或分支",
+  "attempted_groups": 100,
+  "valid_worker_replies": 90,
+  "invalid_worker_attempts": 16,
+  "timing_note": "elapsed_seconds covers resumed phase; total request count includes original phase"
+}

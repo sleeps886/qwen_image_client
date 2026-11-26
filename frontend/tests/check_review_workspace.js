@@ -1,0 +1,66 @@
+// Browser integration: real offline review endpoints, no model gateway calls.
+async (page) => {
+  const assert=(value,message)=>{if(!value)throw new Error(message);};
+  let modelPosts=0;const errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.route('**/api/incremental/sessions/*/step*',async route=>{modelPosts++;await route.abort();});
+  await page.reload();
+  await page.setViewportSize({width:1440,height:960});
+  await page.waitForFunction(()=>document.getElementById('backendReadiness').dataset.state==='ready');
+  await page.getByRole('button',{name:'高级设置',exact:true}).click();
+  await page.locator('#predictionDebug').evaluate(el=>el.open=true);
+  await page.locator('#datasetFile').setInputFiles('work/shared-scene-fixture.json');
+  await page.waitForFunction(()=>document.querySelector('#targetTrackSelect option[value="G1"]'));
+  await page.getByRole('button',{name:'高级设置',exact:true}).click();
+  await page.locator('#targetTrackSelect').selectOption('G1');
+  await page.locator('#allPointsPreview').click();
+  await page.waitForFunction(()=>!document.getElementById('trajectoryReview').hidden);
+  await page.waitForFunction(()=>document.querySelector('#reviewTrajectoryPreview #sharedTrajectoryScene svg'));
+  const messages=await page.locator('#chatMessages .prediction-message').count();
+  assert(messages>0,'review removed message history');
+  assert(await page.locator('.prediction-chat #chatStage > #trajectoryReview').count()===1,'review is outside shared chat stage');
+  assert(!await page.locator('#chatMessages').isVisible(),'both views visible');
+  assert(!await page.locator('#chatComposer').isVisible(),'composer must yield space to review');
+  await page.locator('#reviewReason').fill('保留这条反馈，切换不丢失');
+  await page.locator('#showChatMessages').click();
+  assert(await page.locator('#chatMessages').isVisible(),'messages cannot replace review');
+  assert(!await page.locator('#trajectoryReview').isVisible(),'review not replaced');
+  assert(await page.locator('#chatMessages #sharedTrajectoryScene').count()===1,'shared chart did not return to messages');
+  assert(await page.locator('#chatSend').isDisabled(),'switching view must not bypass review gate');
+  await page.locator('#showChatMessages').press('ArrowRight');
+  assert(await page.locator('#trajectoryReview').isVisible(),'keyboard tab navigation broken');
+  assert(await page.locator('#reviewReason').inputValue()==='保留这条反馈，切换不丢失','tab switch lost review draft');
+  assert(await page.locator('#chatMessages .prediction-message').count()===messages,'tab switch altered history');
+  assert(await page.locator('#sharedTrajectoryScene').count()===1,'chart duplicated');
+  const fits=()=>page.evaluate(()=>({page:document.documentElement.scrollHeight<=innerHeight+1,width:document.documentElement.scrollWidth<=innerWidth,
+    stage:document.getElementById('chatStage').getBoundingClientRect().height}));
+  assert((await fits()).page,'desktop page overflow');
+  await page.locator('.review-content').evaluate(el=>el.scrollTop=0);
+  await page.screenshot({path:'work/review-workspace-desktop.png'});
+  await page.reload();
+  await page.waitForFunction(()=>!document.getElementById('trajectoryReview').hidden);
+  await page.waitForFunction(()=>document.querySelector('#reviewTrajectoryPreview svg'));
+  await page.setViewportSize({width:390,height:844});
+  const mobile=await fits();assert(mobile.page&&mobile.width&&mobile.stage>300,'mobile review overflow');
+  const buttons=await page.locator('.review-actions').boundingBox();
+  assert(buttons&&buttons.y+buttons.height<=844,'mobile review actions must stay in viewport');
+  await page.screenshot({path:'work/review-workspace-mobile.png'});
+  await page.locator('#rejectTrajectory').click();
+  assert(await page.locator('#reviewFeedback').isVisible(),'empty reason error hidden in message view');
+  assert(await page.locator('#trajectoryReview').isVisible(),'invalid rejection left review');
+  await page.locator('#reviewReason').fill('免费离线验收：重新选点');
+  await page.locator('#rejectTrajectory').click();
+  await page.waitForFunction(()=>document.getElementById('trajectoryReview').hidden);
+  assert(await page.locator('#chatMessages').isVisible(),'rejection did not return to messages');
+  assert(!await page.locator('#chatViewTabs').isVisible(),'stale pending review tabs after rejection');
+  await page.setViewportSize({width:1440,height:960});
+  await page.locator('#allPointsPreview').click();
+  await page.waitForFunction(()=>!document.getElementById('trajectoryReview').hidden);
+  await page.locator('#adoptTrajectory').click();
+  await page.waitForFunction(()=>document.getElementById('trajectoryReview').hidden);
+  assert(await page.locator('#chatComposer').isVisible(),'adoption did not restore composer');
+  assert(modelPosts===0,'review flow attempted model calls');
+  assert(errors.length===0,errors.join(';'));
+  return {sharedContainer:true,tabsPreserveHistoryAndDraft:true,keyboard:true,refreshRestoresReview:true,
+    adoption:true,rejection:true,mobile,modelPosts,errors};
+}

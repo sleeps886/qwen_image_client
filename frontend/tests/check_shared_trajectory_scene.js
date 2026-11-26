@@ -1,0 +1,46 @@
+// Two synthetic targets, same navigation frame. Delayed fake gateway only.
+async (page) => {
+  const origin=new URL(page.url()).origin,marker=await page.request.get(origin+'/api/test-fake-gateway');
+  if(!marker.ok()||!(await marker.json()).fake_gateway)throw new Error('Fake gateway required');
+  const assert=(value,message)=>{if(!value)throw new Error(message);};let calls=0;
+  page.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.endsWith('/step'))calls++;});
+  await page.setViewportSize({width:1600,height:1100});await page.goto(origin+'/incremental?empty=1');
+  await page.waitForFunction(()=>!document.getElementById('example').disabled);
+  await page.locator('#predictionAdvanced').evaluate(el=>el.hidden=false);await page.locator('#predictionDebug').evaluate(el=>el.open=true);
+  await page.locator('#datasetFile').setInputFiles('work/shared-scene-fixture.json');await page.locator('#predictionAdvanced').evaluate(el=>el.hidden=true);
+  await page.locator('#targetTrackSelect').selectOption('G1');await page.locator('#chatConsent').check();await page.locator('#chatSend').click();
+  await page.waitForFunction(()=>document.getElementById('chatState').textContent==='单次预测已完成'&&document.querySelector('#sharedTrajectoryScene [data-scene-target="G1"]'));
+  await page.evaluate(()=>globalThis.testSceneElement=document.getElementById('sharedTrajectoryScene'));
+  const firstLine=page.locator('#sharedTrajectoryScene polyline[data-spatial-kind="observed"][data-scene-target="G1"]').first();
+  const length1=(await firstLine.getAttribute('points')).split(' ').length,color1=await firstLine.getAttribute('stroke');
+  await page.locator('#chatSend').click();await page.locator('#chatSend').click();
+  await page.waitForFunction(()=>document.querySelectorAll('#chatMessages .assistant').length===2&&document.getElementById('chatState').textContent==='单次预测已完成'&&document.querySelector('#sharedTrajectoryScene [data-scene-legend="G1"]')?.textContent.includes('30秒'));
+  assert((await firstLine.getAttribute('points')).split(' ').length>length1,'next time point did not extend the same target line');
+  assert(await page.evaluate(()=>document.getElementById('sharedTrajectoryScene')===globalThis.testSceneElement),'new time point created a different scene');
+  await page.locator('#targetTrackSelect').selectOption('G2');
+  await page.waitForFunction(()=>!document.getElementById('targetTrackSelect').disabled&&document.querySelector('#sharedTrajectoryScene [data-scene-legend="G1"]'));
+  assert(calls===2,'target selection invoked model');
+  await page.locator('#chatConsent').check();await page.locator('#chatSend').click();
+  await page.waitForFunction(()=>document.getElementById('chatState').textContent==='单次预测已完成'&&document.querySelectorAll('#sharedTrajectoryScene [data-scene-legend]').length===2);
+  assert(await page.locator('#sharedTrajectoryScene').count()===1,'multiple main scenes created');
+  await page.locator('#sharedTrajectoryScene [data-scene-view="bearing"]').click();
+  assert(await page.locator('#sharedTrajectoryScene [data-platform-marker]:visible').count()===1,'platform marker missing or duplicated');
+  assert(await page.locator('#sharedTrajectoryScene [data-scene-pane="bearing"] [data-bearing-target="G1"]:visible').count()>0,'first target absent from the same bearing chart');
+  assert(await page.locator('#sharedTrajectoryScene [data-scene-pane="bearing"] [data-bearing-target="G2"]:visible').count()>0,'second target absent from the same bearing chart');
+  assert(await firstLine.getAttribute('stroke')===color1,'target color changed after another target was added');
+  const color2=await page.locator('#sharedTrajectoryScene polyline[data-spatial-kind="observed"][data-scene-target="G2"]').first().getAttribute('stroke');
+  assert(color2!==color1,'targets do not have different colors');
+  const sid=await page.locator('#sessionId').inputValue(),state=await(await page.request.get(origin+'/api/incremental/sessions/'+sid)).json();
+  assert(!JSON.stringify(state.rounds[0].input).includes('G1'),'other target overlay leaked into current model input');
+  await page.locator('.bearing-evidence').evaluate(el=>el.open=true);
+  assert(await page.locator('.bearing-evidence [data-platform-time]').count()>=3,'time-bearing basis lacks platform point markers');
+  await page.locator('.bearing-evidence').evaluate(el=>el.open=false);
+  await page.locator('#sharedTrajectoryScene [data-scene-view="space"]').click();
+  assert(await page.locator('#sharedTrajectoryScene [data-platform-marker]:visible').count()===1,'platform marker missing in spatial view');
+  await page.locator('#sharedTrajectoryScene [data-scene-view="bearing"]').click();
+  await page.reload();await page.waitForFunction(()=>document.querySelectorAll('#sharedTrajectoryScene [data-scene-legend]').length===2);
+  assert(calls===3,'refresh caused another prediction');
+  await page.locator('#chatMessages').evaluate(el=>{el.style.scrollBehavior='auto';const card=document.getElementById('sharedTrajectoryScene');el.scrollTop+=card.getBoundingClientRect().top-el.getBoundingClientRect().top;});
+  await page.screenshot({path:'work/shared-trajectory-scene.png'});
+  return {sameSceneForNewTimes:true,multipleTargets:2,stableColors:true,platformMarker:true,platformTimeMarkers:true,noCrossTargetModelInput:true,refreshRestored:true,modelPosts:3,realModelCalls:0};
+}

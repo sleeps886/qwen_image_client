@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000012\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无已有轨迹（targets为空）。该观测组具有独特的方位角特征：Hull阵约105.0°，Tow阵约101.4°，两者存在显著基线差且数值稳定；其强度（0.2437...）与Sigma参数组合在物理上自洽。由于缺乏先验目标进行比对，依据协议将其初始化为一个新目标的起始点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_acec5423-9f04-4812-b609-b71eed0b2629",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 134,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.02728"
+  }
+}

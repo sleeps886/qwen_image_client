@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000068\",\"target_ref\":\"B000002\",\"reason\":\"该单元观测时间为t=99.0，方位角hull约104.79°、tow约101.74°。对比历史轨迹：目标B000001的方位在t=74后约为175°且持续增大；目标B000003从t=54起出现，方位由约143°缓慢增至t=72时的146°左右。而目标B000002自t=26起始，其关联碎片（如F003/F004）显示方位稳定在hull 104.5°-104.7°区间及tow 102.0°-101.9°区间。当前单元的强相关特征（特定双阵方位组合、随时间微小漂移趋势）与B000002的历史模式高度一致，且符合该时间段内的插值逻辑，故判定归属于B000002。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_81a16dc0-6580-42af-b5ca-3233e3724c90",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 251,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007026"
+  }
+}

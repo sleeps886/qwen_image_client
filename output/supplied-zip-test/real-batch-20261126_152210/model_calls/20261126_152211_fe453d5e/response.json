@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000021\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无历史轨迹。在联合观测背景下，本批次存在三个明显的方位聚类：约162-174度、约102-104度和约141-146度（后者自t=54起出现）。U000021位于第二组（~104.6度），该组时间跨度长且连续。虽然无法直接匹配已有目标ID，但根据多视角几何解算出的位置候选显示，U000021的坐标随时间在(1518m, 1754m)附近平滑移动，具有稳定的运动学特征，与强度相近的其他两组明显区分。鉴于其属于独立且连续的航迹簇，判定为新建一个目标以跟踪此特定方位序列的运动状态。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_0edb9db0-6c00-4ac3-af87-f60f12067a84",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 216,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005322"
+  }
+}

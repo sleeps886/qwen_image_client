@@ -1,0 +1,385 @@
+{
+  "snapshot_version": 1,
+  "assignments": [
+    {
+      "unit_id": "U000051",
+      "target_ref": null,
+      "branch_ref": null,
+      "reason_code": "insufficient"
+    },
+    {
+      "unit_id": "U000052",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000053",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000054",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000055",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "new_target"
+    },
+    {
+      "unit_id": "U000056",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000057",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000058",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000059",
+      "target_ref": null,
+      "branch_ref": null,
+      "reason_code": "insufficient"
+    },
+    {
+      "unit_id": "U000060",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000061",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000062",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000063",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000064",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000065",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000066",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000067",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "new_target"
+    },
+    {
+      "unit_id": "U000068",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000069",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000070",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000071",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000072",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000073",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000074",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000075",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000076",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000077",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000078",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000079",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000080",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000081",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000082",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000083",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000084",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "new_target"
+    },
+    {
+      "unit_id": "U000085",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000086",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000087",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000088",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000089",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000090",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000091",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000092",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000093",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000094",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000095",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000096",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000097",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000098",
+      "target_ref": "T002",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000099",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    },
+    {
+      "unit_id": "U000100",
+      "target_ref": "T001",
+      "branch_ref": "pp",
+      "reason_code": "continuity"
+    }
+  ],
+  "revisions": [
+    {
+      "unit_id": "U000004",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000009",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000010",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000011",
+      "target_ref": "N1",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000018",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000019",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000025",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000026",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000032",
+      "target_ref": "N2",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000043",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000044",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000049",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    },
+    {
+      "unit_id": "U000050",
+      "target_ref": "N3",
+      "branch_ref": "pp",
+      "reason_code": "insert"
+    }
+  ]
+}

@@ -4,6 +4,60 @@ let images=[],urls=[],busy=false;
 let currentResultId='',currentTrajectoryStatus='',referenceUrl='',comparing=false;
 let activeMode='images',promptDrafts={images:'',data:''};
 let defaultImagePrompt='';
+let workspaceReady=false,workspaceTouched=false,workspaceTimer=null,retainedResult=null,retainedTransfer=null;
+const hasWorkspaceCache=()=>typeof WorkspaceCache!=='undefined';
+function cacheWarning(){ $('workspaceCacheStatus').textContent='浏览器本地保存失败或空间不足；当前数据仍可使用，但刷新可能丢失，请下载重要结果。'; }
+function saveWorkspaceFiles(){
+  if(!workspaceReady||!hasWorkspaceCache())return;
+  WorkspaceCache.set('main-files',{images:[...images],platform:$('platform').files[0]||null}).catch(cacheWarning);
+}
+function saveWorkspace(){
+  if(!workspaceReady||!hasWorkspaceCache())return;
+  promptDrafts[activeMode]=$('prompt').value;
+  const snapshot={version:1,mode:$('inputMode').value,promptDrafts:{...promptDrafts},result:retainedResult,
+    transfer:retainedTransfer,nodes:[...executionNodes].map(([node,event])=>({node,...event})),targetCount:agentResultMetadata?.target_count,
+    panelState:$('resultPanel').dataset.state,wasRunning:busy,
+    answer:$('answer').textContent.slice(0,4000000),reasoning:$('providerReasoning').textContent.slice(0,1000000),
+    logs:$('logOutput').textContent.slice(-100000),status:$('status').textContent};
+  WorkspaceCache.set('main-state',snapshot).catch(cacheWarning);
+}
+function scheduleWorkspaceSave(){
+  if(!workspaceReady||!hasWorkspaceCache())return;
+  clearTimeout(workspaceTimer);workspaceTimer=setTimeout(saveWorkspace,250);
+}
+async function restoreWorkspace(){
+  if(!hasWorkspaceCache())return;
+  try{
+    const [saved,files]=await Promise.all([WorkspaceCache.get('main-state'),WorkspaceCache.get('main-files')]);
+    if(!workspaceTouched){
+      if(files?.images?.length)selectImages(files.images);
+      if(files?.platform){const transfer=new DataTransfer();transfer.items.add(files.platform);$('platform').files=transfer.files;}
+      if(saved?.version===1){
+        $('inputMode').value=saved.mode==='data'?'data':'images';updateInputMode();
+        promptDrafts=saved.promptDrafts||promptDrafts;$('prompt').value=promptDrafts[activeMode]||'';
+        syncPlatformRemoval();
+        if(saved.result){
+          retainedResult=saved.result;
+          if(saved.result.dry_run){
+            showEvidence(saved.result);showExecution(saved.result.node_events);showTargetCount(saved.result.target_count);$('resultPanel').dataset.state='preflight';
+            $('bodySummary').textContent='本地预检结果（已恢复）';$('downloads').replaceChildren();
+            for(const [name,url] of Object.entries(saved.result.downloads||{})){const link=document.createElement('a');link.href=url;link.textContent='下载 '+name;$('downloads').append(link);}
+          }
+          else showModelResult(saved.result);
+        }
+        if(saved.nodes?.length)showExecution(saved.nodes.map(event=>event.status==='running'?{...event,status:'stopped',summary:'刷新前的运行记录；未自动续跑，不保证上游已停止'}:event));
+        if(!saved.result || saved.result.dry_run){$('answer').textContent=saved.answer||'';if(saved.transfer)showGaussianTransfer(saved.transfer.data,saved.transfer.allowSavedAttempt);}
+        $('providerReasoning').textContent=saved.reasoning||'';$('providerReasoningSection').hidden=!saved.reasoning;
+        $('logOutput').textContent=saved.logs||'';
+        if(saved.wasRunning || saved.panelState==='running'){$('resultPanel').dataset.state='error';status('已恢复刷新前的数据和未完成记录；未自动续跑。上游可能仍在处理或计费，请先核对，不要直接重发。','stopped');}
+        else status('已恢复本地保存：'+(saved.status||'最近工作区')+'；未调用模型。',saved.panelState==='error'?'error':'');
+        $('workspaceCacheStatus').textContent='已恢复图片、参数、提示词和最近记录。费用确认需重新勾选；未自动调用模型。';
+      }
+      $('consent').checked=false;
+    }
+  }catch{cacheWarning();}
+  finally{workspaceReady=true;if(workspaceTouched){saveWorkspaceFiles();saveWorkspace();}}
+}
 const nodeDefinitions=[['knowledge_retrieval','知识规则检索'],['pixel_candidates','绘图区与候选提取'],['tracklet_linking','亮带连续性分析'],['count_hypothesis','数量线索判定'],['association_context','关联上下文组装'],['model_association','模型清单与双阵关联'],['pair_validation','配对归属与同步校验'],['count_audit','数量与覆盖复核'],['identity_reconciliation','跨时段身份与串线复核'],['spatial_localization','双阵空间定位'],['continuous_trajectory_estimation','连续轨迹估计'],['reprojection_quality_check','重投影质检'],['result_summary','数量与定位汇总'],['render','空间候选绘图']];
 let executionNodes=new Map();
 const inverseNodeDefinitions=[['inverse_input','反演输入与标定'],['inverse_field','完整亮带剖面测量'],['inverse_paths','展开角路径与断段检测'],['inverse_gap','断段延续性复核'],['inverse_association','双阵轨迹级关联候选'],['inverse_fit','批量运动模型反演'],['inverse_refine','全局归属与有界迭代'],['inverse_review','可选模型假设复核'],['inverse_quality','正向BTR与可辨识性检查'],['inverse_render','空间候选绘图与汇总']];
@@ -39,7 +93,7 @@ function drawNodes(){
 }
 function receiveNode(event){
   if(![...nodeDefinitions,...fusionNodeDefinitions].some(([id])=>id===event.node)||!['running','completed','failed','skipped','stopped'].includes(event.status))return;
-  executionNodes.set(event.node,{status:event.status,elapsed_ms:typeof event.elapsed_ms==='number'?event.elapsed_ms:undefined,summary:typeof event.summary==='string'?event.summary.slice(0,300):''});drawNodes();
+  executionNodes.set(event.node,{status:event.status,elapsed_ms:typeof event.elapsed_ms==='number'?event.elapsed_ms:undefined,summary:typeof event.summary==='string'?event.summary.slice(0,300):''});drawNodes();scheduleWorkspaceSave();
 }
 function showExecution(events){executionNodes=new Map();for(const event of events||[])receiveNode(event);drawNodes();}
 function showTargetCount(report){
@@ -95,12 +149,13 @@ function autoSelectDataMode(keepConsent=false){
   if(keepConsent)$('consent').checked=consent;
   status(targetData?'已检测到目标数据文件，自动切换为单文件绘图；之前选择的图片不会发送。':'已检测到仅选择数据文件，自动切换为单文件绘图，无需上传图片。');
 }
-function status(text,kind=''){ $('status').textContent=text;$('badge').textContent=kind==='ok'?'已完成':kind==='error'?'需要处理':kind==='warning'?'正文已返回':kind==='stopped'?'已停止':busy?'处理中':'等待输入';$('badge').className='badge '+kind; }
+function status(text,kind=''){ $('status').textContent=text;$('badge').textContent=kind==='ok'?'已完成':kind==='error'?'需要处理':kind==='warning'?'正文已返回':kind==='stopped'?'已停止':busy?'处理中':'等待输入';$('badge').className='badge '+kind;scheduleWorkspaceSave(); }
 let requestLogId='',logCursor=0,logTimer=null;
 function logLine(text){
   const output=$('logOutput');output.textContent+=(output.textContent?'\n':'')+text;
   if(output.textContent.length>80000)output.textContent=output.textContent.slice(-60000);
   output.scrollTop=output.scrollHeight;
+  scheduleWorkspaceSave();
 }
 async function pollLogs(id){
   if(id!==requestLogId)return;
@@ -175,6 +230,9 @@ function renderUsage(usage){
   }
 }
 function resetResultPresentation(){
+  retainedResult=null;retainedTransfer=null;
+  $('gaussianTransfer').hidden=true;
+  $('sendGaussianToPrediction').removeAttribute('href');$('downloadGaussianBatch').removeAttribute('href');
   agentResultMetadata=null;
   executionNodes=new Map();drawNodes();showTargetCount(null);
   $('evidenceSection').hidden=true;$('evidenceImages').replaceChildren();
@@ -188,7 +246,24 @@ function resetResultPresentation(){
   $('debugDownloads').replaceChildren();$('usageRaw').textContent='';$('usageDetails').hidden=true;
   updateAgentOverview();
 }
+function showGaussianTransfer(data,allowSavedAttempt=false){
+  retainedTransfer={data:{result_id:data.result_id,downloads:data.downloads},allowSavedAttempt};
+  const files=data.downloads||{};
+  const available=!!data.result_id && /^[0-9]{8}_[0-9]{6}_[0-9a-f]{8}$/.test(data.result_id) &&
+    (allowSavedAttempt || !!files['inverse_fields.json'] || !!files['measurement_report.json']);
+  $('gaussianTransfer').hidden=!available;
+  if(available){
+    $('sendGaussianToPrediction').href='/incremental?source_result='+encodeURIComponent(data.result_id);
+    $('downloadGaussianBatch').href='/api/incremental/batches/'+encodeURIComponent(data.result_id);
+    $('predictionNav').href='/incremental';
+    $('gaussianTransferStatus').textContent='本批来源：'+data.result_id+'。点击发送后，以预测页实际接收回执为准；不调用模型。';
+  }else{
+    $('sendGaussianToPrediction').removeAttribute('href');$('downloadGaussianBatch').removeAttribute('href');
+    $('predictionNav').href='/incremental';
+  }
+}
 function showEvidence(data){
+  showGaussianTransfer(data);
   $('evidenceImages').replaceChildren();
   const evidenceFiles=Object.entries(data.downloads||{}).filter(([name])=>/^selected_\d\.png$/.test(name));
   const displayEvidence=[...(evidenceFiles.length?evidenceFiles:Object.entries(data.downloads||{}).filter(([name])=>/^evidence_\d\.png$/.test(name))),...Object.entries(data.downloads||{}).filter(([name])=>/^(reprojection|gaussian|inverse_overlay|expected_btr)_\d\.png$/.test(name))];
@@ -231,6 +306,7 @@ $('evidenceDialog').addEventListener('keydown',event=>{
   else if(event.key==='0'){event.preventDefault();fitEvidenceImage();}
 });
 function showModelResult(data,{fromHistory=false}={}){
+  retainedResult=data;
   agentResultMetadata=data;
   showExecution(data.node_events);showTargetCount(data.target_count);
   showEvidence(data);
@@ -383,6 +459,7 @@ async function readModelStream(response){
         $('bodyOutputHint').textContent='当前只有推理文本，尚未返回可用于绘图的正文JSON。';
       }
     }else if(event.event==='error'){
+      if(phase==='local_inverse' && event.result_id)showGaussianTransfer(event,true);
       throw new Error(event.message+(phase==='local_inverse'?' 本地诊断保留，未自动重试。':' 已显示文本可能不完整，未自动重试。'));
     }else if(event.event==='result'){
       completed=true;showModelResult(event.data);logLine('[流式] 已接收最终结果并完成本地处理。');
@@ -440,7 +517,7 @@ async function submit(dryRun){
       if(response.status===404 && !dryRun)message='当前后端尚未加载流式接口，请停止旧服务并重新启动。';
       throw new Error(message);
     }
-    if(dryRun){const data=await response.json();showEvidence(data);showExecution(data.node_events);showTargetCount(data.target_count);status(data.message,'ok');$('answer').textContent=JSON.stringify(data.input_data||data.images,null,2);$('resultPanel').dataset.state='preflight';updateAgentOverview();$('bodySummary').textContent='本地预检结果';$('logPhase').textContent='预检完成';for(const [name,url] of Object.entries(data.downloads||{})){const a=document.createElement('a');a.href=url;a.textContent='下载 '+name;$('downloads').append(a);}}
+    if(dryRun){const data=await response.json();retainedResult=data;showEvidence(data);showExecution(data.node_events);showTargetCount(data.target_count);status(data.message,'ok');$('answer').textContent=JSON.stringify(data.input_data||data.images,null,2);$('resultPanel').dataset.state='preflight';updateAgentOverview();$('bodySummary').textContent='本地预检结果';$('logPhase').textContent='预检完成';for(const [name,url] of Object.entries(data.downloads||{})){const a=document.createElement('a');a.href=url;a.textContent='下载 '+name;$('downloads').append(a);}}
     else if(!(response.headers.get('content-type')||'').includes('text/event-stream'))throw new Error('本地服务未返回SSE，请确认已重启新版后端。');
     else await readModelStream(response);
   }catch(error){
@@ -482,7 +559,7 @@ fetch('/api/health').then(r=>{if(!r.ok)throw new Error('服务不可用');return
   $('keyState').textContent=data.key_configured?'后端配置已就绪 · '+apiLabel:'请配置后端 .env 并重启';
   logLine('[启动检查] 当前接口格式：'+apiLabel+'。修改.env后必须重启后端，刷新页面不会重载进程配置。');
   logLine('[启动检查] 本地服务在线；后端密钥'+(data.key_configured?'已配置。':'未配置，请编辑.env后重启。'));
-}).catch(()=>{logLine('[启动检查] 无法连接本地服务。');status('服务连接失败，请重启本地FastAPI服务。','error');});
+}).catch(()=>{logLine('[启动检查] 无法连接本地服务。');status('服务连接失败，请重启本地FastAPI服务。','error');}).finally(restoreWorkspace);
 
 function resetComparison(){
   $('similarityScore').textContent='—';$('comparisonDetails').hidden=true;
@@ -560,3 +637,29 @@ $('loadHistory').addEventListener('click',async()=>{
 refreshHistory();
 
 updatePipeline();
+for(const id of ['inputMode','prompt','platform','files']){
+  $(id).addEventListener(id==='prompt'?'input':'change',()=>{workspaceTouched=true;saveWorkspace();if(id==='platform'||id==='files')saveWorkspaceFiles();});
+}
+$('dropZone').addEventListener('drop',()=>{workspaceTouched=true;saveWorkspaceFiles();saveWorkspace();});
+$('removePlatform').addEventListener('click',()=>{workspaceTouched=true;saveWorkspaceFiles();saveWorkspace();});
+$('clearWorkspaceCache').addEventListener('click',async()=>{
+  if(busy||!hasWorkspaceCache())return;
+  workspaceReady=false;clearTimeout(workspaceTimer);
+  try{await WorkspaceCache.remove('main-state');await WorkspaceCache.remove('main-files');
+    location.reload();
+  }catch{workspaceReady=true;cacheWarning();}
+});
+if(typeof window!=='undefined')window.addEventListener('pagehide',()=>{clearTimeout(workspaceTimer);saveWorkspace();});
+$('sendGaussianToPrediction').addEventListener('click',()=>{
+  $('gaussianTransferStatus').textContent='正在打开预测页接收本批数据，等待实际接收回执……';
+});
+if(typeof window!=='undefined')window.addEventListener('storage',event=>{
+  if(event.key!=='gaussian-transfer-receipt'||!event.newValue)return;
+  try{
+    const receipt=JSON.parse(event.newValue);
+    if(receipt.resultId!==retainedTransfer?.data?.result_id)return;
+    if(receipt.kind==='success'&&Number.isInteger(receipt.count)&&receipt.count>0)
+      $('gaussianTransferStatus').textContent='✓ 传递成功：预测页面已接收并校验 '+receipt.count+' 个高斯点位，未调用模型。';
+    else if(receipt.kind==='error')$('gaussianTransferStatus').textContent='✕ 传递失败：'+String(receipt.message||'接收校验未通过')+'。请在预测页检查并重试。';
+  }catch{/* Ignore malformed local receipt events. */}
+});

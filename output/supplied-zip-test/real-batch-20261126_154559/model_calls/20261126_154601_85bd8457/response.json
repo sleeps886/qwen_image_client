@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000043\",\"target_ref\":\"new\",\"reason\":\"快照无历史轨迹；该组独立候选无法与既有目标关联，且强度/角度差异大，判定为新目标。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_b9ee90e5-4e27-4e22-a042-acee3f566858",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 52,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00513"
+  }
+}

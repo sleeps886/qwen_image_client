@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000003",
+  "target_ref": "new",
+  "reason": "首点无历史轨迹可续接；同强度组孤立出现且位置候选不连续，不足以归入现有目标。"
+}

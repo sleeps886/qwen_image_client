@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000098\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"该单元观测到的方位角（船体约104.9°，拖曳阵约101.5°）与已确立的目标 B000002 的历史轨迹特征高度一致。回顾 snapshot.tracks 中 F003/F004 (关联至 B000002)，其船体方位在 t=74.0s 时约为 104.70°，拖曳阵方位约为 101.92°。随着时间推移至 t=128.0s，预测方位应略微增大（针对 B000002 的运动趋势），U000098 的实测值符合这一演变规律且处于合理的测量误差范围内。相比之下，目标 B000001 位于 170°+ 区域，目标 B000003 位于 150°+ 区域，均与本单元的 ~104° 方位显著偏离。因此判定为接续已有轨迹 B000002。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_868d1cc5-ae21-446f-9312-0e99e1ef856c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 283,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007112"
+  }
+}

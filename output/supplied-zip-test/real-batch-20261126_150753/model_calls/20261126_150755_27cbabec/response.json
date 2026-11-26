@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000044\",\n\"target_ref\": \"new\",\n\"reason\": \"当前快照中targets列表为空，不存在任何历史轨迹可供关联或插入。该组观测（t=485s）的方位角约为154.9°（hull）和152.8°（tow），强度为0.243756，质量特征与simulated_ideal一致。由于缺乏前置上下文且无匹配目标，根据协议建议将其作为新目标的起始点建立轨迹。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_459e4ae6-e6d3-440e-95c5-fabb4e3c56c9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 137,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004708"
+  }
+}

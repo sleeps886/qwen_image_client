@@ -1,0 +1,277 @@
+[
+  {
+    "file": "btr_target_001 (6).zip",
+    "platform": {
+      "T_MAX": 600,
+      "DT": 1,
+      "B_MIN": 0,
+      "B_MAX": 180,
+      "REF_LAT": 30,
+      "REF_LON": 122,
+      "EARTH_R": 6371000,
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -106.48367852633807,
+            0.0
+          ],
+          "heading_deg": 296.2378738517474
+        }
+      ],
+      "bearing_convention": "relative_heading_folded_0_180",
+      "platform_motion_model": "constant_heading_constant_speed"
+    },
+    "median_parallax_deg": 0.6473126932980477,
+    "measurement_fields": {
+      "t": 13.0,
+      "platform_id": "A",
+      "array": "hull",
+      "bearing_deg": 162.59723844668653,
+      "strength": 0.17889556997238482,
+      "sigma_deg": 5.368947297338742,
+      "quality": "simulation_ideal",
+      "source_kind": "simulation_ideal_bearing"
+    },
+    "windows": [
+      {
+        "start": 0,
+        "status": "rejected_temporal_consistency",
+        "models": []
+      },
+      {
+        "start": 81,
+        "status": "rejected_temporal_consistency",
+        "models": []
+      },
+      {
+        "start": 162,
+        "status": "temporal_supported",
+        "models": [
+          {
+            "family": "cv",
+            "handedness": [
+              1,
+              1
+            ],
+            "heldout_rmse_deg": 0.007431744373779221,
+            "heldout_normalized_rmse": 0.007431744373779221,
+            "position_sigma_proxy_m": 1032.6483536940184,
+            "selection_score": 0.6074317443737792
+          },
+          {
+            "family": "cv",
+            "handedness": [
+              -1,
+              -1
+            ],
+            "heldout_rmse_deg": 0.0033808677164243336,
+            "heldout_normalized_rmse": 0.0033808677164243336,
+            "position_sigma_proxy_m": 1032.6499812165068,
+            "selection_score": 0.6033808677164243
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "btr_target_002 (6).zip",
+    "platform": {
+      "T_MAX": 600,
+      "DT": 1,
+      "B_MIN": 0,
+      "B_MAX": 180,
+      "REF_LAT": 30,
+      "REF_LON": 122,
+      "EARTH_R": 6371000,
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -106.48367852633807,
+            0.0
+          ],
+          "heading_deg": 296.2378738517474
+        }
+      ],
+      "bearing_convention": "relative_heading_folded_0_180",
+      "platform_motion_model": "constant_heading_constant_speed"
+    },
+    "median_parallax_deg": 2.870163109601407,
+    "measurement_fields": {
+      "t": 26.0,
+      "platform_id": "A",
+      "array": "hull",
+      "bearing_deg": 104.56976609177056,
+      "strength": 0.24375619341906057,
+      "sigma_deg": 5.763390374463608,
+      "quality": "simulation_ideal",
+      "source_kind": "simulation_ideal_bearing"
+    },
+    "windows": [
+      {
+        "start": 0,
+        "status": "temporal_supported",
+        "models": [
+          {
+            "family": "cv",
+            "handedness": [
+              1,
+              1
+            ],
+            "heldout_rmse_deg": 0.006246024398309639,
+            "heldout_normalized_rmse": 0.006246024398309639,
+            "position_sigma_proxy_m": 998.4447015647486,
+            "selection_score": 0.6062460243983097
+          },
+          {
+            "family": "cv",
+            "handedness": [
+              -1,
+              -1
+            ],
+            "heldout_rmse_deg": 0.0027346104772586195,
+            "heldout_normalized_rmse": 0.0027346104772586195,
+            "position_sigma_proxy_m": 998.4482554268997,
+            "selection_score": 0.6027346104772586
+          }
+        ]
+      },
+      {
+        "start": 75,
+        "status": "temporal_supported",
+        "models": [
+          {
+            "family": "cv",
+            "handedness": [
+              1,
+              1
+            ],
+            "heldout_rmse_deg": 0.0015395549396601377,
+            "heldout_normalized_rmse": 0.0015395549396601377,
+            "position_sigma_proxy_m": 49.96010537441582,
+            "selection_score": 0.6015395549396602
+          },
+          {
+            "family": "cv",
+            "handedness": [
+              -1,
+              -1
+            ],
+            "heldout_rmse_deg": 0.0003768602946625013,
+            "heldout_normalized_rmse": 0.0003768602946625013,
+            "position_sigma_proxy_m": 49.960117998489345,
+            "selection_score": 0.6003768602946625
+          }
+        ]
+      },
+      {
+        "start": 151,
+        "status": "temporal_supported",
+        "models": [
+          {
+            "family": "cv",
+            "handedness": [
+              1,
+              1
+            ],
+            "heldout_rmse_deg": 0.004412605601845508,
+            "heldout_normalized_rmse": 0.004412605601845508,
+            "position_sigma_proxy_m": 769.1832069283719,
+            "selection_score": 0.6044126056018455
+          },
+          {
+            "family": "cv",
+            "handedness": [
+              -1,
+              -1
+            ],
+            "heldout_rmse_deg": 0.004058985127717074,
+            "heldout_normalized_rmse": 0.004058985127717074,
+            "position_sigma_proxy_m": 769.1826614781432,
+            "selection_score": 0.604058985127717
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "btr_target_003 (6).zip",
+    "platform": {
+      "T_MAX": 600,
+      "DT": 1,
+      "B_MIN": 0,
+      "B_MAX": 180,
+      "REF_LAT": 30,
+      "REF_LON": 122,
+      "EARTH_R": 6371000,
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -106.48367852633807,
+            0.0
+          ],
+          "heading_deg": 296.2378738517474
+        }
+      ],
+      "bearing_convention": "relative_heading_folded_0_180",
+      "platform_motion_model": "constant_heading_constant_speed"
+    },
+    "median_parallax_deg": 0.30725223496291676,
+    "measurement_fields": {
+      "t": 54.0,
+      "platform_id": "A",
+      "array": "hull",
+      "bearing_deg": 142.88711582166962,
+      "strength": 0.28933219948083394,
+      "sigma_deg": 4.406918180429328,
+      "quality": "simulation_ideal",
+      "source_kind": "simulation_ideal_bearing"
+    },
+    "windows": [
+      {
+        "start": 0,
+        "status": "rejected_temporal_consistency",
+        "models": []
+      },
+      {
+        "start": 73,
+        "status": "rejected_temporal_consistency",
+        "models": []
+      },
+      {
+        "start": 146,
+        "status": "rejected_temporal_consistency",
+        "models": []
+      }
+    ]
+  }
+]

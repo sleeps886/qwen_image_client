@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000030\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组为t=58.0时刻的独立观测。在快照中，同方位角（约142-146度）且相似强度特征的目标仅出现在t≥54.0之后（如U000024），此前无任何历史轨迹在此方位出现；而持续存在的其他两组目标分别位于~170度和~104度方位，与当前几何位置不符。由于缺乏早期历史观测支持将其归入现有轨迹，且其运动学起始点晚于其他目标，判定为新出现的第三类目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5ffba448-0491-4d6d-a11a-667aaba8d6cf",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 164,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005182"
+  }
+}

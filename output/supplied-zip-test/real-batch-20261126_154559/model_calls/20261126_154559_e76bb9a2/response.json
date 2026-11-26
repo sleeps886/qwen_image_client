@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000005\",\n  \"target_ref\": \"T_U000004\",\n  \"reason\": \"U000004与U000005时间相邻(7s)，方位角连续变化且强度一致，符合同一目标运动特征。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_d0e49305-9a36-468e-8ef4-61ae06b10b0c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 86,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005222"
+  }
+}

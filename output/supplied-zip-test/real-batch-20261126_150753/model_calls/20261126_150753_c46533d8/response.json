@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000003\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无历史轨迹（tracks为空），无法进行关联匹配。该组观测时间为t=51.0s，方位角约170°，强度为0.1789，与批次内其他最早出现的单元（如t=13.0s的U000001或t=35.0s的U000002）在时间和空间上均不连续，且缺乏同时间点的伴随观测以支持多目标假设，因此判定为新目标起始点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5378c28e-3404-4cd7-ac8c-8e8ff9067373",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 157,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004762"
+  }
+}

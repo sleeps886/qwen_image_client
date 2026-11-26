@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000047\",\n\"target_ref\": \"new\",\n\"reason\": \"该组为初始批次首个单元，无历史轨迹可匹配；方位与平台几何不吻合现有目标特征，故建立新航迹。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_0a56d00c-1dac-4e0c-b58b-8d3a5d1b57cd",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 75,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005192"
+  }
+}

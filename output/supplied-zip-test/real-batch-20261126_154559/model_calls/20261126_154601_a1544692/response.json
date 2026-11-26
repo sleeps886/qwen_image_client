@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000041\",\n  \"target_ref\": \"new\",\n  \"reason\": \"强度0.18对应弱目标，方位129°且时间较晚，与现有强目标及早期弱目标的航迹趋势不符，无法关联。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_deba9008-c21e-4501-bc99-b1d4ca35a122",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 84,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005216"
+  }
+}

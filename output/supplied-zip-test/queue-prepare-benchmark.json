@@ -1,0 +1,25 @@
+{
+  "files": 3,
+  "raw_observations": 966,
+  "selected_units": 25,
+  "call_upper_bound": 24,
+  "samples": [
+    {
+      "create_ms": 147.53,
+      "insufficient_budget_preview_ms": 31.01,
+      "valid_preview_ms": 24.77
+    },
+    {
+      "create_ms": 144.1,
+      "insufficient_budget_preview_ms": 29.57,
+      "valid_preview_ms": 22.02
+    },
+    {
+      "create_ms": 142.3,
+      "insufficient_budget_preview_ms": 28.93,
+      "valid_preview_ms": 22.52
+    }
+  ],
+  "model_calls": 0,
+  "note": "In-process isolated HTTP timing, excludes browser/network/storage latency; not a production SLA."
+}

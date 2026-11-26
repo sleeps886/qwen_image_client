@@ -1,0 +1,7 @@
+```json
+{
+  "snapshot_version": 4,
+  "hypothesis_ref": null,
+  "reason_code": "insufficient"
+}
+```

@@ -1,0 +1,1 @@
+{"snapshot_version":0,"unit_id":"U000015","target_ref":"new","reason":"无历史轨迹可关联。该单元在t=176s提供独立观测，与前后时间不连续且缺乏运动一致性证据，故新建目标。"}

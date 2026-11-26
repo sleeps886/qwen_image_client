@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000059\",\"target_ref\":\"B000002\",\"reason\":\"该组观测(t=90)的方位角(hull≈104.76°, tow≈101.81°)与已有轨迹F003/F004中目标B000002的历史趋势高度一致（此前在t=74时方位分别为104.70°和101.92°），呈现平滑连续的航向演变；其信号强度(0.2438)及噪声特征也与该轨迹既往记录完全吻合，判定为同一目标的后续接续。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_299118a2-1f6a-426e-aba9-6c9cbaf6babe",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 149,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.00675"
+  }
+}

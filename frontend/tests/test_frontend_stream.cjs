@@ -1,12 +1,16 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const path=require('path');
 const html=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
+const agentHtml=fs.readFileSync(path.resolve(__dirname,'../incremental.html'),'utf8');
+assert.match(agentHtml, /mixed-workspace\.js/);
+assert.doesNotMatch(agentHtml, /id="(?:seeds|openJointPrediction)"/);
+assert.match(agentHtml, /数据浏览分组/);
 assert.match(html, /id="processingPipeline" type="hidden" value="forward_model"/);
 assert.match(html, /id="rendererProfile" type="hidden" value="btr_gui_v1"/);
 assert.doesNotMatch(html, /option value="(?:legacy|forward_v1)"/);
 assert.doesNotMatch(html, /id="reviewHypotheses" type="checkbox"/);
 const nodes=new Map();
-function node(id){if(!nodes.has(id))nodes.set(id,{textContent:'',value:'',dataset:{},className:'',hidden:false,open:false,style:{},files:[],children:[],listeners:{},addEventListener(type,fn){this.listeners[type]=fn},removeAttribute(){},replaceChildren(...items){this.children=[];this.textContent='';for(const item of items)this.append(item)},append(...items){for(const text of items){this.children.push(text);this.textContent+=typeof text==='string'?text:(text.textContent||'')}},appendChild(item){this.append(item);return item},classList:{values:new Set(),toggle(name,force){const on=force===undefined?!this.values.has(name):force;if(on)this.values.add(name);else this.values.delete(name)},add(name){this.values.add(name)},remove(name){this.values.delete(name)},contains(name){return this.values.has(name)}}});return nodes.get(id);}
+function node(id){if(!nodes.has(id))nodes.set(id,{textContent:'',value:'',dataset:{},className:'',hidden:false,open:false,style:{},files:[],children:[],listeners:{},addEventListener(type,fn){const previous=this.listeners[type];this.listeners[type]=previous?(...args)=>{previous(...args);fn(...args)}:fn},removeAttribute(){},replaceChildren(...items){this.children=[];this.textContent='';for(const item of items)this.append(item)},append(...items){for(const text of items){this.children.push(text);this.textContent+=typeof text==='string'?text:(text.textContent||'')}},appendChild(item){this.append(item);return item},classList:{values:new Set(),toggle(name,force){const on=force===undefined?!this.values.has(name):force;if(on)this.values.add(name);else this.values.delete(name)},add(name){this.values.add(name)},remove(name){this.values.delete(name)},contains(name){return this.values.has(name)}}});return nodes.get(id);}
 const context=vm.createContext({document:{getElementById:node,createTextNode:text=>({textContent:text}),createElement:()=>node('new'+nodes.size),querySelectorAll:()=>[]},fetch:async()=>({ok:true,json:async()=>({default_prompt:'test',data_prompt:'data prompt',provider_label:'test',key_configured:true})}),FormData,TextDecoder,Uint8Array,AbortController,AbortSignal,URL,setTimeout,clearTimeout,crypto:require('crypto').webcrypto,console});
 vm.runInContext(fs.readFileSync(path.resolve(__dirname,'../app.js'),'utf8'),context);
 const pageHtml=fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8');
@@ -290,5 +294,17 @@ Object.defineProperty(node('platform'),'value',{get(){return this.fileValue||''}
  assert.match(node('completionTitle').textContent,/方位校验未通过.*阻止出图/);
  assert.match(node('bodyOutputHint').textContent,/不使用本地候选替代/);
  assert.equal(node('trackFigure').hidden,true);
- console.log('PASS: streaming, stop, file modes, Agent overview, real node counts, model-call metadata, console structure');
+ vm.runInContext('showEvidence({result_id:"20261124_102104_35b4863d",downloads:{"inverse_fields.json":"/fields.json"}})',context);
+ assert.equal(node('gaussianTransfer').hidden,false);
+ assert.equal(node('sendGaussianToPrediction').href,'/incremental?source_result=20261124_102104_35b4863d');
+ assert.equal(node('downloadGaussianBatch').href,'/api/incremental/batches/20261124_102104_35b4863d');
+ vm.runInContext('showEvidence({result_id:"20261124_102104_35b4863d",downloads:{"measurement_report.json":"/measurements.json"}})',context);
+ assert.equal(node('gaussianTransfer').hidden,false);
+ vm.runInContext('showEvidence({result_id:"20261124_102104_35b4863d",downloads:{"candidate_evidence.json":"/pixels.json"}})',context);
+ assert.equal(node('gaussianTransfer').hidden,true);
+ vm.runInContext('showGaussianTransfer({result_id:"20261124_102104_35b4863d"},true)',context);
+ assert.equal(node('gaussianTransfer').hidden,false);
+ vm.runInContext('resetResultPresentation()',context);
+ assert.equal(node('gaussianTransfer').hidden,true);
+ console.log('PASS: streaming, stop, file modes, Agent overview, real node counts, model-call metadata, console structure, Gaussian transfer');
 })().catch(e=>{console.error(e);process.exitCode=1});

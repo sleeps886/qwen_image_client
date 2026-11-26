@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000007\",\n  \"target_ref\": \"T104_BEARING_STABLE_SIMULATION_IDEAL_QUALITY_SIGMA_DEG_5_763_STRONG_0_243\",\n  \"reason\": \"当前组 U000007 (t=90) 的方位角为 hull:104.76°, tow:101.81°，强度 0.2438。在快照历史的联合背景下，存在一个稳定的信号簇（包括 t=35, t=99, t=139, t=154 等时刻），其共同特征为：hull 阵列位于约 104.6-105.0°区间，tow 阵列位于约 101.2-102.1°区间，且具有完全一致的强度值 0.243756... 和特定的 sigma 误差分布。U000007 的各项参数与该稳定簇高度吻合，属于该目标的连续观测序列中的一环，因此判定归属于此目标轨迹。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_97442ce4-07e1-4350-b444-c99fba0ea09c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.027646"
+  }
+}

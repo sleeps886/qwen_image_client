@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000023\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无已有轨迹或目标可供关联。U000023在t=271.0时刻观测到方位角约105°（hull）/98°（tow），强度特征与同批次其他单元相似，但时间上位于U000022（t=259.0, ~156°）之后且早于后续单元。由于缺乏历史轨迹作为匹配依据，无法将其归入现有目标，故建议初始化为新目标以建立该时间段内的独立航迹基准。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3337ddcb-359a-4e2a-aab0-7811cc8de2c8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 163,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004778"
+  }
+}

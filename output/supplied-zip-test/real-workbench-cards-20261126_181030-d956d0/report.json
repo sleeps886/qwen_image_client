@@ -1,0 +1,38 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_inference": false,
+  "assigned_groups": 300,
+  "target_hypotheses": 3,
+  "confusion": {
+    "B000001": {
+      "I01": 98
+    },
+    "B000002": {
+      "I02": 102
+    },
+    "B000003": {
+      "I03": 93
+    },
+    "None": {
+      "I01": 7
+    }
+  },
+  "unassigned_groups": 7,
+  "groups_with_selected_position": 293,
+  "selected_position_rmse_m": 1955.6432840711598,
+  "mirror_invariant_rmse_m_evaluation_only": 6.347533498441417,
+  "nearest_candidate_rmse_m_evaluation_only": 6.347533498492809,
+  "cross_source_edges": 0,
+  "edge_count": 290,
+  "max_apparent_speed_mps": 13.906143274813317,
+  "mirror_resolved_by_evidence": false,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "real_model_requests": 357,
+  "status": "result_unknown",
+  "snapshots": 6,
+  "last_error": "批内7组未通过；成功单组已保留，只恢复失败环节，不整批重发",
+  "elapsed_seconds": 312.59,
+  "actual_workbench_executor": true,
+  "model": "qwen3.8-omni-flash"
+}

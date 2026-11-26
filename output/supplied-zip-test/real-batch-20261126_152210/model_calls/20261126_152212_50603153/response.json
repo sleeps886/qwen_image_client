@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000045\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组观测位于方位角约145°，强度特征为0.2893，与本批次中其他主要轨迹群（如162-174°和102-104°）在空间上完全分离。由于没有历史轨迹在此方向或此强度级别存在，且无法将其几何位置平滑地连接到任何现有路径中，因此判定为一个全新的独立目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f571f0c8-ec3a-4b05-936b-2f54af793ead",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 132,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005096"
+  }
+}

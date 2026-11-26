@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"tracks\": [\n    {\n      \"target_ref\": \"N1\",\n      \"hypothesis_refs\": [\"L002\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N2\",\n      \"hypothesis_refs\": [\"L004\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N3\",\n      \"hypothesis_refs\": [\"L005\"],\n      \"extra_points\": []\n    },\n    {\n      \"target_ref\": \"N4\",\n      \"hypothesis_refs\": [\"L008\"],\n      \"extra_points\": []\n    }\n  ],\n  \"unassigned_units\": [\n    \"U000001\",\n    \"U000003\",\n    \"U000005\",\n    \"U000006\",\n    \"U000007\",\n    \"U000009\",\n    \"U000010\",\n    \"U000011\",\n    \"U000012\",\n    \"U000013\",\n    \"U000014\",\n    \"U000015\",\n    \"U000016\",\n    \"U000017\",\n    \"U000018\",\n    \"U000019\",\n    \"U000021\",\n    \"U000022\",\n    \"U000023\",\n    \"U000024\",\n    \"U000025\",\n    \"U000026\",\n    \"U000027\",\n    \"U000028\",\n    \"U000029\",\n    \"U000030\",\n    \"U000031\",\n    \"U000032\",\n    \"U000033\",\n    \"U000034\",\n    \"U000035\",\n    \"U000036\",\n    \"U000037\",\n    \"U000038\",\n    \"U000039\",\n    \"U000040\",\n    \"U000041\",\n    \"U000042\",\n    \"U000043\",\n    \"U000044\",\n    \"U000045\",\n    \"U000046\",\n    \"U000047\",\n    \"U000048\",\n    \"U000049\",\n    \"U000050\"\n  ]\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_82c3b521-bc7f-4383-a484-8736c59b7a6a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 20226,
+    "output_tokens": 687,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.018036"
+  }
+}

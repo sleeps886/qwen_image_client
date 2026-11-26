@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"unit_id\":\"U000074\",\"target_ref\":\"B000002\",\"reason\":\"聚焦组U000074包含两个观测（O000145为Hull阵列，O000148为Tow阵列），时间t=101.0s。其强度特征约为0.2438，显著高于目标B000001的0.1789，且低于目标B000003的0.2893。在方位角上，该组的Hull/Tow读数（约104.8°/101.7°）与历史轨迹中目标B000002的特征区间高度一致（B000002的历史观测均分布在Hull~104°和Tow~102°附近）。此外，平台配置显示本船航速为0kn，意味着无自噪声干扰导致的系统偏差，因此可以依据上述强度和空间几何连续性证据将该组归属至已有轨迹B000002。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_774baa98-dff2-4fb3-8dc4-c6276be0f52d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 244,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049656"
+  }
+}

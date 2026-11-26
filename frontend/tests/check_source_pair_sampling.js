@@ -1,0 +1,31 @@
+async page=>{
+  const assert=(v,m)=>{if(!v)throw Error(m);};let watch=false,requests=0;
+  page.on('request',r=>{if(watch&&r.url().includes('/api/'))requests++;});
+  await page.goto('http://127.0.0.1:8891/incremental');await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  await page.locator('#pointFileImport').setInputFiles([1,2,3].map(i=>`C:/Users/LENOVO/AppData/Local/Temp/btr_target_00${i} (6).zip`));
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('966个原始观测'));
+  assert(await page.locator('#samplePointMode').inputValue()==='source_pairs','pair mode not default');
+  watch=true;await page.locator('#samplePointCount').fill('20');await page.locator('#samplePoints').click();
+  assert(await page.locator('#selectedSourceChart circle').count()===20,'20 pairs must render exactly 20 markers');
+  assert(await page.locator('#predictionChart circle').count()===20,'top preview still separates arrays');
+  assert((await page.locator('#selectedSourceCount').textContent()).includes('20组双阵'),'pair count missing');
+  await page.waitForFunction(async()=>{const s=await WorkspaceCache.get('mixed-workspace');return s?.selected.length===40;});
+  const saved=await page.evaluate(()=>WorkspaceCache.get('mixed-workspace'));
+  const selected=saved.dataset.candidates.filter(p=>saved.selected.includes(p.candidate_id));
+  const groups=await page.evaluate(({selected,catalog})=>PointSampling.sourcePairGroups(selected,catalog),{selected,catalog:saved.dataset.target_catalog});
+  assert(groups.length===20,'source/platform/time pair count wrong');
+  await page.locator('#selectedSourceChart circle').nth(1).hover();
+  const tooltip=await page.locator('#selectedSourceHover').textContent(),raw=JSON.parse(tooltip.slice(tooltip.indexOf('\n')+1));
+  assert(!Array.isArray(raw)&&raw.hull&&raw.tow,'hover must use a single object with both arrays');
+  assert(raw.hull.candidate_id!==raw.tow.candidate_id&&raw.hull.sigma_deg!==undefined&&raw.tow.sigma_deg!==undefined,'distinct array fields lost');
+  assert(raw.t!==undefined&&raw.platform_id&&raw.strength!==undefined&&raw.quality&&raw.source_kind,'common fields lost');
+  assert(!Object.hasOwn(raw.hull,'t')&&!Object.hasOwn(raw.tow,'t'),'common time repeated');
+  assert(await page.locator('#selectedSourcePreview table').count()===0,'table still shown');
+  await page.locator('#selectedSourceChart circle').first().focus();assert(await page.locator('#selectedSourceHover').isVisible(),'keyboard detail unavailable');
+  await page.locator('#predictionChart circle').first().focus();assert((await page.locator('#pointHover').textContent()).includes('\"tow\"'),'top group tooltip loses tow');
+  assert(requests===0,'selection calls API');watch=false;
+  await page.screenshot({path:'output/supplied-zip-test/source-pairs-hover.png'});
+  await page.reload();await page.waitForFunction(()=>document.querySelectorAll('#selectedSourceChart circle').length===20);
+  assert(await page.locator('#samplePointMode').inputValue()==='source_pairs','reload changed pair mode');
+  return {defaultSourcePairMode:true,requestedGroups:20,selectedRawObservations:40,renderedMarkersPerChart:20,fullBothArrayTooltip:true,tableRemoved:true,selectionApiRequests:requests};
+}

@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000011",
+  "target_ref": "new",
+  "reason": "方位稳定于175度，强度低且孤立出现，缺乏前后连续观测及速度证据支持并入既有航迹。"
+}

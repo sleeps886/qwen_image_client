@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000092\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"本单元包含两个同步观测（O000181在t=122.0，bearing≈104.89°，hull阵；O000184在t=122.0，bearing≈101.55°，tow阵）。根据快照历史，目标B000002的轨迹片段F003（hull）与F004（tow）已建立稳定关联：其hull bearing从t=26.0至t=74.0由约104.57°平滑增长至104.70°，且所有对应时刻的strength均严格等于0.243756...，sigma_deg恒为5.763...。当前单元中，两观测方位差约为3.34°，符合该平台几何配置下固定目标的视在方位偏移特征（例如t=26.0时偏移约2.38°，随时间呈规律变化），且强度、质量标签及误差参数与前序B000002序列完全一致。此外，同时间段内其他活跃目标如B000001（bearing~174-176°）和B000003（bearing~155°）的方位与本单元显著不符，排除混淆可能。因此判定该组属于已有目标B000002的新增末端接续点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2fa9c6e4-dd66-4a90-b8ad-43e9d6983f7b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 366,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007336"
+  }
+}

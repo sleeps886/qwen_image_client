@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000028\",\n\"target_ref\": \"new\",\n\"reason\": \"该点位置远离其他簇（x≈576,y≈50），且与同强度的U000023、U000043时间上无连续运动趋势，判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_50d6a184-7664-495d-b3d3-74cca9dab46a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 87,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034074"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000002\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无已存在轨迹或目标可供关联（targets为空）。该组包含t=35.0时刻hull与tow阵列的双阵观测，方位角分别为104.6°和102.1°，差值约2.5度且在各自sigma范围内一致；强度及质量特征自洽。作为首个处理的单元之一且无前序状态支持延续旧目标，故判定为新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_1255d08c-fe0c-49a4-8c53-1bcefb1651c1",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 130,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00469"
+  }
+}

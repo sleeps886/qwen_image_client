@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000051\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该单元观测时间为t=74.0，方位角hull约146.6°、tow约145.2°。对比快照中已归属至目标B000003的历史轨迹片段（F005和F006），其在邻近时间窗口内的方位演化趋势一致：在t=72.0时，对应观测分别为146.3°(hull)和144.8°(tow)，随时间推移方位呈缓慢增加态势。本单元的方位值与历史外推预测高度吻合。此外，其信号强度及噪声标准差特征也与B000003的其他观测保持一致，而与B000001和B000002的方位区间明显不符。因此判定为迟到观测插入现有轨迹末端。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_8b7a8d30-be5a-4c6c-b63c-99ea4011318c",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 227,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.04961"
+  }
+}

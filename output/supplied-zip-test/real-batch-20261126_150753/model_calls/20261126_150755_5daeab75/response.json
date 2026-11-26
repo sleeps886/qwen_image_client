@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000042\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹与已确认目标（targets为空），该组为独立观测单元。其时间t=463.0及方位角（Hull~128.7°, Tow~127.2°）与前序单元U000041（t=459.0，Hull~129.5°, Tow~128.0°）在时序上紧密衔接且方位连续变化，符合同一物理目标的运动特征；但由于缺乏初始锚定信息且不能仅凭强度相似推断，故判定为新起始目标并开启新轨迹。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_51fbe1f2-c7ee-4331-9e98-9ae9b572e7fc",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 173,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004806"
+  }
+}

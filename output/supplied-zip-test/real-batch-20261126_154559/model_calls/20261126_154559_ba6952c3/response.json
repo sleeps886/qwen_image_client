@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\"snapshot_version\":0,\"unit_id\":\"U000006\",\"target_ref\":\"new\",\"reason\":\"孤立单时点观测，无历史轨迹关联；因缺乏时间连续性证据且无法验证运动模型一致性，判定为新目标。\"}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_ea96e7d0-090d-4ae1-af09-c6e57ccd263d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 42300,
+    "output_tokens": 58,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.033996"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000036\",\n  \"target_ref\": \"new\",\n  \"reason\": \"该组观测（t=64s，Hull方位约144.76°，Tow方位约143.23°）在时间和空间特征上与历史批次中其他明显独立的轨迹群均不匹配：其一，它不属于起始于 t≈13–51s、随后在 t≈54s+ 出现且 Hull/Tow 方位差稳定约为0.4°的序列；其二，它也不同于自 t=26s 起持续存在、Hull/Tow 方位差接近2.5°并长期保持恒定强度的另一条独立目标轨迹。由于 snapshot.targets 为空，无法归入任何已声明目标 ID；同时依据平台配置与双阵几何解算出的位置候选虽显示其可能位于前向扇区或侧后方的镜像不确定区域，但没有任何既有轨迹能提供足够一致的 bearing-time-geometry 连续性以支持插入中段或接续末尾的操作。因此应将其视为一个尚未被先前快照覆盖的新目标起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_47dcfc36-b794-4e88-9d6d-67bf838a8fb9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 255,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034278"
+  }
+}

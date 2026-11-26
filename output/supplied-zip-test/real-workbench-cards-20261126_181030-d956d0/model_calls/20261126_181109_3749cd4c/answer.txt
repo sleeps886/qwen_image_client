@@ -1,0 +1,1 @@
+{"snapshot_version":2,"hypothesis_ref":"L011","reason_code":"continuity"}

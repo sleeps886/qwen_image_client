@@ -1,0 +1,33 @@
+async page=>{
+  const assert=(v,m)=>{if(!v)throw Error(m);};let watch=false,apiRequests=0;
+  page.on('request',r=>{if(watch&&r.url().includes('/api/'))apiRequests++;});
+  await page.setViewportSize({width:1800,height:1000});
+  await page.goto('http://127.0.0.1:8891/incremental');await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  await page.locator('#pointFileImport').setInputFiles([1,2,3].map(i=>`C:/Users/LENOVO/AppData/Local/Temp/btr_target_00${i} (6).zip`));
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('966个原始观测'));
+  watch=true;await page.locator('#samplePointCount').fill('20');await page.locator('#samplePoints').click();
+  assert(await page.locator('#chartSidebar #selectedSourceChart circle').count()===20,'chart selection lost');
+  assert(await page.locator('.prediction-main #sharedTrajectoryScene, .prediction-main #selectedSourcePreview').count()===0,'charts still in center');
+  const rail=await page.locator('#chartSidebarShell').boundingBox(),main=await page.locator('.prediction-main').boundingBox();
+  assert(rail.x>=main.x+main.width-1,'rail is not right of chat');
+  const handle=page.locator('#chartSidebarResize'),box=await handle.boundingBox();
+  await page.mouse.move(box.x+3,box.y+80);await page.mouse.down();await page.mouse.move(box.x-120,box.y+80,{steps:8});await page.mouse.up();
+  const wider=await page.locator('#chartSidebarShell').boundingBox();assert(wider.width>rail.width+100,'pointer resize failed');
+  await page.waitForFunction(()=>Math.abs(document.querySelector('#selectedSourceChart').viewBox.baseVal.width-document.querySelector('#selectedSourceChart').clientWidth)<2);
+  await handle.focus();await handle.press('ArrowRight');
+  const savedWidth=Number(await handle.getAttribute('aria-valuenow'));assert(savedWidth<wider.width,'keyboard resize failed');
+  await page.locator('#toggleChartSidebar').click();assert(await page.locator('#chartSidebarShell').isHidden(),'collapse failed');
+  await page.locator('#toggleChartSidebar').click();assert(await page.locator('#chartSidebarShell').isVisible(),'reopen failed');
+  assert(await page.locator('#selectedSourceChart circle').count()===20,'collapse/reopen changed selection');
+  await page.screenshot({path:'output/supplied-zip-test/right-chart-sidebar.png'});
+  assert(apiRequests===0,'layout dispatches API');watch=false;
+  await page.reload();await page.waitForFunction(()=>document.querySelectorAll('#selectedSourceChart circle').length===20);
+  assert(Number(await handle.getAttribute('aria-valuenow'))===savedWidth,'width not restored');
+  await page.setViewportSize({width:700,height:850});
+  assert(await page.locator('#chartSidebarShell').isHidden(),'narrow view obscures chat by default');
+  await page.locator('#toggleChartSidebar').click();assert(await page.locator('#chartSidebarShell').isVisible(),'narrow drawer unavailable');
+  await handle.focus();await handle.press('End');
+  const narrow=await page.locator('#chartSidebarShell').boundingBox();assert(narrow.x>=0&&narrow.x+narrow.width<=701,'rail overflows screen');
+  await page.locator('#closeChartSidebar').click();assert(await page.locator('#chartSidebarShell').isHidden(),'narrow drawer cannot close');
+  return {twoChartsInRightRail:true,dragResize:true,keyboardResize:true,widthRestored:true,collapseRetainsSelection:true,narrowDrawer:true,selectedPairs:20,layoutApiRequests:apiRequests};
+}

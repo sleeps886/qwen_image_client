@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000040",
+  "target_ref": "new",
+  "reason": "无历史轨迹可供关联，该观测组作为独立新目标处理。"
+}

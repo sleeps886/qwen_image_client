@@ -1,0 +1,17 @@
+{
+  "groups": 50,
+  "positions": 50,
+  "modelLines": 47,
+  "streams": 3,
+  "postInferenceSourceCheck": {
+    "B000001": {
+      "I01": 22
+    },
+    "B000002": {
+      "I02": 18
+    },
+    "B000003": {
+      "I03": 10
+    }
+  }
+}

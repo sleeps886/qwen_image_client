@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000050\",\n  \"target_ref\": \"new\",\n  \"reason\": \"snapshot为空，无历史轨迹可比对。U000050包含t=550时刻的hull+tow双阵观测（方位约165度），在缺乏先前状态估计且不可仅凭特征相似性关联的情况下，判定为新目标起始点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_7895cb28-f0a3-4c18-8308-6d44b5d7a78b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 109,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004632"
+  }
+}

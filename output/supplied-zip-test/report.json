@@ -1,0 +1,368 @@
+{
+  "format": "supplied-package-test-v1",
+  "files": [
+    {
+      "file": "btr_target_001 (6).zip",
+      "sha256": "63c9b3790115d37a956a9081d35e037f5e80d959dc0930db1f26821bb0e3a338",
+      "bytes": 97404,
+      "observations": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 340,
+        "group_count": 170,
+        "hull_point_count": 170,
+        "tow_point_count": 170,
+        "strict_dual_group_count": 170,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      }
+    },
+    {
+      "file": "btr_target_002 (6).zip",
+      "sha256": "e64761239695eff45cdb44dd1b513bc2183949a5af1f6f4187cbde554625ecad",
+      "bytes": 89992,
+      "observations": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 318,
+        "group_count": 159,
+        "hull_point_count": 159,
+        "tow_point_count": 159,
+        "strict_dual_group_count": 159,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      }
+    },
+    {
+      "file": "btr_target_003 (6).zip",
+      "sha256": "0553ccd5cdd65689e0780d8fd34c5bc4a1e502faa670cdbbc9e33345bc6caf9d",
+      "bytes": 87698,
+      "observations": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 308,
+        "group_count": 154,
+        "hull_point_count": 154,
+        "tow_point_count": 154,
+        "strict_dual_group_count": 154,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      }
+    }
+  ],
+  "real_model_calls": 0,
+  "truth_read": false,
+  "model_accuracy_evaluated": false,
+  "cases": [
+    {
+      "name": "points_20_seed_7",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 9,
+        "tow_point_count": 11,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 13,
+      "reference_covered_points": 18,
+      "references_by_array": {
+        "hull": 5,
+        "tow": 8
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 9149,
+      "seconds": 0.051,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "points_20_seed_19",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 10,
+        "tow_point_count": 10,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 11,
+      "reference_covered_points": 17,
+      "references_by_array": {
+        "hull": 3,
+        "tow": 8
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 8839,
+      "seconds": 0.052,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "points_20_seed_37",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 10,
+        "tow_point_count": 10,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 14,
+      "reference_covered_points": 20,
+      "references_by_array": {
+        "hull": 8,
+        "tow": 6
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 9657,
+      "seconds": 0.049,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "points_20_seed_73",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 7,
+        "tow_point_count": 13,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 14,
+      "reference_covered_points": 20,
+      "references_by_array": {
+        "hull": 4,
+        "tow": 10
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 9713,
+      "seconds": 0.052,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "points_20_seed_101",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 6,
+        "tow_point_count": 14,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 8,
+      "reference_covered_points": 17,
+      "references_by_array": {
+        "hull": 2,
+        "tow": 6
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 8294,
+      "seconds": 0.051,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "synchronous_groups_20_seed_19",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 110,
+        "group_count": 20,
+        "hull_point_count": 55,
+        "tow_point_count": 55,
+        "strict_dual_group_count": 20,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 32,
+      "reference_covered_points": 105,
+      "references_by_array": {
+        "hull": 16,
+        "tow": 16
+      },
+      "reference_pairings": 12,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": true,
+      "wire_chars": 30931,
+      "seconds": 0.625,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "optional_neighborhood_seed_19",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 548,
+        "group_count": 96,
+        "hull_point_count": 274,
+        "tow_point_count": 274,
+        "strict_dual_group_count": 96,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 184,
+      "reference_covered_points": 547,
+      "references_by_array": {
+        "hull": 92,
+        "tow": 92
+      },
+      "reference_pairings": 12,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": true,
+      "wire_chars": 141195,
+      "seconds": 1.07,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "all_original_points",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 966,
+        "group_count": 170,
+        "hull_point_count": 483,
+        "tow_point_count": 483,
+        "strict_dual_group_count": 170,
+        "single_array_group_count": 0,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 336,
+      "reference_covered_points": 958,
+      "references_by_array": {
+        "hull": 168,
+        "tow": 168
+      },
+      "reference_pairings": 12,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": true,
+      "wire_chars": 252661,
+      "seconds": 2.02,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    },
+    {
+      "name": "existing_20_point_scope",
+      "selected": {
+        "policy": "accept-sparse-v1",
+        "scope": "current_observation_pool",
+        "point_count": 20,
+        "group_count": 20,
+        "hull_point_count": 11,
+        "tow_point_count": 9,
+        "strict_dual_group_count": 0,
+        "single_array_group_count": 20,
+        "synchronization_rule": "same-platform-exact-time",
+        "target_pairing_confirmed": false,
+        "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。"
+      },
+      "reference_count": 10,
+      "reference_covered_points": 17,
+      "references_by_array": {
+        "hull": 4,
+        "tow": 6
+      },
+      "reference_pairings": 0,
+      "numerically_supported_pairings": 0,
+      "pairing_shortlist_truncated": false,
+      "wire_chars": 8931,
+      "seconds": 0.045,
+      "lossless_roundtrip": true,
+      "source_labels_excluded": true,
+      "model_calls": 0
+    }
+  ],
+  "merged": {
+    "policy": "accept-sparse-v1",
+    "scope": "current_observation_pool",
+    "point_count": 966,
+    "group_count": 170,
+    "hull_point_count": 483,
+    "tow_point_count": 483,
+    "strict_dual_group_count": 170,
+    "single_array_group_count": 0,
+    "synchronization_rule": "same-platform-exact-time",
+    "target_pairing_confirmed": false,
+    "note": "单点、缺阵、不同时间均可分析；本轮计数不代替累计历史证据，不证明同目标配对或空间可定位。",
+    "browse_groups": 3,
+    "unique_ids": 966
+  },
+  "existing_scope_source": {
+    "session_id": "20261125_220606_eaabadea",
+    "submitted": 20,
+    "assigned": 8,
+    "unassigned": 12
+  },
+  "raw_measurements_unchanged": true,
+  "note": "数值参考覆盖/配对不是模型归属或真实目标数；未执行真实模型关联、绘图或准确率评估。",
+  "ui": {
+    "actual_zip_import": true,
+    "points": 966,
+    "groups": 3,
+    "sample_20_preserves_original": true,
+    "delete_session_keeps_file": true,
+    "reload_keeps_file": true,
+    "reopen": true,
+    "export_measurements_identical": true,
+    "model_dispatches": 0
+  }
+}

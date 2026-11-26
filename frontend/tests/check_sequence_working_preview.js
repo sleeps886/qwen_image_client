@@ -1,0 +1,46 @@
+// Isolated fake gateway only: verify drawing, not target identification accuracy.
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);};
+  assert((await(await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'fake server required');
+  await page.setViewportSize({width:1700,height:1000});await page.goto(base+'/incremental');
+  await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  const data={candidates:Array.from({length:5},(_,i)=>['hull','tow'].map(array=>({candidate_id:array+'-'+i,t:i*10,platform_id:'A',array,bearing_deg:40+i+(array==='tow'?1:0),quality:'fitted',strength:.4,sigma_deg:1}))).flat()};
+  await page.locator('#pointFileImport').setInputFiles({name:'processed-preview.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});
+  await page.waitForFunction(()=>document.querySelector('#batchSource').textContent.includes('已保留10点'));
+  await page.locator('#sequenceMode').selectOption('sequential');await page.locator('#samplePointCount').fill('4');await page.locator('#samplePoints').click();await page.locator('#prepareSequence').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已免费准备4组'));
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceNext').click();
+  await page.waitForFunction(()=>document.querySelectorAll('#sequenceWorkingChart circle').length===1);
+  assert(await page.locator('#sequenceWorkingChart polyline').count()===0,'seed has invented link');
+  assert(await page.locator('#chartSidebar #sequenceWorkingPreview').isVisible(),'working points not in right rail');
+  const sid=await page.locator('#sessionId').inputValue(),stateUrl=base+'/api/incremental/mixed-sessions/'+sid;
+  assert((await(await page.request.get(stateUrl)).json()).calls===0,'seed calls model');
+  await page.locator('#sequenceWorkingChart circle').first().hover();const hover=await page.locator('#sequenceWorkingHover').textContent();
+  assert(hover.includes('"hull"')&&hover.includes('"tow"'),'group tooltip incomplete');
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceNext').click();
+  await page.waitForFunction(()=>document.querySelectorAll('#sequenceWorkingChart circle[data-validated="true"]').length===2);
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已处理2/4组'));
+  assert(await page.locator('#sequenceWorkingChart polyline').count()===1,'validated same-fragment points not linked');
+  const state=await(await page.request.get(stateUrl)).json(),rid=state.active_sequential_run,runUrl=stateUrl+'/runs/'+rid;
+  await page.route('**/runs/'+rid,async route=>{const response=await route.fetch(),run=await response.json();run.status='failed';await route.fulfill({json:run});});
+  await page.locator('#sequenceRefresh').click();await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('failed'));
+  assert(await page.locator('#sequenceWorkingChart circle').count()===2,'failure discards prior valid points');
+  await page.unroute('**/runs/'+rid);await page.reload();
+  await page.waitForFunction(()=>document.querySelectorAll('#sequenceWorkingChart circle').length===2);
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceStart').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('completed_awaiting_review'),{},{timeout:30000});
+  assert(await page.locator('#sequenceWorkingChart circle').count()===4,'queue completion not reflected');
+  await page.locator('#sequenceAdopt').click();await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('adopted'));
+  await page.locator('#samplePointCount').fill('5');await page.locator('#samplePoints').click();await page.locator('#prepareSequence').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已免费准备1组'));
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceNext').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('completed_awaiting_review'));
+  assert(await page.locator('#sequenceWorkingChart circle').count()===5,'later single input loses earlier history');
+  assert(await page.locator('#sequenceWorkingChart circle[data-current-run="true"]').count()===1,'new and history markers not distinguished');
+  assert(await page.locator('#sequenceWorkingChart polyline').count()===1,'history continuation lost');
+  await page.locator('#sequenceWorkingPreview').screenshot({path:'output/supplied-zip-test/processed-working-preview.png'});
+  const working=await(await page.request.get(stateUrl+'/runs/'+(await(await page.request.get(stateUrl)).json()).active_sequential_run)).json();
+  assert(working.working_view.points.length===10,'raw observations lost');
+  assert(await page.locator('#selectedSourceChart polyline').count()===0,'working links leaked into source preview');
+  return {seedVisible:true,seedModelCalls:0,validAssociationsLinked:true,failureKeepsPriorPoints:true,reloadRestores:true,nextSingleGroupContinuesHistory:true,markers:5,rawMeasurements:10,realModelCalls:0};
+}

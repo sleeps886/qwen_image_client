@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"tracks\":[{\"target_ref\":\"T001\",\"hypothesis_refs\":[\"L005\"],\"extra_points\":[]},{\"target_ref\":\"T002\",\"hypothesis_refs\":[\"L003\"],\"extra_points\":[]},{\"target_ref\":\"T003\",\"hypothesis_refs\":[\"L008\"],\"extra_points\":[]},{\"target_ref\":\"T004\",\"hypothesis_refs\":[\"L002\"],\"extra_points\":[]},{\"target_ref\":\"N1\",\"hypothesis_refs\":[\"L012\"],\"extra_points\":[]},{\"target_ref\":\"N2\",\"hypothesis_refs\":[\"L010\"],\"extra_points\":[]}],\"unassigned_units\":[\"U000001\",\"U000004\",\"U000005\",\"U000006\",\"U000009\",\"U000010\",\"U000011\",\"U000012\",\"U000013\",\"U000016\",\"U000017\",\"U000018\",\"U000019\",\"U000023\",\"U000025\",\"U000026\",\"U000032\",\"U000036\",\"U000037\",\"U000038\",\"U000039\",\"U000045\",\"U000046\",\"U000059\",\"U000067\",\"U000071\"]}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_d066f1d4-4892-458a-b400-26055a259d56",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 28672,
+    "input_tokens": 1597,
+    "output_tokens": 355,
+    "prompt_tokens_details": {
+      "cached_tokens": 28672
+    },
+    "cost": "¥0.005104"
+  }
+}

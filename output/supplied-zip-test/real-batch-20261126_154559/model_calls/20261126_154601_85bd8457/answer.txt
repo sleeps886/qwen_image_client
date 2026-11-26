@@ -1,0 +1,1 @@
+{"snapshot_version":0,"unit_id":"U000043","target_ref":"new","reason":"快照无历史轨迹；该组独立候选无法与既有目标关联，且强度/角度差异大，判定为新目标。"}

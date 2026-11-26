@@ -1,5 +1,6 @@
 """Application composition root. Run with python -m backend.app.main."""
 import uvicorn
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.middleware.trustedhost import TrustedHostMiddleware
@@ -12,7 +13,13 @@ from backend.app.api.exception_handlers import application_error_handler,invalid
 
 
 def create_app():
-    application=FastAPI(title='千问图片接入服务',version='1.0.0',
+    @asynccontextmanager
+    async def lifespan(application):
+        from backend.app.api.routers import live_tracking
+        if live_tracking.LIVE_DB.exists():
+            live_tracking.repository().recover_interrupted()
+        yield
+    application=FastAPI(title='千问图片接入服务',version='1.0.0',lifespan=lifespan,
         description='本地图片和目标数据解析、预检与模型调用。')
     application.add_middleware(UploadLimit)
     application.add_middleware(TrustedHostMiddleware,allowed_hosts=list(settings.allowed_hosts))

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000091\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"该组观测强度为0.1789，与历史轨迹B000001一致。方位角随时间从约162度平滑递增至174度左右，符合B000001的演变趋势。虽然t=54-72期间有另一目标（B000003）出现在相近区域，但其在t=92后消失且强度更高（0.289），而本组在t>92持续存在且保持低强度特征，因此判定为向末尾接续而非插入中间或新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3932cc20-cb8d-40f7-9690-301723409fca",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 177,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006826"
+  }
+}

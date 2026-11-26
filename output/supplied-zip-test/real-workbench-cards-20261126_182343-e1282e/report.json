@@ -1,0 +1,70 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_inference": false,
+  "assigned_groups": 483,
+  "target_hypotheses": 3,
+  "confusion": {
+    "B000001": {
+      "I01": 162
+    },
+    "B000002": {
+      "I02": 158
+    },
+    "B000003": {
+      "I03": 154
+    },
+    "None": {
+      "I01": 8,
+      "I02": 1
+    }
+  },
+  "unassigned_groups": 9,
+  "groups_with_selected_position": 474,
+  "selected_position_rmse_m": 957.6128705073043,
+  "mirror_invariant_rmse_m_evaluation_only": 5.4245061308848435,
+  "nearest_candidate_rmse_m_evaluation_only": 5.6770036619062525,
+  "cross_source_edges": 0,
+  "edge_count": 471,
+  "max_apparent_speed_mps": 13.709967509988491,
+  "mirror_resolved_by_evidence": false,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "real_model_requests": 513,
+  "status": "completed_awaiting_review",
+  "snapshots": 10,
+  "last_error": null,
+  "elapsed_seconds": 182.26,
+  "actual_workbench_executor": true,
+  "model": "qwen3.8-omni-flash",
+  "manual_unknown_retest_authorization": {
+    "source_test_copy": "C:\\Users\\LENOVO\\Desktop\\qwen_image_client\\output\\supplied-zip-test\\real-workbench-cards-20261126_181746-76d90a",
+    "duplicate_charge_risk_acknowledged": true,
+    "manual_test_reissue_units": [
+      "U000379",
+      "U000380",
+      "U000381",
+      "U000382",
+      "U000383",
+      "U000384",
+      "U000385",
+      "U000386",
+      "U000387",
+      "U000388",
+      "U000389",
+      "U000390"
+    ],
+    "prior_calls": 415,
+    "total_call_limit_unchanged": 507,
+    "automatic_unknown_retry_enabled": false,
+    "previous_total_call_limit": 507,
+    "new_total_call_limit": 513
+  },
+  "new_requests_in_this_phase": 98,
+  "actual_total_call_limit": 513,
+  "unassigned_breakdown": {
+    "no_usable_dual_array_intersection": 8,
+    "unstable_intersection_not_in_selected_plan": 1
+  },
+  "this_user_turn_total_real_request_attempts": 822,
+  "request_count_note": "105 + 102 + 102 + (357 original + 58 manual stage 1 + 98 manual stage 2); unknown requests may already be billed; not 822 successful inferences"
+}

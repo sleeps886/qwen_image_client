@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n    \"snapshot_version\": 0,\n    \"unit_id\": \"U000046\",\n    \"target_ref\": \"new\",\n    \"reason\": \"当前快照历史为空（targets=[], tracks=[]），无已知目标可供关联。U000046在t=513.0时刻观测到方位角约117°（hull）和116°（tow）。虽然本批次中存在其他早期时间点的单位（如U000002 t=35, U000007 t=90等）具有相似的~104-105°方位特征，但由于缺乏显式的轨迹状态、运动模型及连续的时间序列证据，且协议明确禁止仅凭强度或相似参数强行建立长间隔的稀疏关联（可能导致错误的身份判定），因此将该孤立的双阵观测组建议为新目标的起始点更为稳妥。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_80b3df3c-1f5d-4a75-bcc6-78414a1890f9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 200,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004878"
+  }
+}

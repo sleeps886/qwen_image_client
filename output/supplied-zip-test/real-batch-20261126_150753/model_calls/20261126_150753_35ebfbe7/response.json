@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000009\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照历史中无任何已建立的目标或轨迹（targets为空），无法将当前观测关联至既有目标。U000009包含t=102.0时刻的船体与拖曳阵列方位角观测，且两阵数据在强度、质量及时间上高度一致，符合同一物理辐射源特征。鉴于无先验航迹可匹配，且该组观测具有独立的时空连续性潜力，建议初始化为新目标以构建独立轨迹线。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_56447f07-8eb9-40b0-b290-c6c967193b2d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 144,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004728"
+  }
+}

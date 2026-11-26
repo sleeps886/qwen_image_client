@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000001\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前为首次处理，快照中无历史轨迹可供关联。该单元包含t=13.0时刻的hull与tow观测对（方位角分别约为162.6°和162.1°），且强度一致。虽然存在几何解算歧义导致位置候选未稳定收敛，但依据时间连续性原则及批次内同型目标分布特征（如后续t=15.0起出现的同类序列），判定其为独立运动目标的起始段，建议创建新目标而非归入不存在的旧轨迹或标记为未归属噪声。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_192a19a6-a28a-42c3-8ca1-1d5d4364e909",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 164,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034034"
+  }
+}

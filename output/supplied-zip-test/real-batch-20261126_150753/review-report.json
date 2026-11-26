@@ -1,0 +1,8 @@
+{
+  "real_new_requests": 1,
+  "targets_before": 5,
+  "targets_after": 5,
+  "revised_observations": 4,
+  "reference_used_as_model_input": false,
+  "production_state_updated": false
+}

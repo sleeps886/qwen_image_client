@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000037\",\n\"target_ref\": \"new\",\n\"reason\": \"快照无历史轨迹。该组为独立观测单元，在缺乏多普勒或航向连续性佐证的情况下，不能仅凭方位推测归属，故建立新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_429a10d9-d986-4b3f-9294-bf25addab90f",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 76,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005194"
+  }
+}

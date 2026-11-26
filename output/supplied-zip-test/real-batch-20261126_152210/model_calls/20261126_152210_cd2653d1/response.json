@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000007\",\"target_ref\":\"new\",\"reason\":\"该单元（t=29.0）具有特定的声学特征：强度约0.2438，sigma_deg约5.76 (hull)/2.21 (tow)。在快照历史的早期时间点（如 t=13-17），存在一组强度假设相似但方位角差异巨大（~163° vs ~104°）且sigma不同的观测（属于另一潜在轨迹）。由于本批次中该特定强度/sigma组合的目标首次出现于 t=29，且没有历史同构轨迹可供延伸或插入，依据几何连续性原则，应将其初始化为一个新的独立目标轨迹。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_35822b2d-ed39-413a-970c-622348985828",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 161,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005174"
+  }
+}

@@ -1,0 +1,6 @@
+{
+"snapshot_version": 0,
+"unit_id": "U000021",
+"target_ref": "new",
+"reason": "快照无历史轨迹。该单元方位与强度特征独立，无法关联现有目标，建议新建轨迹。"
+}

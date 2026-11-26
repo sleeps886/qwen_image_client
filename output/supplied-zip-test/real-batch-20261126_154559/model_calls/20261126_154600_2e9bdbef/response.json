@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000032\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无有效历史轨迹，且本组观测时间独立，无法建立连续航迹，故判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a184a0e4-e1b3-4294-8136-5dfd364028e8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 65,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005164"
+  }
+}

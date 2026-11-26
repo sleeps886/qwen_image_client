@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000049\",\"target_ref\":\"new\",\"reason\":\"首观测无历史轨迹，无法匹配已有目标，判定为新航迹起始。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_c2c92065-1583-4e98-8724-943ec4526ad3",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 43,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005104"
+  }
+}

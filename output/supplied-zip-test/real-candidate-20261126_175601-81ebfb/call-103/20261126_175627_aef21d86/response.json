@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":1,\"tracks\":[{\"target_ref\":\"T001\",\"hypothesis_refs\":[\"L005\"]},{\"target_ref\":\"T002\",\"hypothesis_refs\":[\"L003\"]},{\"target_ref\":\"T003\",\"hypothesis_refs\":[\"L008\"]},{\"target_ref\":\"T004\",\"hypothesis_refs\":[\"L002\"]},{\"target_ref\":\"N1\",\"hypothesis_refs\":[\"L010\"]},{\"target_ref\":\"N2\",\"hypothesis_refs\":[\"L012\"]}],\"unassigned_units\":[\"U000001\",\"U000004\",\"U000005\",\"U000006\",\"U000007\",\"U000008\",\"U000009\",\"U000010\",\"U000011\",\"U000012\",\"U000013\",\"U000014\",\"U000015\",\"U000016\",\"U000017\",\"U000018\",\"U000019\",\"U000020\",\"U000021\",\"U000022\",\"U000023\",\"U000024\",\"U000025\",\"U000026\",\"U000027\",\"U000028\",\"U000029\",\"U000030\",\"U000031\",\"U000032\",\"U000033\",\"U000034\",\"U000035\",\"U000036\",\"U000037\",\"U000038\",\"U000039\",\"U000040\",\"U000041\",\"U000042\",\"U000043\",\"U000044\",\"U000045\",\"U000046\",\"U000047\",\"U000048\",\"U000049\",\"U000050\",\"U000059\",\"U000071\"]}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_09036b34-8957-4696-8459-e864f192f14b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 30256,
+    "output_tokens": 523,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.025616"
+  }
+}

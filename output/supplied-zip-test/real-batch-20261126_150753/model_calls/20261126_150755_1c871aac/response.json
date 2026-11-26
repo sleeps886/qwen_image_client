@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000043\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无有效历史轨迹（tracks为空），无法建立连续性关联。该单元在t=476.0的方位约为156°，与上一时间点的候选观测相比存在显著跳变：例如强度为0.243的目标前一时刻位于约165°，而强度为0.178的目标位于约128°，均超出合理的角速率预测范围且信号特征不匹配。因此判定为新出现的独立目标，建议新建轨迹。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_84c8e5e2-4b65-493c-b380-e03857a3f506",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 153,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004752"
+  }
+}

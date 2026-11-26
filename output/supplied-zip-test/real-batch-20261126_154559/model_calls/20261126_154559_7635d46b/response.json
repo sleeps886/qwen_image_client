@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000002\",\n  \"target_ref\": \"new\",\n  \"reason\": \"首时刻独立观测，无历史轨迹可接续。虽方位角与部分后续单元相似，但缺乏连续位置证据，且强度特征未构成排他性身份依据，故建议新建目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_ea7c90a1-ca48-466c-b8ea-0f743392dce5",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 86,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005222"
+  }
+}

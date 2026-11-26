@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000021\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无已有轨迹或目标记录，无法进行归属匹配。该单元包含t=244.0时的两路观测（hull方位约158.06度，tow方位约157.57度），强度约为0.179。由于缺乏历史上下文作为连续性验证依据，且不能仅凭强度特征推断为特定已知目标，故判定为新目标起始点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_061dc47f-6b97-4bcc-9e07-f22d72cdfd56",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 133,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004698"
+  }
+}

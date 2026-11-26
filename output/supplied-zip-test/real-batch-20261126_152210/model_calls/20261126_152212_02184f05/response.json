@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000050\",\n\"target_ref\": \"new\",\n\"reason\": \"该组在t=74.0的观测特征（强度≈0.2438，方位约104°）与本批次中另一条主要轨迹（如U000001-U000003等，强度≈0.1789，方位162-163°）存在显著差异，无法归入同一目标。虽然本批次中存在多条强度相似的辅助线索（如U000005至U000047组成的序列），但它们的时间跨度从t=26.0开始且未包含t=74.0时刻，缺乏直接的时序连续性证据将其延伸至今日；同时快照历史为空，无既有稳定航迹可供接续。因此判定为新出现的目标候选。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_bac39854-18aa-4ff0-80a5-6eeaa115b4a8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 209,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005304"
+  }
+}

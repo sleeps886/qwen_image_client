@@ -1,0 +1,33 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_inference": false,
+  "assigned_groups": 50,
+  "target_hypotheses": 3,
+  "confusion": {
+    "B000001": {
+      "I01": 19
+    },
+    "B000002": {
+      "I02": 16
+    },
+    "B000003": {
+      "I03": 15
+    }
+  },
+  "unassigned_groups": 0,
+  "groups_with_selected_position": 50,
+  "selected_position_rmse_m": 2782.184125377287,
+  "mirror_invariant_rmse_m_evaluation_only": 5.86413052590325,
+  "nearest_candidate_rmse_m_evaluation_only": 5.864130526118861,
+  "cross_source_edges": 0,
+  "edge_count": 47,
+  "max_apparent_speed_mps": 13.222771538735241,
+  "mirror_resolved_by_evidence": false,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "session_id": "20261126_193331_33d342b4",
+  "real_model_requests": 51,
+  "through_actual_browser": true,
+  "protocol": "model-selected-spatial-cards-v1",
+  "status": "completed_awaiting_review"
+}

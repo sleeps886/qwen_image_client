@@ -1,44 +1,108 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>纯点位增量预测 · 小怪</title>
-  <link rel="stylesheet" href="/assets/style.css"><script src="/assets/incremental.js" defer></script>
-</head>
-<body>
-  <header><div class="brand"><strong>纯点位增量预测 · 第一期</strong></div><a href="/">返回原有识别流程</a></header>
-  <main>
-    <section class="intro"><h1>逐轮加入点位，验证下一段预测。</h1><p>单目标假设、单阵列方位—时间预测；不向模型发送图片，不是空间定位，也尚未实现多目标交叉消歧。</p></section>
-    <section class="card">
-      <h2>01 导入候选点与初始化</h2>
-      <p class="note">支持已有 candidate_evidence.json（images结构）或 candidates数组。候选须包含id/candidate_id、t、bearing_deg、array、platform_id。只导入种子所属阵列/平台。早于种子末时刻的数据视为初始化已开放数据，后续点逐轮开放；源点提取若使用未来邻域，本模式不等于严格在线盲测。</p>
-      <label>候选数据文件<input id="datasetFile" type="file" accept=".json,application/json"></label>
-      <button id="example" type="button">载入本地点位示例（不调用模型）</button>
-      <label>3～5个种子编号，以逗号分隔<input id="seeds" type="text" placeholder="P0,P2,P4"></label>
-      <div class="comparison-controls">
-        <label>每轮开放时间切片数<input id="stride" type="number" min="1" max="8" value="1"></label>
-        <label>预测时长（秒）<input id="horizon" type="number" min="0.1" max="600" value="20"></label>
-        <label>最大模型调用次数<input id="maxCalls" type="number" min="1" max="100" value="20"></label>
-      </div>
-      <button id="create" type="button" class="primary">创建本地任务（免费）</button>
-      <details><summary>查看已导入点编号（仅供手工选种子，不发送模型）</summary><pre id="inventory">未导入</pre></details>
-    </section>
-    <section class="card">
-      <h2>02 单步预测与恢复</h2>
-      <label>任务编号<input id="sessionId" type="text" placeholder="创建后自动填写；可粘贴旧任务编号"></label>
-      <button id="reload" type="button">加载已保存任务（免费）</button>
-      <label class="check"><input id="predictionConsent" type="checkbox"><span>同意将已开放的点位和轨迹状态发送至后端模型服务，每次推进最多调用一次，可能产生API费用。</span></label>
-      <div class="actions"><button id="step" class="primary" type="button" disabled>执行初始化预测</button><button id="export" type="button" disabled>导出已开放结果</button></div>
-      <p class="note">单步模式不会后台自动推进，停止点击即暂停。请求最长等待约90秒，失败/超时不自动重试；pending或结果未知的任务禁止再次调用。调用上限不是精确金额上限。</p>
-      <p id="predictionStatus" role="status" aria-live="polite">等待导入点位数据。</p>
-    </section>
-    <section class="card">
-      <h2>03 方位轨迹与下一段预测</h2>
-      <p class="note">灰点：已开放候选；彩色点/实线：已接入点及其连线估计；蓝色虚线：模型未来预测；橙色虚线：后端线性参考。缺测轮次断开连线。未开放点不进入此图，线条不代表已验证身份。</p>
-      <svg id="predictionChart" viewBox="0 0 1000 420" width="100%" role="img" aria-label="时间—方位增量预测图"></svg>
-      <pre id="predictionSummary">尚无轨迹</pre>
-      <details><summary>逐轮输入、模型判断、用量与预测误差</summary><pre id="roundLog">尚未执行</pre></details>
-    </section>
-  </main>
-</body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>混合观测轨迹工作台 · 小怪</title><link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/mixed-workspace.css"><script src="/assets/workspace-cache.js" defer></script><script src="/assets/track-connections.js" defer></script><script src="/assets/point-sampling.js" defer></script><script src="/assets/observation-diagnostics.js" defer></script><script src="/assets/evidence-neighborhood.js" defer></script><script src="/assets/mixed-workspace.js" defer></script></head>
+<body class="prediction-app has-app-navigation">
+<aside class="app-navigation" aria-label="主导航">
+  <a class="app-nav-brand" href="/" aria-label="小怪工作空间"><span class="app-nav-mark">小</span><strong>小怪工作空间</strong></a>
+  <span class="app-nav-caption">工作空间</span>
+  <nav class="app-nav-links" aria-label="页面导航">
+    <a href="/" ><span aria-hidden="true">▧</span><span>图片识别</span></a>
+    <a id="predictionNav" href="/incremental" aria-current="page"><span aria-hidden="true">⌁</span><span>轨迹工作台</span></a>
+    <a href="/generator"><span aria-hidden="true">⚒</span><span>数据生成工具</span></a>
+  </nav>
+  <a class="app-nav-docs" href="/docs" target="_blank" rel="noopener">API 文档 ↗</a>
+</aside>
+
+<header><div class="brand"><strong>小怪 · 轨迹工作台</strong></div><div class="actions"><button id="togglePointSidebar">☷ 数据浏览</button><button id="toggleChartSidebar" aria-controls="chartSidebar" aria-expanded="true">图表侧栏</button><button id="toggleExecutionSidebar" aria-expanded="false">执行过程</button></div></header>
+<main><section class="intro"><h1>混合观测输入，先关联，再预测。</h1><p>自由选择散点，不预设目标身份或数量。系统建立独立轨迹假设，无法区分时保留歧义。方位—时间预测不等于空间路线。</p></section>
+<section id="backendReadiness" class="card" role="status">正在检查混合观测接口（免费）……</section>
+<div class="prediction-workspace">
+<aside id="pointSidebar" class="card prediction-sidebar">
+<section class="conversation-manager"><div class="heading"><h2>会话</h2><button id="openNewConversation">＋ 新建会话</button></div><div id="conversationList"></div></section>
+<section class="point-file-library"><h2>导入数据点文件</h2><p id="fileLibraryIndependence" class="note">独立文件库：删除会话不会删除这里的文件。只有文件条目的“删除”会移除该文件；可随时打开或导出。</p><label>本次导入方式<select id="pointImportMode"><option value="replace">替换当前浏览数据（保留旧会话）</option><option value="append">追加到当前会话（不清空历史）</option></select></label><div id="pointFileDropZone" class="point-file-drop-zone" role="group" aria-label="拖入ZIP或JSON导入数据"><strong>拖入 ZIP 轨迹包即可导入</strong><span>支持多文件；自动解压并在下方分组显示</span><label class="point-file-picker">或选择 ZIP / JSON 文件<input id="pointFileImport" type="file" multiple accept=".zip,.json,application/zip,application/json"></label></div><p id="pointFileImportStatus" class="note" role="status" aria-live="polite">读取 observations.json 与平台配置，跳过 reference.json 真值；不会调用模型。多文件须使用相同平台配置。导出保留全部原始点位。</p><div id="pointFileList"></div><button id="refreshPointFiles">刷新文件列表</button></section>
+<section class="workspace-input"><h2>当前会话 · 持久化追加</h2><p id="workspaceInputStatus" class="note" role="status">仍在此工作台处理，不打开第二个页面。</p><label>时间基准ID<input id="workspaceTimeline" maxlength="120"></label><label>本次追加来源ID<input id="workspaceSource" value="workspace" maxlength="120"></label><p class="note">同一来源保持相同ID以识别重复；独立数据重用编号时请区分来源。不同时间基准不要直接追加。</p><div class="actions"><button id="enableWorkspaceInput">启用当前会话追加（免费）</button><a id="exportWorkspace" hidden download>导出会话与接入账本</a></div><details><summary>追加单点 / 批次 JSON</summary><textarea id="workspaceRawPoints" rows="4" placeholder='[{"candidate_id":"new-1","t":1,"platform_id":"A","array":"hull","bearing_deg":30}]'></textarea><button id="appendWorkspacePoints">追加观测（免费）</button><button id="retryWorkspaceAppend" hidden>重发原接入请求（免费）</button></details><pre id="workspaceReceipt" hidden></pre></section>
+<input id="sessionId" type="hidden">
+<p id="batchSource" class="note"></p>
+<h2>数据浏览与自由选点</h2><p class="note">每个点是一条带时间、平台、阵列、方位的观测；仿真数据与图片高斯提取数据按来源区分。同一秒可有多个候选。勾整行加入该时刻全部候选，展开可逐点选择。</p><label>数据浏览分组<select id="targetTrackSelect" multiple size="4" aria-label="数据浏览分组"><option value="" selected>全部候选</option></select></label>
+<p id="targetTrackNotice" class="note">分组仅用于浏览，不是模型身份答案。切换分组不会清空选择或新建会话。</p>
+<div class="actions"><button id="selectInitialPoints">补选各组前3点</button><button id="selectAllPoints" type="button" title="选择当前浏览分组中的全部观测，保留其他已选点">全选当前分组</button><button id="clearSelection">清空选择</button><button id="showSelected">查看已选清单</button></div>
+<section class="point-sampling" aria-label="可选测试抽样"><label for="samplePointMode">测试抽样模式<select id="samplePointMode"><option value="source_pairs" selected>按同数据集 hull＋tow 双阵组（默认）</option><option value="points">按单点随机（保留稀疏测试）</option><option value="synchronous_groups">按同步时刻组（可选对照）</option></select></label><label for="samplePointCount"><span id="samplePointCountLabel">要选多少个单独观测点</span><input id="samplePointCount" type="number" min="1" step="1" value="100" inputmode="numeric" aria-describedby="pointSamplingHint"></label><button id="samplePoints" type="button">随机小间隔选点</button><p id="pointSamplingHint" class="note"></p><p id="pointSamplingStatus" class="note" role="status" aria-live="polite"></p></section>
+<button id="supplementEvidence" type="button">可选：补选真实邻域并准备复核（免费）</button><p class="note">只补选已导入的相邻时刻候选，先显示数量供确认；不按文件认定目标，不自动调用模型。稀疏随机测试仍可原样使用。</p><p id="selectionDiagnostics" class="note" role="status" aria-live="polite"></p>
+<p id="chatPayloadSummary" class="note"></p><details id="importFilterReport" hidden></details><div id="candidateGroupList" class="candidate-group-list" aria-label="同步观测行与单点选择"></div>
+<details id="selectedList" open><summary id="selectedSummary">已选观测 · 0点</summary><div id="selectedPoints"></div></details>
+<section class="sidebar-platform"><h2>平台配置</h2><label class="point-file-picker">导入平台 JSON<input id="platformFileImport" type="file" accept=".json,application/json"></label><p id="platformImportStatus" class="note" role="status" aria-live="polite">平台文件位于轨迹 ZIP 的 input/platform.json；导入轨迹包时会自动读取。以下字段仅展示，不可编辑。</p><div id="sidebarPlatformFields"></div><p class="note">综合图保留平台配置导航轨迹，不将平台坐标当作目标位置。已有分析时导入新平台会另建会话，保留旧结果。</p></section>
+</aside>
+<div class="prediction-main">
+<section class="card prediction-chat"><div class="heading"><h2>小怪 · 关联与预测</h2><span id="chatState">等待观测</span></div>
+<template id="executionTemplate"><details class="chat-execution" data-execution-group><summary><span data-execution-role="title">执行过程</span><span data-execution-role="badge"></span></summary><div class="chat-execution-body"><p data-execution-role="current" role="status"></p><progress hidden data-execution-role="progress" max="8" value="0" aria-label="已完成执行步骤"></progress><ol data-execution-role="nodes"></ol><section class="execution-stream-output" hidden><h4>模型正文 · 完整流式输出</h4><p class="execution-stream-status note"></p><pre class="execution-stream-body" tabindex="0" aria-label="完整模型正文"></pre></section><p class="execution-footnote">实际执行记录 · 展开明细不会再次调用模型</p></div></details></template>
+<div id="chatStage" class="chat-scroll-stage" aria-label="聊天消息与执行过程">
+<div id="chatMessages" class="prediction-messages" role="log"></div>
+<details id="sequenceHistory" class="sequence-history" open hidden><summary>逐组执行记录 · 完整模型正文与证据</summary><div class="context-copy-toolbar"><button id="copySequenceContext" class="context-copy-button" type="button" title="复制当前任务全部输入、模型原文、校验与显示假设">⧉ 复制全部上下文</button></div><div id="sequenceSteps"></div><div class="context-copy-toolbar"><button id="copySequenceContextBottom" class="context-copy-button" type="button">⧉ 复制全部上下文</button></div></details>
+<section id="spatialTrajectoryScene" class="spatial-result" hidden><div class="heading"><h3>空间轨迹 <span id="spatialStatusBadge" class="chart-status-badge">候选 · 非唯一解</span></h3><div class="actions"><button id="spatialZoomIn" aria-label="放大空间图">＋</button><button id="spatialZoomOut" aria-label="缩小空间图">－</button><button id="spatialReset">复位</button><a id="downloadSpatial" hidden download>下载 PNG</a></div></div><p id="spatialStatus" class="note"></p><svg hidden id="spatialChart" role="img" aria-label="平台与目标空间候选轨迹图"></svg><p id="spatialLegendNote" class="note">方块为平台 · 同色为同一假设的镜像分支 · 滚轮缩放，拖动平移</p></section>
+<section id="bearingResultScene" class="spatial-result" hidden><h3>模型方位诊断 · 非空间轨迹</h3><p id="bearingResultStatus" class="note"></p><svg id="bearingResultChart" role="img" aria-label="模型方位拟合与实际支持观测，非空间路线"></svg><p class="note">圆点为实际已确认观测；实线为模型提供并通过校验的拟合；虚线为模型预测。缺测和空曲线不由本地补线。</p></section></div>
+<div id="chatDock" class="chat-bottom-dock" aria-label="固定底部的选择、输入与操作区">
+<section id="sequencePanel" class="sequence-panel" aria-label="逐组轨迹判断队列">
+<label class="check"><input id="useSequential" type="checkbox" checked>启用轨迹判断队列（支持逐组／50组快照批次）</label>
+<div class="actions"><label>执行模式<select id="sequenceMode"><option value="batch-snapshot-v1" selected>50组快照批次 · 模型并发判断（默认）</option><option value="sequential">逐组判断（兼容原队列）</option></select></label><label>每批组数<input id="sequenceBatchSize" type="number" min="1" max="50" value="50"></label><label>批内模型并发<input id="sequenceConcurrency" type="number" min="1" max="50" value="50"></label></div>
+<p id="sequenceModeNotice" class="note" role="status"></p><div class="actions"><button id="sequenceSwitchBatch" hidden>结束旧队列并切换50组模式（免费）</button></div>
+<div id="sequenceSpatialCardsSetup" class="actions"><label class="check"><input id="sequenceSpatialCards" type="checkbox" checked>联合判断目标与空间分支（候选方案版；新队列默认启用）</label><span class="note">数值候选由模型选择；保守接续上限100米/秒，镜像仍是工作假设。</span></div>
+<div id="sequenceRetrySetup" class="actions"><label class="check"><input id="sequenceRetryEnabled" type="checkbox" checked>输出格式异常自动重试（额外计费；未知/超时不自动重试）</label><label>每环节额外重试<input id="sequenceRetryLimit" type="number" min="0" max="2" value="2"></label><label>全队列额外重试预算<input id="sequenceRetryBudget" type="number" min="0" max="1000" value="20"></label></div>
+<p id="sequenceRetryStatus" class="note" role="status"></p>
+<div class="actions"><button id="sequencePrepareRetry" hidden>准备失败环节重试（免费，需重新授权）</button></div>
+<div id="sequenceSetup" class="actions"><label>顺序<select id="sequenceOrder"><option value="event_time">实验回放：观测时间</option><option value="received">按当前提交顺序</option></select></label><label>接续范围<select id="sequenceTarget"><option value="">全部已有轨迹（不预设归属）</option></select></label><label>局部复核上限<input id="sequenceReviewLimit" type="number" min="1" max="500" value="80"></label><label>长缺口提示（秒）<input id="sequenceGapLimit" type="number" min="1" max="86400" value="180"></label><label>总调用上限（含重试）<input id="sequenceBudget" type="number" min="0" max="10000" step="1" value="20"></label><button id="prepareSequence">准备队列（免费）</button></div>
+<p id="sequenceBudgetHint" class="note" role="status"></p><p id="sequencePreparationStatus" class="note" role="status" aria-live="polite"></p>
+<div class="actions"><button id="sequenceApplyBudget" hidden>应用预算到现有会话（免费，不发送模型）</button><a id="sequenceSnapshots" hidden download="batch-snapshots.json">下载批次快照（免费）</a></div>
+<p id="sequenceStatus" class="note" role="status">先选择观测并免费准备；批量选择将排队逐组判断，预测仍需另外授权。</p>
+<label class="check"><input id="sequenceConsent" type="checkbox">我同意按准备结果调用模型，包含明确列出的输出格式重试次数及预算；快照模式包含单组判断和每批归并。所有尝试计入总上限，可能产生API费用；超时/未知结果不自动重试。关闭页面不会取消运行，以实际账单为准。</label>
+<div class="actions"><button id="sequenceNext">执行下一组</button><button id="sequenceStart">连续逐组执行</button><button id="sequencePause">暂停后续步骤</button><button id="sequenceRefresh">刷新状态（免费）</button></div>
+<div class="actions"><button id="sequenceAdopt">确认本次更新（免费）</button><button id="sequenceReject">结束并放弃本次更新</button><button id="sequenceExtendReview" hidden>准备待决片段复核（免费，发送另需授权）</button><button id="sequenceRecover">复核保存回复（免费）</button></div>
+
+</section>
+
+<section id="rerunPanel" class="rerun-panel" hidden><h3 id="rerunTitle">本轮未完成，可手动重新运行</h3><p id="rerunHint" class="note"></p><label id="rerunUnknownWarning" class="check" hidden><input id="rerunUnknownAck" type="checkbox"><span>我已核对服务记录，理解上次可能已计费，本次重新请求也可能产生费用。</span></label><div class="actions"><button id="prepareRerun" class="primary">重新运行本轮（先免费准备）</button><button id="rerunAssociation" hidden>重新分析本轮归属</button></div></section>
+<section id="trajectoryReview" class="mixed-review" hidden><h3>各目标数据集合等待确认</h3><p id="revisionNotice"></p><label>打回原因（打回必填）<textarea id="reviewReason" rows="2" maxlength="2000"></textarea></label><div class="actions"><button id="adoptTrajectory" class="primary">确认集合（免费，尚不绘图）</button><button id="rejectTrajectory">打回关联集合（免费）</button></div></section>
+<section id="modelPlotPanel" class="mixed-review" hidden><h3>第二阶段 · 模型空间轨迹图</h3><label>本次绘图用途<select id="modelPlotPurpose"><option value="spatial">空间轨迹（必须有有效几何候选）</option><option value="bearing">仅方位诊断（不等于空间路线）</option></select></label><p id="modelPlotCapability" class="note" role="status"></p><p id="modelPlotHint">确认集合后，把目标集合、未归属、质量和校验说明发给模型生成曲线；不使用后端线性替代。</p><label class="check"><input id="modelPlotConsent" type="checkbox"><span>单独同意第二次模型调用及API费用，用于轨迹判断、曲线与预测。</span></label><div class="actions"><button id="prepareModelPlot">准备绘图资料（免费）</button><button id="runModelPlot" class="primary" disabled>授权模型生成空间轨迹 ↗</button></div></section>
+<div id="chatComposer" class="chat-composer"><details><summary id="chatAttachmentSummary">本轮明确选择的观测</summary><div id="chatPointTable"></div><details><summary>匿名模型输入预览（免费准备后可见）</summary><pre id="chatInput"></pre></details></details><label>发送给 Agent 的问题<textarea id="chatQuestion" rows="4" maxlength="2000"></textarea></label><label class="check"><input id="chatConsent" type="checkbox"><span>同意发送本轮匿名观测与问题，并承担一次模型调用可能产生的API费用。失败不自动重试。</span></label><div class="actions"><button id="chatPrepare">准备输入（免费）</button><button id="chatSend" class="primary" disabled>分析归属并列出集合 ↗</button></div></div>
+<button id="prepareAssociationRecheck" type="button" hidden>重新复核全部已提交观测（免费；发送仍需模型授权）</button>
+<button id="recoverPlot" type="button" hidden>本地复核已保存绘图回复（免费，不调用模型）</button>
+<button id="refreshRunningTask" type="button" hidden>刷新任务状态（免费，不重新调用模型）</button>
+<button id="recoverAssociation" type="button" hidden>读取已保存回复并本地恢复（免费，不调用模型）</button>
+<p id="chatNotice" class="note" role="status">首批选择只作为待分析观测，不自动连成轨迹。</p></div></section>
+</div>
+<div id="chartSidebarShell" class="chart-sidebar-shell">
+<div id="chartSidebarResize" class="chart-sidebar-resize" role="separator" tabindex="0" aria-label="调整右侧图表栏宽度，左右方向键调整" aria-orientation="vertical" aria-controls="chartSidebar" aria-valuemin="280" aria-valuemax="900" aria-valuenow="460" title="拖动调整宽度；左右方向键调整，双击恢复默认"></div>
+<aside id="chartSidebar" class="chart-sidebar" aria-label="观测与数据集图表"><div class="chart-sidebar-heading"><strong>图表预览</strong><button id="closeChartSidebar" type="button" aria-label="收起右侧图表栏">收起</button></div>
+<section id="sequenceWorkingPreview" class="sequence-working-preview" aria-label="逐组已处理观测与暂定轨迹" hidden>
+<div class="heading"><h3>空间轨迹 · 一组一位置</h3><span id="sequenceWorkingCount">0组</span></div>
+<p id="sequenceCompletionNotice" class="association-warning" role="status" hidden></p>
+<p id="sequenceWorkingStatus" class="note" role="status"></p>
+<div class="actions"><button id="sequenceSpatialZoomIn" aria-label="放大逐组空间图">＋</button><button id="sequenceSpatialZoomOut" aria-label="缩小逐组空间图">－</button><button id="sequenceSpatialReset">复位</button></div>
+<label class="note">证据分不出镜像时的显示约定：<select id="sequenceMirrorSide"><option value="right">hull相对航向右侧优先</option><option value="left">hull相对航向左侧优先</option></select></label>
+<label class="note"><input id="sequenceAutoConnect" type="checkbox" checked><span id="sequenceAutoConnectLabel">自动暂接并随新组重算（本地显示假设，非模型归属）</span></label>
+<p id="sequenceSpatialLinkSummary" class="note"></p>
+<details><summary>自动改线／镜像更换记录</summary><div id="sequenceSpatialLinkChanges"></div></details>
+<p id="sequenceSpatialStatus" class="note" role="status"></p>
+<svg id="sequenceSpatialChart" viewBox="0 0 500 320" role="img" aria-label="双阵分组唯一位置的东向北向米制空间图"></svg>
+<details id="sequenceSpatialGroupDetails" open><summary id="sequenceSpatialGroupTitle">双阵组位置与待定详情</summary><div id="sequenceSpatialGroupList"></div></details>
+<details><summary id="sequenceSpatialLegendTitle">候选分支图例（非目标数）</summary><div id="sequenceSpatialLegend" class="chart-legend"></div></details>
+<details id="sequenceSpatialUnavailable"><summary>无法定位或不稳定的说明</summary><pre id="sequenceSpatialDiagnostics"></pre></details>
+<pre id="sequenceSpatialHover" class="selected-source-hover" hidden role="status"></pre>
+<p class="note">方块为平台，每组双阵采用一个可撤回的位置假设。已有接续历史时比较连续性；证据无法区分镜像时使用上方明确约定，不代表已解除镜像或确认目标。不同轨迹假设用不同颜色，同一条内点线同色实线；实线不等于已确认。不稳定及暂接说明保留在详情，后续可自动改接。本图不是未来预测。</p>
+<details id="sequenceBearingDiagnostics"><summary>方位—时间诊断（非空间图）</summary>
+<svg id="sequenceWorkingChart" viewBox="0 0 500 230" role="img" aria-label="已处理观测与已校验暂定归属的方位时间图"></svg>
+<div id="sequenceWorkingLegend" class="chart-legend"></div><p class="note">一组一个点，位置取 hull 方位（缺 hull 时取 tow）。仅按已校验的单阵接续边连线；淡虚线为低置信暂接，普通虚线为多点支持，橙线为疑点；灰色待定点不连。不是空间路线、拟合或未来预测，不按来源颜色连线。</p>
+</details>
+<details id="sequenceWorkingRevisions"><summary>暂接与局部修订记录</summary><div id="sequenceRevisionList"></div></details>
+
+<pre id="sequenceWorkingHover" class="selected-source-hover" hidden role="status"></pre>
+</section>
+<details id="sharedTrajectoryScene" class="bearing-preview" open aria-label="持续更新的综合轨迹图"><summary id="trajectorySceneTitle">方位—时间过渡预览（可展开／收起）</summary><div class="bearing-preview-body"><svg id="predictionChart" viewBox="0 0 800 210" role="img" aria-label="综合方位—时间轨迹图"></svg><div id="pointHover" class="point-hover" hidden role="status"></div><section id="pointCard" class="point-card" hidden aria-label="观测点完整数据"></section><div id="bearingLegend" class="chart-legend" aria-label="方位图轨迹图例"></div><div id="predictionSummary"></div><p id="associationQualityNotice" class="note" role="status"></p><details class="bearing-extra"><summary>图例、平台与历史记录</summary><p class="note">此处仅显示观测组标记：完整 hull＋tow 只画一个点，显示位置取 hull 方位，不是两阵平均值；未成组观测独立显示。灰点为待分析／未归属，固定色为组内一致的已确认归属。不显示接续线、拟合线或未来预测点。空间轨迹在最终回答后单独展示，不补造缺测观测或距离。</p><div id="platformScene"></div><details class="prediction-ledger"><summary>历史预测与修订记录</summary><pre id="roundLog"></pre></details></details></div></details>
+<section id="selectedSourcePreview" class="selected-source-preview" aria-label="已勾选观测的来源颜色预览">
+<div class="heading"><h3>已勾选点 · 数据集颜色预览</h3><span id="selectedSourceCount">0点</span></div>
+<p class="note">仅前端对照：同一导入数据集同色；每组 hull＋tow 只画一个实心点，显示位置取 hull 方位，tow 见悬浮详情；颜色不代表模型目标归属；仅显示散点，不连线、不拟合、不预测；悬停或键盘聚焦可查看该双阵组的完整信息。</p>
+<svg id="selectedSourceChart" viewBox="0 0 800 230" role="img" aria-label="按来源数据集着色的已勾选点方位时间图"></svg>
+<div id="selectedSourceLegend" class="chart-legend"></div>
+<pre id="selectedSourceHover" class="selected-source-hover" hidden role="status"></pre>
+</section>
+</aside></div>
+</div></main></body></html>

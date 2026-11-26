@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000018",
+  "target_ref": "new",
+  "reason": "同强度组中该单元方位与位置均不连续，无法并入现有轨迹，故建议新建目标。"
+}

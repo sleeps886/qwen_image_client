@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000093\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"U000093包含的观测O000182和O000185的特征（强度约0.289，Hull方位角从142.9°持续增大至155.4°）与快照中已归属轨迹B000003的历史特征完全一致。时间序列上，该组位于t=74之后、t=131之前，符合向已有轨迹末尾接续的逻辑；几何趋势显示目标在相对平台上持续向右舷移动，属于稳定航迹延续，无跳变或冲突迹象。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_a0c87a53-de6e-42ac-b45e-976cb13e2289",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 182,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.00684"
+  }
+}

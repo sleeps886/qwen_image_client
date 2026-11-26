@@ -1,0 +1,8 @@
+```json
+{
+"snapshot_version": 0,
+"unit_id": "U000024",
+"target_ref": "unassigned",
+"reason": "快照无已有轨迹，该组孤立且缺乏连续性证据，暂不建立新目标。"
+}
+```

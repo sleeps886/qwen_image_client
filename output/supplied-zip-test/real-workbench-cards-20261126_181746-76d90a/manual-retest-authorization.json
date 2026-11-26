@@ -1,0 +1,16 @@
+{
+  "source_test_copy": "C:\\Users\\LENOVO\\Desktop\\qwen_image_client\\output\\supplied-zip-test\\real-workbench-cards-20261126_181030-d956d0",
+  "duplicate_charge_risk_acknowledged": true,
+  "manual_test_reissue_units": [
+    "U000342",
+    "U000343",
+    "U000344",
+    "U000345",
+    "U000346",
+    "U000347",
+    "U000348"
+  ],
+  "prior_calls": 357,
+  "total_call_limit_unchanged": 507,
+  "automatic_unknown_retry_enabled": false
+}

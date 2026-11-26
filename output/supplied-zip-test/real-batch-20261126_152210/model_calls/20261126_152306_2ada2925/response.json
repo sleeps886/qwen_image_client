@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000086\",\n  \"target_ref\": \"B000002\",\n  \"reason\": \"该单元观测的方位角（Hull约104.86°，Tow约101.59°）与目标B000002的历史轨迹特征高度吻合。在t=72~74秒期间，B000002的Hull方位稳定在104.69°-104.70°区间，Tow方位在101.93°-101.92°区间；本单元t=117秒时Hull方位为104.86°、Tow为101.59°，呈现连续缓慢变化趋势且无跳变。此外，信号强度值（Hull≈0.244，Tow≈0.244）及标准差参数与B000002既有记录完全一致，而明显区别于B000001（强度≈0.179）和B000003（强度≈0.289）。几何候选位置显示其位于平台左舷方向，符合该目标的持续运动模式，因此判定归属为B000002。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_bfa3efd2-ec06-49ed-881a-64a6ea21cdd8",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 310,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049834"
+  }
+}

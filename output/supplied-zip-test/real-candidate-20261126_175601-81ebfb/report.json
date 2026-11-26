@@ -1,0 +1,46 @@
+{
+  "evaluation_only": true,
+  "reference_used_for_inference": false,
+  "assigned_groups": 50,
+  "target_hypotheses": 4,
+  "confusion": {
+    "None": {
+      "I01": 8,
+      "I03": 6
+    },
+    "T001": {
+      "I02": 9
+    },
+    "T003": {
+      "I01": 9
+    },
+    "T004": {
+      "I03": 9
+    },
+    "T002": {
+      "I02": 9
+    }
+  },
+  "unassigned_groups": 14,
+  "groups_with_selected_position": 36,
+  "selected_position_rmse_m": 2989.3782734839124,
+  "mirror_invariant_rmse_m_evaluation_only": 4.212869554682078,
+  "nearest_candidate_rmse_m_evaluation_only": 4.883464538163465,
+  "cross_source_edges": 0,
+  "edge_count": 32,
+  "max_apparent_speed_mps": 13.058375866581102,
+  "mirror_resolved_by_evidence": false,
+  "production_session_modified": false,
+  "results_adopted": false,
+  "status": "invalid_response",
+  "model": "qwen3.8-omni-flash",
+  "real_model_requests": 105,
+  "extra_retries": 3,
+  "snapshots": 1,
+  "elapsed_seconds": 55.75,
+  "last_validation_error": "模型候选选择重复占用了同一观测组",
+  "runtime_workbench_changed": false,
+  "numerical_cards_applied_without_model": false,
+  "valid_worker_replies": 100,
+  "invalid_worker_attempts": 0
+}

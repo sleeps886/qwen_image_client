@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000038\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无历史轨迹可供关联。本组观测（t=422.0）的方位角约为165°-167°，强度为0.2437。虽然在全局数据中存在其他同强度的目标（如t=90-214区间的~102°群），但其方位与当前值差异巨大且时间跨度长，无法建立合理的运动连续性；同时不存在接近该时刻或该方位的其他候选轨迹片段。依据协议，不得仅凭强度匹配认定身份，故建议作为新目标起始。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_c74a9e16-48c9-4962-863c-4223510d2ab0",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 165,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004784"
+  }
+}

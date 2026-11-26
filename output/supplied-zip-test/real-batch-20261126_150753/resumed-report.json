@@ -1,0 +1,16 @@
+{
+  "model": "qwen3.8-omni-flash",
+  "run_id": "79668c76d6c946d1b9a627a6278557d5",
+  "status": "completed_awaiting_review",
+  "processed_groups": 54,
+  "real_model_requests": 56,
+  "snapshots": 2,
+  "target_hypotheses": 5,
+  "unassigned_raw": 0,
+  "additional_elapsed_seconds": 75.98,
+  "last_error": null,
+  "automatic_retries": 0,
+  "single_group_requests_repeated": 0,
+  "results_adopted": false,
+  "production_session_modified": false
+}

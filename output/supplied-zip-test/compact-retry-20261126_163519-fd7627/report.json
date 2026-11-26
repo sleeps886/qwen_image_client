@@ -1,0 +1,16 @@
+{
+  "source_session": "20261126_160221_e6c775eb",
+  "new_model_requests": 1,
+  "status": "paused",
+  "processed_before": 150,
+  "processed_after": 200,
+  "target_hypotheses": 3,
+  "worker_requests_repeated": 0,
+  "snapshot_count": 4,
+  "prior_snapshots_preserved": true,
+  "canonical_chars": 197342,
+  "compact_chars": 77933,
+  "input_reduction_percent": 60.51,
+  "last_error": null,
+  "production_state_unchanged": true
+}

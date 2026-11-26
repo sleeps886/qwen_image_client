@@ -1,0 +1,228 @@
+{
+  "method": "blind reference-only diagnostic; no source labels, no truth; prioritize 3-degree parallax for probing only, not a production ranker",
+  "original_shortlist": [
+    {
+      "reference_id": "P001",
+      "fragment_refs": [
+        "R027",
+        "R199"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    },
+    {
+      "reference_id": "P002",
+      "fragment_refs": [
+        "R031",
+        "R195"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    },
+    {
+      "reference_id": "P003",
+      "fragment_refs": [
+        "R027",
+        "R195"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 8,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P004",
+      "fragment_refs": [
+        "R023",
+        "R195"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    },
+    {
+      "reference_id": "P005",
+      "fragment_refs": [
+        "R027",
+        "R191"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    },
+    {
+      "reference_id": "P006",
+      "fragment_refs": [
+        "R031",
+        "R199"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 8,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P007",
+      "fragment_refs": [
+        "R023",
+        "R192"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 6,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P008",
+      "fragment_refs": [
+        "R024",
+        "R191"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 6,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P009",
+      "fragment_refs": [
+        "R024",
+        "R192"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 6,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P010",
+      "fragment_refs": [
+        "R023",
+        "R191"
+      ],
+      "status": "rejected_temporal_consistency",
+      "synchronous_times": 8,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+    },
+    {
+      "reference_id": "P011",
+      "fragment_refs": [
+        "R031",
+        "R203"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    },
+    {
+      "reference_id": "P012",
+      "fragment_refs": [
+        "R035",
+        "R199"
+      ],
+      "status": "insufficient_evidence",
+      "synchronous_times": 4,
+      "identity_confirmed": false,
+      "eligible_for_spatial": false,
+      "models": [],
+      "reason": "需要至少5个实际同步时刻，才能留出观测核对跨阵配对；单次交会不是身份依据。"
+    }
+  ],
+  "additional_pairs_tested": [
+    {
+      "refs": [
+        "R117",
+        "R288"
+      ],
+      "time_range": [
+        397.0,
+        422.0
+      ],
+      "evidence": {
+        "status": "rejected_temporal_consistency",
+        "synchronous_times": 8,
+        "identity_confirmed": false,
+        "eligible_for_spatial": false,
+        "models": [],
+        "reason": "跨阵多时刻拟合、留出误差或距离可观测性不足；不因射线相交就合并目标。"
+      }
+    },
+    {
+      "refs": [
+        "R026",
+        "R194"
+      ],
+      "time_range": [
+        90.0,
+        104.0
+      ],
+      "evidence": {
+        "status": "temporal_supported",
+        "synchronous_times": 8,
+        "identity_confirmed": false,
+        "eligible_for_spatial": true,
+        "models": [
+          {
+            "family": "cv",
+            "handedness": [
+              1,
+              1
+            ],
+            "heldout_rmse_deg": 0.0050564379658648104,
+            "heldout_normalized_rmse": 0.0050564379658648104,
+            "position_sigma_proxy_m": 854.7925171457025,
+            "selection_score": 0.6050564379658648
+          },
+          {
+            "family": "cv",
+            "handedness": [
+              -1,
+              -1
+            ],
+            "heldout_rmse_deg": 0.002246306477664872,
+            "heldout_normalized_rmse": 0.002246306477664872,
+            "position_sigma_proxy_m": 854.7896824680533,
+            "selection_score": 0.6022463064776649
+          }
+        ],
+        "reason": "通过选中观测的多时刻／留出检查，仍是配对候选，不是身份真值。",
+        "heldout_times": [
+          98.0,
+          102.0
+        ]
+      }
+    }
+  ],
+  "eligible_found": true,
+  "real_model_calls": 0
+}

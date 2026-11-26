@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000030\",\n\"target_ref\": \"T_S_289_STRONG\",\n\"reason\": \"快照中无既有轨迹与目标，故判定为新目标。依据本批联合背景：该单元强度为0.28933（强信号），方位约173°，时间t=340s处于观测序列后段；其运动趋势符合从近正后方（~176°）向大角度侧方演化的特征，属于高置信度的独立接触点，需建立新航迹以区分于低/中强度的其他信号源。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3efc60ad-da26-44b8-b8e9-ba73d9460407",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 149,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.00474"
+  }
+}

@@ -30,6 +30,23 @@ class ModelTrajectoryTests(unittest.TestCase):
             if change=='empty':answer['tracks']=[]
             with self.subTest(change=change),self.assertRaises(ValueError):validate_final(json.dumps(answer),self.context,self.candidates)
 
+    def test_partial_numeric_refinement_cannot_call_cloud_or_publish_final_tracks(self):
+        from backend.app.agents.nodes.inverse import InverseNodes
+        with tempfile.TemporaryDirectory() as temporary:
+            directory=Path(temporary);agent=ForwardInverseAgent(finalizer=lambda *args:self.fail('cloud must not be called'))
+            agent.directory=directory
+            (directory/'estimated_track.png').write_bytes(b'local candidate')
+            (directory/'tracks.json').write_text('{}',encoding='utf-8')
+            result=InverseNodes(agent).model_final({'context':self.context,'document':self.candidates,
+                                                   'profile_report':{'status':'budget_limited'}})
+            self.assertEqual(agent.new_model_calls,0)
+            self.assertEqual(agent.final_report['failed_stage'],'numeric_refinement')
+            self.assertFalse(agent.final_report['numeric_fallback'])
+            self.assertFalse((directory/'estimated_track.png').exists())
+            self.assertFalse((directory/'tracks.json').exists())
+            self.assertTrue((directory/'backend_candidate.png').exists())
+            self.assertFalse(result['document']['tracks'])
+
     def test_exact_identity_branch_reference_is_accepted_without_changing_points(self):
         candidates=copy.deepcopy(self.candidates);candidates['tracks'][0]['branch']='cv:alternative0:segment0'
         answer=copy.deepcopy(self.answer);answer['tracks'][0]['source_candidate_ids']=['C1|cv:alternative0:segment0']

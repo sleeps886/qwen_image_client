@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "unit_id": "U000026",
+  "target_ref": "new",
+  "reason": "强度与现有轨迹均不匹配，且无法建立连续方位变化趋势，故判定为新目标。"
+}

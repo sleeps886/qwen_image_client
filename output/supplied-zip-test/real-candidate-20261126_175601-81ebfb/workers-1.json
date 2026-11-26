@@ -1,0 +1,652 @@
+{
+  "U000002": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    }
+  },
+  "U000040": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000006": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000008": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    }
+  },
+  "U000001": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000012": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000009": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000020": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    }
+  },
+  "U000003": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": null,
+      "reason_code": "competing"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": null,
+      "reason_code": "competing"
+    }
+  },
+  "U000004": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000017": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000025": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    }
+  },
+  "U000005": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000007": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    }
+  },
+  "U000024": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000016": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": null,
+      "reason_code": "insufficient"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": null,
+      "reason_code": "insufficient"
+    }
+  },
+  "U000022": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    }
+  },
+  "U000010": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000019": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000026": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    }
+  },
+  "U000033": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    }
+  },
+  "U000042": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000027": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    }
+  },
+  "U000021": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L001",
+      "reason_code": "continuity"
+    }
+  },
+  "U000046": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    }
+  },
+  "U000032": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    }
+  },
+  "U000031": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    }
+  },
+  "U000030": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    }
+  },
+  "U000029": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000023": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L010",
+      "reason_code": "continuity"
+    }
+  },
+  "U000041": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000038": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    }
+  },
+  "U000043": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    }
+  },
+  "U000044": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    }
+  },
+  "U000045": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "continuity"
+    }
+  },
+  "U000014": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    }
+  },
+  "U000018": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000011": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L012",
+      "reason_code": "continuity"
+    }
+  },
+  "U000036": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    }
+  },
+  "U000035": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000034": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000047": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L005",
+      "reason_code": "continuity"
+    }
+  },
+  "U000015": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L002",
+      "reason_code": "continuity"
+    }
+  },
+  "U000013": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L009",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L009",
+      "reason_code": "continuity"
+    }
+  },
+  "U000037": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "competing"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L008",
+      "reason_code": "competing"
+    }
+  },
+  "U000049": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    }
+  },
+  "U000048": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L006",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L006",
+      "reason_code": "continuity"
+    }
+  },
+  "U000028": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L004",
+      "reason_code": "continuity"
+    }
+  },
+  "U000050": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L003",
+      "reason_code": "continuity"
+    }
+  },
+  "U000039": {
+    "status": "returned",
+    "object": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    },
+    "parsed": {
+      "snapshot_version": 0,
+      "hypothesis_ref": "L007",
+      "reason_code": "continuity"
+    }
+  }
+}

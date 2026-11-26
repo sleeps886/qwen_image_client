@@ -1,0 +1,28 @@
+{
+  "evaluation_only": true,
+  "reference_used_as_model_input": false,
+  "reference_targets": 3,
+  "model_target_hypotheses": 5,
+  "source_counts_per_model_target": {
+    "B000001": {
+      "I01": 18
+    },
+    "B000002": {
+      "I02": 8
+    },
+    "B000003": {
+      "I03": 18
+    },
+    "B000004": {
+      "I02": 8
+    },
+    "B000005": {
+      "I01": 2
+    }
+  },
+  "pairwise_partition_agreement": 0.9301,
+  "appearance_matches_three_complete_lines": false,
+  "note": "No cross-source mixing in this run, but 2 true paths split into 2 hypotheses each. Mirror choice is display-only.",
+  "left_display_rmse_m": 2506.87,
+  "right_display_rmse_m": 1787.96
+}

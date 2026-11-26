@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000009\",\n\"target_ref\": \"unassigned\",\n\"reason\": \"快照无历史轨迹，本组为首次观测且坐标未收敛，无法确认身份，暂不归属。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f38fa455-9bfd-4aff-b878-e7850e1ee61f",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 69,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005176"
+  }
+}

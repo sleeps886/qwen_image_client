@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 0,
+  "target_ref": "new",
+  "branch_ref": "pp",
+  "reason_code": "insufficient"
+}

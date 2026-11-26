@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000029\",\n\"target_ref\": \"new\",\n\"reason\": \"当前快照中无历史轨迹（targets为空），该组观测作为时间序列中的首个单元，缺乏前序坐标或运动趋势供关联。观测数据特征为强度约0.289、方位角173度左右且hull与tow偏差极小，虽暗示单一稳定声源，但在无先验目标库的情况下，无法将其归属至任何已存在的轨迹，故判定为新目标的初始观测点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2dd39a0c-c5ff-4310-9c63-bd21837f61ef",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 130,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.027268"
+  }
+}

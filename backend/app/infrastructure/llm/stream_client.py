@@ -39,11 +39,11 @@ def safe_error(data,key):
     return (code+'：' if code else '')+message.replace('\r',' ').replace('\n',' ')[:500]
 
 
-async def stream_images(images,prompt,model,base_url,api_key,output_dir,*,allow_text_only=False,api_format=None):
+async def stream_images(images,prompt,model,base_url,api_key,output_dir,*,allow_text_only=False,api_format=None,max_prompt_chars=50000):
     if not api_key or '\n' in api_key or '\r' in api_key:raise ClientError('请检查服务端MODEL_API_KEY')
     api_format=api_format or model_api_format()
     url=endpoint(base_url,api_format)
-    body,metadata=build_request(images,prompt,model,allow_text_only=allow_text_only,api_format=api_format)
+    body,metadata=build_request(images,prompt,model,allow_text_only=allow_text_only,api_format=api_format,max_prompt_chars=max_prompt_chars)
     body['stream']=True
     run=ResultRepository(output_dir).create_run()
     content=[];reasoning=[];usage=None;response_id=None;finish_reason=None;done=False;total=0;provider_stop_reason=None

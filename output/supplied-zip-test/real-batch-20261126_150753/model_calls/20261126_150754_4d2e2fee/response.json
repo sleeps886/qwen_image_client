@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000025\",\n\"target_ref\": \"new\",\n\"reason\": \"快照初始无历史轨迹与目标列表。当前单元 U000025 (t=296s) 为独立观测点，其方位角(约176°)与前序最近时间戳 t=285s 的强信号簇(U000024, ~176.6°)虽接近，但后续时间点 t=337s、340s 及更晚时刻出现的相似高信噪比观测存在长时间间隔且伴随其他方向信号的穿插干扰。在缺乏连续平滑航迹约束的情况下，仅凭强度等级和局部方位相近不足以确证身份延续（符合协议禁止项）。因此，建议将该组观测作为新目标的起始段建立初步关联，待后续批次数据补充后再行合并或修正。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_30e139f6-b09a-4bec-a542-1ad955306011",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 208,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.0049"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000010\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹可供关联。当前单元在t=117.0的方位角约154°，强度为0.289。该时间窗口内同强度的另一候选（U000006）位于接近正后方区域，与当前观测偏差过大；且无法排除其他低强度目标的可能。缺乏连续性证据支持归入现有航迹或插入已有序列，故建议作为新目标的初始观测点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_ca526fed-4ae5-42f5-b8b3-0d53d203165e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 140,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004716"
+  }
+}

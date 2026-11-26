@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\": 1, \"unit_id\": \"U000077\", \"target_ref\": \"B000002\", \"reason\": \"该组观测（t=102）的方位角与B000002的历史轨迹高度连续：Hull阵列从t=98至104维持在约104.8°附近，Tow阵列维持在约101.7°附近。其信号强度特征（~0.244）及双阵标准差配置也与B000002在快照中的既有模式完全一致。鉴于平台静止且其他目标方位差异显著，判定为向末尾接续。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f6f30285-bfd5-4263-9323-900827d5f5ca",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 150,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006754"
+  }
+}

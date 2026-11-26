@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 2,\n  \"assignments\": [],\n  \"revisions\": [\n    {\n      \"observation_ids\": [\n        \"O000517\",\n        \"O000520\",\n        \"O000615\",\n        \"O000618\"\n      ],\n      \"target_ref\": \"B000001\",\n      \"reason\": \"观测点 O000517/520 (t=332) 与 O000615/618 (t=377) 虽暂定属于 B000004，但其强度特征（Strength≈0.179~0.244）及几何趋势更接近长期存在的背景目标 B000001。考虑到 B000004 为较晚出现的局部高亮簇，而此处存在明显的时空缺口和强度回落，判定这两个点实为 B000001 轨迹的延续片段，因噪声或检测中断被错误分割为新目标 N/B000004。将其归并回 B000001 以恢复单一连续物理航迹。\"\n    }\n  ]\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f67f24f4-bad4-48c2-b587-ec6c93b4a903",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 26168,
+    "output_tokens": 287,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.02171"
+  }
+}

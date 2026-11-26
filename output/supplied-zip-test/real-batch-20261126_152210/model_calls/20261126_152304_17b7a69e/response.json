@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000055\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"本单元包含t=83.0的双阵观测（O000111/O000114），其强度为0.1789，显著低于同批次的其他目标（如B000002的0.2438和B000003的0.2893）。在快照历史中，该强度特征唯一对应已建立的轨迹B000001。方位角方面，Hull阵列读数约176.6°，Tow阵列读数约176.5°，两者高度一致且符合双阵几何约束。对比B000001的历史末端（t=74.0时Hull约为174.8°，Tow约为174.7°），当前观测值显示出平滑、连续的微小增量趋势，无跳变。虽然存在位置候选的多义性，但结合独特的低强度属性与稳定的方位演化规律，判定其为向已有轨迹B000001末尾接续。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_8972e46e-06ca-4a34-a699-1b79e01f0074",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 274,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007088"
+  }
+}

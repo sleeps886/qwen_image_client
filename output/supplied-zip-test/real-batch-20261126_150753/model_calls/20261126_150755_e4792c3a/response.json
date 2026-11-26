@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000036\",\n\"target_ref\": \"new\",\n\"reason\": \"快照中无历史轨迹（targets为空）。本批次联合背景显示存在多组具有稳定方位角趋势和特定强度特征的候选航迹：例如，strength≈0.289的观测点集中在170°-176°区间（如U000024, U000025, U000029, U000030），形成一条接近正后方的连续轨迹；strength≈0.244的观测点在100°-107°及150°左右波动；strength≈0.179的观测点在140°-165°及更低角度分布。当前聚焦单元U000036的特征为t=399s, bearing≈140°, strength≈0.179。虽然其强度与部分早期或低信噪比目标相似，但其时间戳较晚且方位角(140°)与该时刻附近其他同强度的高置信度观测（如U000037在t=415s, bearing≈137°）虽有延续性，但缺乏更早的同源直接前驱观测以确认为同一物理实体的中段插入。鉴于没有预存的活跃轨迹可供接续，且该单组观测不足以独立构成完整轨迹的确凿证据链来合并到现有的模糊群集中，故判定为新目标的初始检测或未归属的新起点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_2f9536a3-f429-4b20-82ab-236c99b748ff",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 347,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.005276"
+  }
+}

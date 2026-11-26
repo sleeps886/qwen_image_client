@@ -1,0 +1,40 @@
+// Isolated fake provider: control/display verification only, never accuracy.
+async page=>{
+  const base='http://127.0.0.1:8891',assert=(v,m)=>{if(!v)throw Error(m);},errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  assert((await(await page.request.get(base+'/api/test-fake-gateway')).json()).fake_gateway,'fake gateway required');
+  await page.setViewportSize({width:1750,height:1100});await page.goto(base+'/incremental');
+  await page.waitForFunction(()=>!document.querySelector('#openNewConversation').disabled);
+  await page.locator('#openNewConversation').click();
+  await page.waitForFunction(()=>!document.querySelector('#pointFileImport').disabled);
+  await page.locator('#pointFileImport').setInputFiles([1,2,3].map(i=>`C:/Users/LENOVO/AppData/Local/Temp/btr_target_00${i} (2).zip`));
+  await page.waitForFunction(()=>document.querySelector('#pointFileImportStatus').textContent.includes('966个原始观测'));
+  await page.locator('#samplePointCount').fill('50');await page.locator('#samplePoints').click();
+  await page.locator('#sequenceBudget').fill('65');await page.locator('#sequenceBudget').dispatchEvent('change');
+  await page.locator('#sequenceRetryBudget').fill('14');await page.locator('#sequenceRetryBudget').dispatchEvent('change');
+  await page.locator('#sequenceSpatialCards').check();await page.locator('#prepareSequence').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('已免费准备50组'));
+  await page.locator('#sequenceConsent').check();await page.locator('#sequenceStart').click();
+  await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('completed_awaiting_review'),{},{timeout:60000});
+  const sid=await page.locator('#sessionId').inputValue(),url=base+'/api/incremental/mixed-sessions/'+sid;
+  const state=await(await page.request.get(url)).json();
+  const run=await(await page.request.get(url+'/runs/'+state.active_sequential_run)).json();
+  assert(run.spec.spatial_association_contract==='model-selected-spatial-cards-v1','contract not frozen');
+  assert(run.calls===51&&run.cursor===50,'unexpected dispatch count');
+  const doc=run.working_view.spatial_preview;
+  assert(doc.branch_selection_source==='model','backend did not expose frozen branches');
+  assert(await page.locator('#sequenceMirrorSide').isDisabled(),'frontend can override model branch');
+  const expected=Object.values(doc.model_branch_choices).filter(Boolean).length;
+  assert(expected>0&&await page.locator('#sequenceSpatialChart circle[data-unit-id]').count()===expected,'missing/duplicate model-selected spatial markers');
+  assert(await page.locator('#sequenceSpatialGroupList>details').count()===50,'unlocalized group disappeared');
+  assert((await page.locator('#sequenceSpatialStatus').textContent()).includes('前端不'),'source label missing');
+  const before=await page.locator('#sequenceSpatialChart circle[data-unit-id]').evaluateAll(ns=>ns.map(n=>[n.dataset.unitId,n.getAttribute('cx'),n.getAttribute('cy')]));
+  await page.reload();await page.waitForFunction(()=>document.querySelector('#sequenceStatus').textContent.includes('completed_awaiting_review'));
+  assert(await page.locator('#sequenceSpatialCards').isChecked(),'frozen mode lost on refresh');
+  assert(await page.locator('#sequenceMirrorSide').isDisabled(),'mirror override enabled after refresh');
+  const after=await page.locator('#sequenceSpatialChart circle[data-unit-id]').evaluateAll(ns=>ns.map(n=>[n.dataset.unitId,n.getAttribute('cx'),n.getAttribute('cy')]));
+  assert(JSON.stringify(before)===JSON.stringify(after),'working positions changed after refresh');
+  assert(errors.length===0,'runtime errors: '+errors.join(';'));
+  await page.screenshot({path:'output/supplied-zip-test/spatial-cards-workbench-ui.png'});
+  return {modelOwnedBranches:true,refreshStable:true,groups:50,markers:expected,dispatches:51,realModelCalls:0,runtimeErrors:0};
+}

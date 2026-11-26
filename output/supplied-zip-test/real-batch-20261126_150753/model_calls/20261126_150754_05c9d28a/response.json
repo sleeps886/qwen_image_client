@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000026\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无已建立轨迹。本批次联合背景显示观测主要聚类为三个方位区段：约100°-107°（如U000023）、约142°-158°（如U000022/U000027）和约173°-177°（如U000025）。Focus Unit U000026位于t=310.0s，hull阵列方位约151.27°，tow阵列方位约150.62°。该数据在时间上紧邻U000027 (t=316.0s)，且其方位角与同强度的U000022 (t=259.0s) 及后续的U000027高度连续（从156°平滑变化至150°），符合单一目标的运动特征。由于这是首次处理此类数据且无历史目标库匹配，故判定为新目标起始点。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_216ab616-2963-481a-8217-5555e7f227e7",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 276,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.005084"
+  }
+}

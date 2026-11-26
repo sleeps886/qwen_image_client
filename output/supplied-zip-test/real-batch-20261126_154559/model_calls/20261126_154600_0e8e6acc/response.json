@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"unit_id\":\"U000029\",\"target_ref\":\"new\",\"reason\":\"无历史轨迹，且单点观测无法独立验证运动连续性，暂作为新目标初始点。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_15998e57-b7d4-4abe-9ff6-32867847dd80",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 47,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005116"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000081\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"该单元包含Hull和Tow在t=104.0的两个观测。从信号特征看，强度为0.2893且sigma_deg分别为4.4069（Hull）和1.9973（Tow），这与历史中归属于目标B000003的片段F005、F006的特征完全一致。方位角方面，Hull测得约152.14度，Tow测得约150.92度，两者数值接近且随时间的演化趋势与B000003的历史轨迹吻合（例如对比前序时刻t=102的对应观测）。此外，其几何位置候选点与其他已知目标的分布明显区分开，符合B000003的运动规律。因此判定归属B000003。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_825a1c5f-9fb9-4998-8105-2a12145aa00b",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 235,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.006982"
+  }
+}

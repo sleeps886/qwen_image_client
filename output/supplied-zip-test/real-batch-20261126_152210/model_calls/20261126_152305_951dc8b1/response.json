@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\": 1, \"unit_id\": \"U000070\", \"target_ref\": \"B000001\", \"reason\": \"该组观测在 t=100.0s 时方位角约为 179.8°，强度为 0.1789。回顾历史轨迹 B000001（包含 F001/F002），其最近时刻 t=74.0s 的方位角约为 174.7°~174.8°，且在整个时间段内呈现缓慢增加的趋势（从 t=54s 的 ~170.9° 到 t=74s 的 ~174.7°）。本组观测延续了这一趋势并处于合理的时间间隔后，同时保持了与 B000001 完全一致的恒定强度特征（0.1789）及 sigma_deg 参数组合（Hull: 5.3689, Tow: 1.6902）。相比之下，其他已知目标如 B000002 (strength≈0.2438) 和 B000003 (strength≈0.2893) 的强度特征与本组不符，因此判定归属于 B000001。\"}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_3e6e541e-a354-4986-bb9e-542187fa13e9",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 61247,
+    "output_tokens": 292,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.049786"
+  }
+}

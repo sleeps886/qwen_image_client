@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n    \"snapshot_version\": 0,\n    \"unit_id\": \"U000022\",\n    \"target_ref\": \"new\",\n    \"reason\": \"本批次中该方位角区间（约170°-175°）的观测序列在时间上连续且平滑演进：从 t=13.0 (U000001) 到 t=74.0 (U000049)，中间包含多个单元。具体而言，t=51.0 对应 U000020（Hull: 170.30°, Tow: 170.01°），t=55.0 对应 U000025（Hull: 171.10°, Tow: 170.84°）。当前关注单元 U000022 位于 t=54.0，其 Hull 方位角为 170.90°，Tow 方位角为 170.63°。这两个数值精确地插值于前后相邻时刻的同特征目标之间，表明它们属于同一个持续存在的声源轨迹。由于 snapshot.targets 为空，没有预定义的目标 ID，因此将其判定为新目标。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_612c9be7-d801-43ab-a35b-160fe006bd1e",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 283,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005504"
+  }
+}

@@ -1,0 +1,1963 @@
+[
+  {
+    "index": 1,
+    "kind": "worker",
+    "unit_id": "U000001",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 2,
+    "kind": "worker",
+    "unit_id": "U000002",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": \"mm\",\n\"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007466"
+    }
+  },
+  {
+    "index": 3,
+    "kind": "worker",
+    "unit_id": "U000003",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T1\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 42,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001208"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 4,
+    "kind": "worker",
+    "unit_id": "U000004",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"mm\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001212"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 5,
+    "kind": "worker",
+    "unit_id": "U000005",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 6,
+    "kind": "worker",
+    "unit_id": "U000006",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\"snapshot_version\": 0, \"target_ref\": \"T1\", \"branch_ref\": \"pp\", \"reason_code\": \"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 31,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001178"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 7,
+    "kind": "worker",
+    "unit_id": "U000007",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"T_U000002\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007484"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 8,
+    "kind": "worker",
+    "unit_id": "U000008",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.00119"
+    }
+  },
+  {
+    "index": 9,
+    "kind": "worker",
+    "unit_id": "U000009",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 10,
+    "kind": "worker",
+    "unit_id": "U000010",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001194"
+    }
+  },
+  {
+    "index": 11,
+    "kind": "worker",
+    "unit_id": "U000011",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 12,
+    "kind": "worker",
+    "unit_id": "U000012",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 13,
+    "kind": "worker",
+    "unit_id": "U000013",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\": 0, \"target_ref\": \"new\", \"branch_ref\": null, \"reason_code\": \"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 29,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001172"
+    }
+  },
+  {
+    "index": 14,
+    "kind": "worker",
+    "unit_id": "U000014",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007466"
+    }
+  },
+  {
+    "index": 15,
+    "kind": "worker",
+    "unit_id": "U000015",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001156"
+    }
+  },
+  {
+    "index": 16,
+    "kind": "worker",
+    "unit_id": "U000016",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001204"
+    }
+  },
+  {
+    "index": 17,
+    "kind": "worker",
+    "unit_id": "U000017",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T_new_1\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001212"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 18,
+    "kind": "worker",
+    "unit_id": "U000018",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n    \"snapshot_version\": 0,\n    \"target_ref\": \"new\",\n    \"branch_ref\": null,\n    \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 19,
+    "kind": "worker",
+    "unit_id": "U000019",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T_U000018\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 48,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001224"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 20,
+    "kind": "worker",
+    "unit_id": "U000020",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007476"
+    }
+  },
+  {
+    "index": 21,
+    "kind": "worker",
+    "unit_id": "U000021",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T1\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 42,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001208"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 22,
+    "kind": "worker",
+    "unit_id": "U000022",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001204"
+    }
+  },
+  {
+    "index": 23,
+    "kind": "worker",
+    "unit_id": "U000023",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 24,
+    "kind": "worker",
+    "unit_id": "U000024",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001156"
+    }
+  },
+  {
+    "index": 25,
+    "kind": "worker",
+    "unit_id": "U000025",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"T001\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 26,
+    "kind": "worker",
+    "unit_id": "U000026",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T1\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 42,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001208"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 27,
+    "kind": "worker",
+    "unit_id": "U000027",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 28,
+    "kind": "worker",
+    "unit_id": "U000028",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"mm\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007476"
+    }
+  },
+  {
+    "index": 29,
+    "kind": "worker",
+    "unit_id": "U000029",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 30,
+    "kind": "worker",
+    "unit_id": "U000030",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007476"
+    }
+  },
+  {
+    "index": 31,
+    "kind": "worker",
+    "unit_id": "U000031",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007476"
+    }
+  },
+  {
+    "index": 32,
+    "kind": "worker",
+    "unit_id": "U000032",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 33,
+    "kind": "worker",
+    "unit_id": "U000033",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"unassigned\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007476"
+    }
+  },
+  {
+    "index": 34,
+    "kind": "worker",
+    "unit_id": "U000034",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\": 0, \"target_ref\": \"new\", \"branch_ref\": null, \"reason_code\": \"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 29,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001172"
+    }
+  },
+  {
+    "index": 35,
+    "kind": "worker",
+    "unit_id": "U000035",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007428"
+    }
+  },
+  {
+    "index": 36,
+    "kind": "worker",
+    "unit_id": "U000036",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007462"
+    }
+  },
+  {
+    "index": 37,
+    "kind": "worker",
+    "unit_id": "U000037",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 38,
+    "kind": "worker",
+    "unit_id": "U000038",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007474"
+    }
+  },
+  {
+    "index": 39,
+    "kind": "worker",
+    "unit_id": "U000039",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007428"
+    }
+  },
+  {
+    "index": 40,
+    "kind": "worker",
+    "unit_id": "U000040",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 9207,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.007462"
+    }
+  },
+  {
+    "index": 41,
+    "kind": "worker",
+    "unit_id": "U000041",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 42,
+    "kind": "worker",
+    "unit_id": "U000042",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001212"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 43,
+    "kind": "worker",
+    "unit_id": "U000043",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\": 0, \"target_ref\": \"new\", \"branch_ref\": \"pp\", \"reason_code\": \"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 30,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001174"
+    }
+  },
+  {
+    "index": 44,
+    "kind": "worker",
+    "unit_id": "U000044",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.00119"
+    }
+  },
+  {
+    "index": 45,
+    "kind": "worker",
+    "unit_id": "U000045",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001194"
+    }
+  },
+  {
+    "index": 46,
+    "kind": "worker",
+    "unit_id": "U000046",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T_new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 42,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001208"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 47,
+    "kind": "worker",
+    "unit_id": "U000047",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 0,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.00119"
+    }
+  },
+  {
+    "index": 48,
+    "kind": "worker",
+    "unit_id": "U000048",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 49,
+    "kind": "worker",
+    "unit_id": "U000049",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 50,
+    "kind": "worker",
+    "unit_id": "U000050",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 247,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001156"
+    }
+  },
+  {
+    "index": 51,
+    "kind": "worker",
+    "unit_id": "U000006",
+    "attempt": 2,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001234"
+    }
+  },
+  {
+    "index": 52,
+    "kind": "worker",
+    "unit_id": "U000003",
+    "attempt": 2,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"T_1\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 43,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.00124"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 53,
+    "kind": "worker",
+    "unit_id": "U000007",
+    "attempt": 2,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001234"
+    }
+  },
+  {
+    "index": 54,
+    "kind": "worker",
+    "unit_id": "U000004",
+    "attempt": 2,
+    "status": "returned",
+    "answer": "{\"snapshot_version\": 0, \"target_ref\": \"new\", \"branch_ref\": null, \"reason_code\": \"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 29,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001202"
+    }
+  },
+  {
+    "index": 55,
+    "kind": "worker",
+    "unit_id": "U000021",
+    "attempt": 2,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":0,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001186"
+    }
+  },
+  {
+    "index": 56,
+    "kind": "worker",
+    "unit_id": "U000025",
+    "attempt": 2,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 8960,
+      "input_tokens": 284,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 8960
+      },
+      "cost": "¥0.001232"
+    }
+  },
+  {
+    "index": 57,
+    "kind": "merge",
+    "unit_id": null,
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 0,\n  \"assignments\": [\n    {\n      \"unit_id\": \"U000001\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000002\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"new_target\"\n    },\n    {\n      \"unit_id\": \"U000003\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000004\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000005\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"new_target\"\n    },\n    {\n      \"unit_id\": \"U000006\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000007\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000008\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000009\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000010\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000011\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000012\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000013\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000014\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000015\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000016\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000017\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000018\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000019\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000020\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000021\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000022\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000023\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000024\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000025\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000026\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000027\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000028\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000029\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000030\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000031\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000032\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000033\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000034\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000035\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000036\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000037\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000038\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000039\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000040\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000041\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000042\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000043\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000044\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000045\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000046\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000047\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000048\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"outlier\"\n    },\n    {\n      \"unit_id\": \"U000049\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000050\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    }\n  ],\n  \"revisions\": []\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 10816,
+      "output_tokens": 2439,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015238"
+    }
+  },
+  {
+    "index": 58,
+    "kind": "worker",
+    "unit_id": "U000051",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015368"
+    }
+  },
+  {
+    "index": 59,
+    "kind": "worker",
+    "unit_id": "U000052",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"T001\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 60,
+    "kind": "worker",
+    "unit_id": "U000053",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\": 1, \"target_ref\": \"T001\", \"branch_ref\": \"pp\", \"reason_code\": \"insert\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 32,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002802"
+    }
+  },
+  {
+    "index": 61,
+    "kind": "worker",
+    "unit_id": "U000054",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015378"
+    }
+  },
+  {
+    "index": 62,
+    "kind": "worker",
+    "unit_id": "U000055",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 63,
+    "kind": "worker",
+    "unit_id": "U000056",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"T002\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 64,
+    "kind": "worker",
+    "unit_id": "U000057",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 65,
+    "kind": "worker",
+    "unit_id": "U000058",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"T002\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 66,
+    "kind": "worker",
+    "unit_id": "U000059",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"unassigned\",\"branch_ref\":null,\"reason_code\":\"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 24,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015324"
+    }
+  },
+  {
+    "index": 67,
+    "kind": "worker",
+    "unit_id": "U000060",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"T002\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 68,
+    "kind": "worker",
+    "unit_id": "U000061",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015378"
+    }
+  },
+  {
+    "index": 69,
+    "kind": "worker",
+    "unit_id": "U000062",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": null,\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 39,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.00282"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 70,
+    "kind": "worker",
+    "unit_id": "U000063",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002778"
+    }
+  },
+  {
+    "index": 71,
+    "kind": "worker",
+    "unit_id": "U000064",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T001\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002786"
+    }
+  },
+  {
+    "index": 72,
+    "kind": "worker",
+    "unit_id": "U000065",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 73,
+    "kind": "worker",
+    "unit_id": "U000066",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T002\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 74,
+    "kind": "worker",
+    "unit_id": "U000067",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"unassigned\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002816"
+    }
+  },
+  {
+    "index": 75,
+    "kind": "worker",
+    "unit_id": "U000068",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 76,
+    "kind": "worker",
+    "unit_id": "U000069",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.01537"
+    }
+  },
+  {
+    "index": 77,
+    "kind": "worker",
+    "unit_id": "U000070",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002812"
+    }
+  },
+  {
+    "index": 78,
+    "kind": "worker",
+    "unit_id": "U000071",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 79,
+    "kind": "worker",
+    "unit_id": "U000072",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 80,
+    "kind": "worker",
+    "unit_id": "U000073",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"unassigned\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 81,
+    "kind": "worker",
+    "unit_id": "U000074",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 19074,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.015378"
+    }
+  },
+  {
+    "index": 82,
+    "kind": "worker",
+    "unit_id": "U000075",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\"snapshot_version\": 1, \"target_ref\": null, \"branch_ref\": null, \"reason_code\": \"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 28,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.00279"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 83,
+    "kind": "worker",
+    "unit_id": "U000076",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 84,
+    "kind": "worker",
+    "unit_id": "U000077",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"insert\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 25,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002782"
+    }
+  },
+  {
+    "index": 85,
+    "kind": "worker",
+    "unit_id": "U000078",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 86,
+    "kind": "worker",
+    "unit_id": "U000079",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 87,
+    "kind": "worker",
+    "unit_id": "U000080",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"unassigned\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 88,
+    "kind": "worker",
+    "unit_id": "U000081",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002786"
+    }
+  },
+  {
+    "index": 89,
+    "kind": "worker",
+    "unit_id": "U000082",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002786"
+    }
+  },
+  {
+    "index": 90,
+    "kind": "worker",
+    "unit_id": "U000083",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"unassigned\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 91,
+    "kind": "worker",
+    "unit_id": "U000084",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"insert\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 25,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002782"
+    }
+  },
+  {
+    "index": 92,
+    "kind": "worker",
+    "unit_id": "U000085",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 93,
+    "kind": "worker",
+    "unit_id": "U000086",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T002\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"insert\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 43,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002832"
+    }
+  },
+  {
+    "index": 94,
+    "kind": "worker",
+    "unit_id": "U000087",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 95,
+    "kind": "worker",
+    "unit_id": "U000088",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"new\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"new_target\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 96,
+    "kind": "worker",
+    "unit_id": "U000089",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\"snapshot_version\": 1, \"target_ref\": null, \"branch_ref\": null, \"reason_code\": \"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 28,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.00279"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 97,
+    "kind": "worker",
+    "unit_id": "U000090",
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "```json\n{\n  \"snapshot_version\": 1,\n  \"target_ref\": null,\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}\n```",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    },
+    "error": "worker目标不在允许集合"
+  },
+  {
+    "index": 98,
+    "kind": "worker",
+    "unit_id": "U000091",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"T002\",\n\"branch_ref\": \"pp\",\n\"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002824"
+    }
+  },
+  {
+    "index": 99,
+    "kind": "worker",
+    "unit_id": "U000092",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002786"
+    }
+  },
+  {
+    "index": 100,
+    "kind": "worker",
+    "unit_id": "U000093",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n\"snapshot_version\": 1,\n\"target_ref\": \"new\",\n\"branch_ref\": null,\n\"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 36,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002812"
+    }
+  },
+  {
+    "index": 101,
+    "kind": "worker",
+    "unit_id": "U000094",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 102,
+    "kind": "worker",
+    "unit_id": "U000095",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"T002\",\"branch_ref\":\"pp\",\"reason_code\":\"continuity\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002786"
+    }
+  },
+  {
+    "index": 103,
+    "kind": "worker",
+    "unit_id": "U000096",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 104,
+    "kind": "worker",
+    "unit_id": "U000097",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"insufficient\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002778"
+    }
+  },
+  {
+    "index": 105,
+    "kind": "worker",
+    "unit_id": "U000098",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"unassigned\",\n  \"branch_ref\": null,\n  \"reason_code\": \"insufficient\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002826"
+    }
+  },
+  {
+    "index": 106,
+    "kind": "worker",
+    "unit_id": "U000099",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\"snapshot_version\":1,\"target_ref\":\"new\",\"branch_ref\":\"pp\",\"reason_code\":\"new_target\"}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002778"
+    }
+  },
+  {
+    "index": 107,
+    "kind": "worker",
+    "unit_id": "U000100",
+    "attempt": 1,
+    "status": "returned",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"target_ref\": \"T001\",\n  \"branch_ref\": \"pp\",\n  \"reason_code\": \"continuity\"\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 17920,
+      "input_tokens": 1154,
+      "output_tokens": 44,
+      "prompt_tokens_details": {
+        "cached_tokens": 17920
+      },
+      "cost": "¥0.002834"
+    }
+  },
+  {
+    "index": 108,
+    "kind": "merge",
+    "unit_id": null,
+    "attempt": 1,
+    "status": "invalid_response",
+    "answer": "{\n  \"snapshot_version\": 1,\n  \"assignments\": [\n    {\n      \"unit_id\": \"U000051\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000052\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000053\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000054\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000055\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"new_target\"\n    },\n    {\n      \"unit_id\": \"U000056\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000057\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000058\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000059\",\n      \"target_ref\": null,\n      \"branch_ref\": null,\n      \"reason_code\": \"insufficient\"\n    },\n    {\n      \"unit_id\": \"U000060\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000061\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000062\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000063\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000064\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000065\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000066\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000067\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"new_target\"\n    },\n    {\n      \"unit_id\": \"U000068\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000069\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000070\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000071\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000072\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000073\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000074\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000075\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000076\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000077\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000078\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000079\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000080\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000081\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000082\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000083\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000084\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"new_target\"\n    },\n    {\n      \"unit_id\": \"U000085\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000086\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000087\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000088\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000089\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000090\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000091\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000092\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000093\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000094\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000095\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000096\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000097\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000098\",\n      \"target_ref\": \"T002\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000099\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    },\n    {\n      \"unit_id\": \"U000100\",\n      \"target_ref\": \"T001\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"continuity\"\n    }\n  ],\n  \"revisions\": [\n    {\n      \"unit_id\": \"U000004\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000009\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000010\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000011\",\n      \"target_ref\": \"N1\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000018\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000019\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000025\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000026\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000032\",\n      \"target_ref\": \"N2\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000043\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000044\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000049\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    },\n    {\n      \"unit_id\": \"U000050\",\n      \"target_ref\": \"N3\",\n      \"branch_ref\": \"pp\",\n      \"reason_code\": \"insert\"\n    }\n  ]\n}",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 20813,
+      "output_tokens": 3225,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "cost": "¥0.025358"
+    },
+    "error": "工作接续超过实验100m/s上限：U000088->U000089=240.6m/s；复核归属或分支"
+  }
+]

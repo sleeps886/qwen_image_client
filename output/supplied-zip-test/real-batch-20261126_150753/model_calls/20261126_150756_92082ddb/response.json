@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000049\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无已有轨迹。聚焦单元 U000049（t=540s）的方位角约149度，强度为中等值(0.2438)。在当前批次联合背景下，该单元与邻近时刻及相似强度的观测组（如 t=530s 的 U000048，以及较早时段 t=476-485s 的 U000043/U000044）在运动学趋势和信号特征上表现出一致性，暗示存在一个独立的声源目标。鉴于缺乏先验历史轨迹进行匹配，且不能仅凭静态属性判定身份，将其建议为新目标的起始点或独立航迹段最为稳妥。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_67d6a55f-6572-4d2a-9c39-a1d0a656ae8a",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 207,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004898"
+  }
+}

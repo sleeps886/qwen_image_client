@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n\"snapshot_version\": 0,\n\"unit_id\": \"U000049\",\n\"target_ref\": \"new\",\n\"reason\": \"该组观测（t=74.0s）方位角约为174.8°（hull）和174.7°（tow），强度为0.179。在历史轨迹中，存在两组主要运动模式：一组是起始于约162°并随时间平滑增加至约173°的目标（如U000001序列），另一组是稳定在约104°/102°左右的目标（如U000005序列）。U000049的方位角（~174.8°）与第一类目标的最新状态（t=72.0s时约174.45°）非常接近且趋势一致，但快照中并未提供已建立的明确track ID供直接关联。鉴于协议要求基于snapshot.targets判断，而当前targets列表为空，且无法仅凭几何连续性自动继承未定义的ID，故将其判定为新目标候选或保留为未归属的新建轨迹起点。考虑到其明显的连续变化特征属于同一物理源的可能性极大，但在无既有Target Ref的情况下，最安全的操作是标记为new以建立新跟踪线。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_f4395b7c-e55b-45da-b073-ff5feece4d46",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 772,
+    "output_tokens": 292,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.005528"
+  }
+}

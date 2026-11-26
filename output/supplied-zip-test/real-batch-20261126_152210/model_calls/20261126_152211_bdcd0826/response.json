@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000028\",\n  \"target_ref\": \"new\",\n  \"reason\": \"U000028观测时间t=58.0，方位约171.69°（hull）和171.45°（tow），强度0.1789。该特征与批次中另一组轨迹序列高度吻合：从t=13的U000001开始，经过U000002、U000003...直到t=74的U000049，这些单元均表现为相同的低强度(0.1789)且方位随时间平滑单调增加（例如t=55的U000025为~171.0°，t=59的U000031为~171.8°）。虽然snapshot.targets为空导致无法引用已有ID，但基于几何连续性判断，U000028属于这条正在演变的连续航迹的中段观测。由于协议要求target_ref指向snapshot.targets中的现有ID或new/unassigned，而当前快照无历史目标定义，故标记为新目标以建立该连续航迹的身份关联。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_8df4d4d3-ab67-4fae-82fc-4bedc10bc542",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 41988,
+    "output_tokens": 293,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.034382"
+  }
+}

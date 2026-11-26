@@ -1,0 +1,43 @@
+```json
+{
+  "snapshot_version": 0,
+  "tracks": [
+    {
+      "target_ref": "N1",
+      "hypothesis_refs": ["L002"],
+      "extra_points": []
+    },
+    {
+      "target_ref": "N2",
+      "hypothesis_refs": ["L004"],
+      "extra_points": []
+    },
+    {
+      "target_ref": "N3",
+      "hypothesis_refs": ["L005"],
+      "extra_points": []
+    },
+    {
+      "target_ref": "N4",
+      "hypothesis_refs": ["L008"],
+      "extra_points": []
+    }
+  ],
+  "unassigned_units": [
+    "U000001",
+    "U000004",
+    "U000005",
+    "U000006",
+    "U000009",
+    "U000010",
+    "U000011",
+    "U000012",
+    "U000013",
+    "U000016",
+    "U000017",
+    "U000018",
+    "U000019",
+    "U000023"
+  ]
+}
+```

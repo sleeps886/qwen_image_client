@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000022\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照无历史轨迹可供归属。聚焦单元 U000022（t=259.0）的方位角约为 156°，强度等级为 0.1789 (sigma≈5.37)。该强度特征与批次内的另一组连续观测序列相符：U000021 (t=244, ~158°, str=0.1789) 和 U000026/U000027 (t=310/316, ~151-150°, str=0.1789)。从 t=244 到 t=316，方位角呈现平滑递减趋势 (158° -> 156° -> 151°)，符合单一运动目标的几何连续性特征。尽管时间间隔较长且缺乏中间时刻数据，但基于现有的联合背景观测模式，建议将该单元归属于此新发现的运动目标轨迹中，标记为新目标以建立初始关联。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_58aa4e99-093b-477d-bea5-fa41a6e93cba",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 33647,
+    "output_tokens": 268,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.027642"
+  }
+}

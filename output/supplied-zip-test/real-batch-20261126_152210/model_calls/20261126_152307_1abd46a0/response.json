@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000100\",\n  \"target_ref\": \"B000001\",\n  \"reason\": \"U000100位于t=131.0，方位约174.6°（Hull）和174.5°（Tow）。快照历史显示目标B000001在早期时间片（如t=74）的Hull/Tow方位分别为174.8°/174.7°。由于平台A航向约为296°，正前方对应绝对方位约296°，后方为116°。观测到的174°-176°区间表明声源相对于船首位于左舷侧方偏后方向（相对角约-120°至+240°），而非尾部窄扇区。此外，该目标的信号强度稳定在0.178左右，与B000001的历史特征一致，且排除了属于右舷侧方的B000003（强度~0.289，方位~150-156°）或前部固定参照系的B000002（强度~0.243，方位~104°）。因此判定为向B000001末尾接续的新观测点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_60059e51-a438-4b44-92e1-d1ce81d43919",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 322,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007218"
+  }
+}

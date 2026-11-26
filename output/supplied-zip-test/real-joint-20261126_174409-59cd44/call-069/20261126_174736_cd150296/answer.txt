@@ -1,0 +1,6 @@
+{
+  "snapshot_version": 1,
+  "target_ref": null,
+  "branch_ref": null,
+  "reason_code": "insufficient"
+}

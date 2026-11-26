@@ -30,6 +30,10 @@ class InverseNodes:
         self.agent.final_report={'status':'preparing','automatic_retry':False}
         stage='evidence_preparation'
         try:
+            stage='numeric_refinement'
+            if state.get('profile_report',{}).get('status')=='budget_limited':
+                raise ValueError('本地细化尚未完成，停止云端最终轨迹生成；粗拟合仅作为独立诊断保留，请勿当作最终轨迹')
+            stage='evidence_preparation'
             images,prompt,manifest=evidence_bundle(state['paths'],state['evidence'],state['document'],context,directory,state.get('selection'))
             self.agent.save('model_final_input.json',{'images':manifest,'prompt':prompt,'prompt_version':PROMPT_VERSION})
             # Local optimization keeps its original 120s budget. Cloud stage gets a separate allowance.
@@ -61,7 +65,7 @@ class InverseNodes:
             return {'document':document,'_summary':'已由大模型综合三类图输出最终轨迹点；已做逐身份覆盖审计和模型坐标回投；非真值验证'}
         except InversionStopped:raise
         except Exception as exc:
-            message=str(exc)[:250] if stage in ('coordinate_validation','model_reprojection') and isinstance(exc,ValueError) else '最终轨迹阶段失败：'+stage+'（'+type(exc).__name__+'）'
+            message=str(exc)[:250] if stage in ('numeric_refinement','coordinate_validation','model_reprojection') and isinstance(exc,ValueError) else '最终轨迹阶段失败：'+stage+'（'+type(exc).__name__+'）'
             self.agent.final_report.update(status='failed',error_type=type(exc).__name__,numeric_fallback=False,
                                            failed_stage=stage,error_message=message)
             self.agent.save('model_final_report.json',self.agent.final_report)
@@ -112,7 +116,8 @@ class InverseNodes:
         self.agent.save('inverse_proposals.json',{'pairs':[{'id':p['id'],'hull':p['hull']['id'],'tow':p['tow']['id'],
                    'synchronous_times':len(p['common_rows']),'sparse_dual_support':p.get('sparse_dual_support',False)} for p in result['pairs']],
                    'budget_excluded':result['budget_excluded'],'retained_sparse_pairs':result.get('retained_sparse_pairs',0),
-                   'rejected_sync_gate':result.get('rejected_sync_gate',0),'sparse_policy':result.get('sparse_policy')})
+                   'rejected_sync_gate':result.get('rejected_sync_gate',0),'sparse_policy':result.get('sparse_policy'),
+                   'adjacent_continuations':result.get('adjacent_continuations',[])})
         return {'proposals':result,'_summary':f"筛出{len(result['pairs'])}组轨迹级双阵解释；预算排除{result['budget_excluded']}组"}
 
 
@@ -131,7 +136,8 @@ class InverseNodes:
             self.agent.emit({'event':'node','node':'inverse_refine','label':INVERSE_LABELS['inverse_refine'],
                 'status':'running','execution_kind':'local_numeric',
                 'summary':f"第{update['iteration']}轮 · {update['hypothesis_id']} · {update['phase']}；细化预算剩余{update['remaining_s']}秒"})
-        selection,profile_report=refine_profiles(selection,state['evidence'],context,self.agent.control,progress=progress)
+        selection,profile_report=refine_profiles(selection,state['evidence'],context,self.agent.control,
+                                                phase_seconds=120.,reserve_seconds=30.,progress=progress)
         # Keep only actually supported, exclusive measurements after changing
         # motion parameters. Image fitting cannot invent count evidence.
         selection=select_exclusive({'candidates':selection['selected']},state['evidence'],context,self.agent.control)

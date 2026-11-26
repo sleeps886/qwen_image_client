@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const {build}=require('../track-connections.js');
+const p=(id,t,array='hull',platform_id='P')=>({candidate_id:id,t,bearing_deg:30+t*.01,array,platform_id});
+const original=[p('last',300),p('first',0),p('near',10),p('middle',20)];
+const snapshot=JSON.stringify(original),result=build(original,[],30);
+assert.deepEqual(result.connections.map(e=>[e.from.candidate_id,e.to.candidate_id]),[['first','near'],['near','middle'],['middle','last']]);
+assert.deepEqual(result.connections.map(e=>e.gap),[false,false,true]);
+assert.equal(JSON.stringify(original),snapshot,'must not mutate original observations');
+assert.equal(result.points.length,4,'must not interpolate or fabricate observations');
+const excluded=build([...original,p('unassigned',15),p('ambiguous',18)],['unassigned','ambiguous'],30);
+assert.equal(excluded.connections.length,3);assert.ok(excluded.connections.every(e=>!['unassigned','ambiguous'].includes(e.from.candidate_id)&&!['unassigned','ambiguous'].includes(e.to.candidate_id)));
+assert.equal(build([p('singleton',0)]).connections.length,0);
+assert.equal(build([p('a',0),p('a',0),p('b',10)]).connections.length,1);
+assert.equal(build([p('a',0),p('b',10,'tow'),p('c',20,'hull','Q')]).connections.length,0,'different arrays or platforms must not be linked');
+assert.equal(build([p('a',0),p('b',0)]).connections.length,0,'must not create zero-time direction');
+assert.equal(build(original,original.map(p=>p.candidate_id)).connections.length,0);
+assert.deepEqual(build(original).connections.map(e=>e.gap),[false,false,true],'fallback gap styling must not omit confirmed links');
+console.log('PASS: confirmed links, excluded candidates/ambiguity, gap styling, chronological order, no interpolation, no cross-stream links');

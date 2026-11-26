@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "```json\n{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000037\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照中无历史轨迹（targets为空），无法进行关联。当前单元U000037包含时间t=415.0的观测，方位角约为137°-138°，强度为0.179。该参数特征与本批次早期出现的另一组低强度目标相似（如U000021/U000022在t=244/259时方位约156-158°，以及更早期的趋势），且由于缺乏已建立的目标状态作为基准，不能直接判定其属于某个特定历史目标。因此建议将其初始化为一个新的临时轨迹起点。\"\n}\n```",
+      "type": "text"
+    }
+  ],
+  "id": "msg_296653fb-82ed-4a60-96f5-9b5e48ff78d3",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 190,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004852"
+  }
+}

@@ -82,7 +82,7 @@ def prepare_inverse_job(files,platform,renderer_profile,review_model,consent,*,u
             gateway=ConfiguredModelGateway(timeout_override=75 if final_model else 45)
             def reviewer(images,prompt,directory):
                 return gateway.invoke(images,prompt,settings,directory/'review_provider','images')
-        return InverseJob(temporary,paths,prepared.context,InversionControl(),slots,reviewer=None if final_model else reviewer,finalizer=reviewer if final_model else None)
+        return InverseJob(temporary,paths,prepared.context,InversionControl(seconds=240.),slots,reviewer=None if final_model else reviewer,finalizer=reviewer if final_model else None)
     except Exception as exc:
         try:
             if temporary:temporary.cleanup()

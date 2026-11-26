@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 1,\n  \"unit_id\": \"U000075\",\n  \"target_ref\": \"B000003\",\n  \"reason\": \"本组观测（O000146/O000149）在t=101.0时，船体阵方位角为151.599°，拖曳阵方位角为150.350°，强度均为0.289。这与历史轨迹中目标B000003的特征高度吻合：其船体碎片F005和拖曳碎片F006显示该目标的强度稳定在0.289左右，且方位角随时间呈缓慢增大的趋势（从t=54时的约142°增至t=72时的约146°）。将本组数据插入B000003的末尾序列，符合其运动连续性假设。相比之下，B000001和B000002的强度分别为0.179和0.244，与本组不符；虽然存在其他同强度的新目标可能性，但鉴于已有明确的连续航迹且参数匹配度高，优先判定为接续至B000003。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5a4517f1-c494-4afd-9eec-391eb171d19f",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 60928,
+    "input_tokens": 319,
+    "output_tokens": 288,
+    "prompt_tokens_details": {
+      "cached_tokens": 60928
+    },
+    "cost": "¥0.007126"
+  }
+}

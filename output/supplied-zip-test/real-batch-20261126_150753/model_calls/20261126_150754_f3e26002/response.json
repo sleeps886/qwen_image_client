@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000015\",\n  \"target_ref\": \"new\",\n  \"reason\": \"当前快照中无历史轨迹可关联。该组观测(t=176.0s)为全新出现的接触，方位角约163°~164°（船体阵162.87°@t=166.0 -> 164.48°@t=176.0），信号强度(0.289)及相位中心偏移特征与同一时刻的U000014相似但时间不连续且幅度跳变较大（从低强度0.178突增至高强度0.289）。在缺乏前置航迹支撑的情况下，判定为新目标起始点更为稳妥。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_5b2bda63-2fdb-4a9c-8e18-85a727972213",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 32256,
+    "input_tokens": 1391,
+    "output_tokens": 188,
+    "prompt_tokens_details": {
+      "cached_tokens": 32256
+    },
+    "cost": "¥0.004846"
+  }
+}

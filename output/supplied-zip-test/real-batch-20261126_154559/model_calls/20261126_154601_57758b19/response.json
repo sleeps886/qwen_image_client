@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\n  \"snapshot_version\": 0,\n  \"unit_id\": \"U000044\",\n  \"target_ref\": \"new\",\n  \"reason\": \"快照无已有轨迹，该单元无法关联历史；其方位角变化趋势与强度特征独立，建议作为新目标起始。\"\n}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_585def3f-a1c3-43bb-b25d-ff6f5adb965d",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 41216,
+    "input_tokens": 1084,
+    "output_tokens": 71,
+    "prompt_tokens_details": {
+      "cached_tokens": 41216
+    },
+    "cost": "¥0.00518"
+  }
+}

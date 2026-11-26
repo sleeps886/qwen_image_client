@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>双目标联合调试 · 小怪</title><link rel="stylesheet" href="/assets/style.css"><script src="/assets/joint-prediction.js" defer></script>
+<link rel="stylesheet" href="/assets/joint-prediction.css"></head><body><header><strong>小怪 · 双目标联合预测</strong><a href="/incremental">返回单目标工作台</a></header><main>
+<p class="note">第二阶段第一步：同平台、同主阵列的两个无交叉目标假设。共享候选池，联合判断，独立状态；交叉时可报告歧义，但尚未实现多分支消歧和空间联合定位。</p>
+<div class="joint-layout"><aside class="card">
+<h2>初始化两个目标</h2><label>来源结果编号<input id="jointSource"></label><button id="jointLoad">载入高斯批次（免费）</button>
+<p id="jointBatchInfo" class="note"></p>
+<label>目标假设一<select id="jointTarget0"></select></label><label>目标一种子编号<input id="jointSeeds0" placeholder="逗号分隔，2～5个"></label>
+<label>目标假设二<select id="jointTarget1"></select></label><label>目标二种子编号<input id="jointSeeds1" placeholder="逗号分隔，2～5个"></label>
+<p class="note">默认从两个候选片段共同的最早三个单值时刻选择种子，仍需人工核对。离线目标目录只是候选假设，后续轮次不按目录预分配点位。起始截止时间须相同，不能共用观测。</p>
+<label>预测时长（秒）<input id="jointHorizon" type="number" min="1" max="600" value="20"></label>
+<button id="jointCreate">新建联合会话（免费）</button>
+<h3>恢复会话</h3><label>联合任务编号<input id="jointSession"></label><button id="jointRestore">加载（免费）</button>
+<div id="jointPlatform" class="note"></div>
+</aside><section class="card">
+<h2>联合预测问答</h2><p id="jointStatus" class="joint-status">等待初始化</p>
+<div id="jointChart"></div><div id="jointMessages" role="log"></div>
+<details><summary>本轮共享候选（两个目标共同可见）</summary><div id="jointCandidates" class="scroll"></div></details>
+<label>本轮问题<textarea id="jointQuestion" rows="2">请结合两个目标的历史趋势，联合分配本轮候选点，分别预测下一段方位轨迹；证据不足时保留歧义，不重复占用观测。</textarea></label>
+<label class="check"><input id="jointConsent" type="checkbox">同意发送两个目标已开放点位；每轮一次模型调用，可能产生 API 费用。</label>
+<div class="actions"><button id="jointPrepare">准备下一轮（免费）</button><button id="jointSend" class="primary" disabled>运行一次联合预测</button></div>
+<div id="jointReview" hidden><p>候选结果待人工确认。采用不代表真实身份已验证。</p><label>打回原因<input id="jointReviewReason"></label><button id="jointAdopt">同时采用</button><button id="jointReject">整轮打回</button></div>
+<p id="jointNotice" role="status" class="note"></p>
+</section></div></main></body></html>
