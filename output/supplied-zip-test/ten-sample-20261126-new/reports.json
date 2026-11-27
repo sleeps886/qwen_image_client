@@ -1,0 +1,450 @@
+[
+  {
+    "processed_groups": 50,
+    "selected_positions": 50,
+    "unassigned_groups": 0,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 18
+      },
+      "B000002": {
+        "I03": 20
+      },
+      "B000003": {
+        "I02": 12
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 47,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 1.0,
+    "selected_rmse_m": 5491.788298550008,
+    "mirror_aligned_rmse_m_evaluation_only": 10.85625828777033,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 10.856258287732306,
+    "max_apparent_speed_mps": 11.025176423434527,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 1,
+    "elapsed_seconds": 10.69,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 50,
+    "numeric_uncovered_groups": 0,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 24,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 50,
+    "unassigned_groups": 0,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I03": 20
+      },
+      "B000002": {
+        "I02": 17
+      },
+      "B000003": {
+        "I01": 13
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 47,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 1.0,
+    "selected_rmse_m": 12.662640133805393,
+    "mirror_aligned_rmse_m_evaluation_only": 12.662640133805393,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 12.662640133805393,
+    "max_apparent_speed_mps": 12.513803606134921,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 2,
+    "elapsed_seconds": 8.53,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 50,
+    "numeric_uncovered_groups": 0,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 6,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 34,
+    "unassigned_groups": 16,
+    "target_hypotheses": 2,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I03": 18
+      },
+      "None": {
+        "I01": 10,
+        "I02": 2,
+        "I03": 4
+      },
+      "B000002": {
+        "I02": 16
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 32,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.6363636363636364,
+    "selected_rmse_m": 14939.321892676377,
+    "mirror_aligned_rmse_m_evaluation_only": 16.705603882149884,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 16.797871975069278,
+    "max_apparent_speed_mps": 11.49682555547274,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 3,
+    "elapsed_seconds": 8.46,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 34,
+    "numeric_uncovered_groups": 11,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 24,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 44,
+    "unassigned_groups": 6,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 20
+      },
+      "None": {
+        "I02": 2,
+        "I03": 1,
+        "I01": 3
+      },
+      "B000002": {
+        "I03": 15
+      },
+      "B000003": {
+        "I02": 9
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 41,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.7733644859813084,
+    "selected_rmse_m": 5396.4876040072195,
+    "mirror_aligned_rmse_m_evaluation_only": 4.633400826761698,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 4.698275884070019,
+    "max_apparent_speed_mps": 14.541130844105338,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 4,
+    "elapsed_seconds": 9.68,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 44,
+    "numeric_uncovered_groups": 3,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 24,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 33,
+    "unassigned_groups": 17,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 9
+      },
+      "None": {
+        "I02": 5,
+        "I01": 7,
+        "I03": 5
+      },
+      "B000002": {
+        "I03": 12
+      },
+      "B000003": {
+        "I02": 12
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 30,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.42857142857142855,
+    "selected_rmse_m": 1.0988054824459785,
+    "mirror_aligned_rmse_m_evaluation_only": 1.0988054824459785,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 1.4712121197737271,
+    "max_apparent_speed_mps": 14.235278090842854,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 5,
+    "elapsed_seconds": 9.31,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 33,
+    "numeric_uncovered_groups": 4,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 24,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 40,
+    "unassigned_groups": 10,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "None": {
+        "I03": 3,
+        "I02": 4,
+        "I01": 3
+      },
+      "B000001": {
+        "I03": 15
+      },
+      "B000002": {
+        "I01": 18
+      },
+      "B000003": {
+        "I02": 7
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 37,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.6674641148325359,
+    "selected_rmse_m": 6.505374011171022,
+    "mirror_aligned_rmse_m_evaluation_only": 6.505374011171022,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 6.9067610246850535,
+    "max_apparent_speed_mps": 13.511900644731544,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 6,
+    "elapsed_seconds": 9.45,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 40,
+    "numeric_uncovered_groups": 4,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 24,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 50,
+    "unassigned_groups": 0,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 20
+      },
+      "B000002": {
+        "I02": 15
+      },
+      "B000003": {
+        "I03": 15
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 47,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 1.0,
+    "selected_rmse_m": 12058.96967509668,
+    "mirror_aligned_rmse_m_evaluation_only": 64.77828115027447,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 64.77828114943901,
+    "max_apparent_speed_mps": 10.682685009985171,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 7,
+    "elapsed_seconds": 9.21,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 50,
+    "numeric_uncovered_groups": 0,
+    "sample_geometry_groups": 50,
+    "numeric_cards": 6,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 45,
+    "unassigned_groups": 5,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "None": {
+        "I01": 1,
+        "I03": 4
+      },
+      "B000001": {
+        "I01": 18
+      },
+      "B000002": {
+        "I02": 14
+      },
+      "B000003": {
+        "I03": 13
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 42,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.8090452261306532,
+    "selected_rmse_m": 6376.68487303029,
+    "mirror_aligned_rmse_m_evaluation_only": 10.028536097258163,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 10.02853609715542,
+    "max_apparent_speed_mps": 12.045655553746665,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 8,
+    "elapsed_seconds": 9.54,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 45,
+    "numeric_uncovered_groups": 5,
+    "sample_geometry_groups": 45,
+    "numeric_cards": 18,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 48,
+    "unassigned_groups": 2,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 19
+      },
+      "B000002": {
+        "I03": 11
+      },
+      "B000003": {
+        "I02": 18
+      },
+      "None": {
+        "I01": 2
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 45,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.9066985645933014,
+    "selected_rmse_m": 4816.692809524521,
+    "mirror_aligned_rmse_m_evaluation_only": 2.9904279053903693,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 2.990427905508924,
+    "max_apparent_speed_mps": 13.792643116157375,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 9,
+    "elapsed_seconds": 12.32,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 48,
+    "numeric_uncovered_groups": 2,
+    "sample_geometry_groups": 48,
+    "numeric_cards": 6,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  },
+  {
+    "processed_groups": 50,
+    "selected_positions": 48,
+    "unassigned_groups": 2,
+    "target_hypotheses": 3,
+    "source_confusion_evaluation_only": {
+      "B000001": {
+        "I01": 15
+      },
+      "B000002": {
+        "I02": 19
+      },
+      "B000003": {
+        "I03": 14
+      },
+      "None": {
+        "I01": 1,
+        "I02": 1
+      }
+    },
+    "cross_source_edges": 0,
+    "edges": 45,
+    "pairwise_precision": 1.0,
+    "pairwise_recall": 0.9152119700748129,
+    "selected_rmse_m": 1036.291361882272,
+    "mirror_aligned_rmse_m_evaluation_only": 5.2034105453629165,
+    "reference_nearest_candidate_rmse_m_evaluation_only": 5.203410545306532,
+    "max_apparent_speed_mps": 13.152268190655334,
+    "reference_used_for_inference": false,
+    "mirror_unique": false,
+    "status": "completed_awaiting_review",
+    "real_requests": 51,
+    "last_error": null,
+    "sample": 10,
+    "elapsed_seconds": 9.97,
+    "sampled_groups": 50,
+    "actual_workbench_executor": true,
+    "production_session_modified": false,
+    "model": "qwen3.8-omni-flash",
+    "numeric_candidate_max_coverage": 48,
+    "numeric_uncovered_groups": 2,
+    "sample_geometry_groups": 48,
+    "numeric_cards": 21,
+    "inference_model_input_has_reference": false,
+    "selected_partition": null
+  }
+]

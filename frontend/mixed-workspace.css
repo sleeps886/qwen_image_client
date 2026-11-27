@@ -197,3 +197,10 @@ body.resizing-chart-sidebar{cursor:col-resize;user-select:none}
 .context-copy-button svg{width:17px;height:17px;flex:none}
 #contextCopyDialog{width:min(800px,90vw);background:#17211c;color:#d0e3db;border:1px solid #4a6457;border-radius:10px}
 #contextCopyDialog textarea{box-sizing:border-box;width:100%;height:min(55vh,450px);font:12px/1.6 monospace;white-space:pre;overflow:auto}
+.target-mirror-panel{margin:10px 0;padding:8px;border:1px solid #3c5147;border-radius:8px;font-size:11px}
+.target-mirror-panel[hidden]{display:none!important}
+.target-mirror-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #34443d}
+.target-mirror-row:last-child{border:0}
+.target-mirror-row .legend-item{min-width:88px}
+.target-mirror-row select{min-width:0;max-width:100%;flex:1 1 140px;padding:5px;font-size:11px}
+.target-mirror-row .note{flex-basis:100%;margin:0;overflow-wrap:anywhere}

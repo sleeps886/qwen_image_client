@@ -1,0 +1,537 @@
+[
+  {
+    "archives": [
+      "btr_target_001 (1).zip",
+      "btr_target_002 (1).zip",
+      "btr_target_003 (1).zip"
+    ],
+    "sha256": [
+      "6bf9968ea1c318b9acf10a12177fd20cf1cf8b8fb0885bb0113fd0773b3c71f5",
+      "539a75e442b86a8c73a92586755f1d04c91ab926ddc89e9f8b3b4717b956f1dd",
+      "79a6d21927665a2ea76524d09bf7e01213e6da80f91075ea1edf8b8a409c67f1"
+    ],
+    "raw_observations": 958,
+    "available_paired_groups": 479,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 349.3575271644977,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -118.86680720395383,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      44.0,
+      594.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 1
+  },
+  {
+    "archives": [
+      "btr_target_001 (1) (1).zip",
+      "btr_target_002 (2) (1).zip",
+      "btr_target_003 (3).zip"
+    ],
+    "sha256": [
+      "83243cb70efaf775a121175843e268ff040ad9adcd553dd82cde4dbc37745066",
+      "dcde9b119c1c3d00640ae3c9970914d4aa78cd62c4901261497057a100cb398f",
+      "b7f5dbc2ccf74de79fe8673ce382a7fa8ae07cf62c7ee08a63007ff43d6aef41"
+    ],
+    "raw_observations": 902,
+    "available_paired_groups": 451,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 225.5324368193689,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -132.73043230552383,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      6.0,
+      572.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 2
+  },
+  {
+    "archives": [
+      "btr_target_001 (4).zip",
+      "btr_target_002 (5).zip",
+      "btr_target_003 (6) (1).zip"
+    ],
+    "sha256": [
+      "f842149dace7171e72e54a474f844ed0b54b0fabeccb3a3154626f4223639f40",
+      "4fd1f7a5753a26f3a39331d920ed31bbf5675e9f5ad6b3f82ce7a3515fd47ed7",
+      "3e4c10a44274a71b726c690b52e0fbbefc689391182903e77b49ee94566e5e1b"
+    ],
+    "raw_observations": 832,
+    "available_paired_groups": 416,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 78.26616907112,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -149.18473523576745,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      58.0,
+      542.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 3
+  },
+  {
+    "archives": [
+      "btr_target_001 (7).zip",
+      "btr_target_002 (8).zip",
+      "btr_target_003 (9).zip"
+    ],
+    "sha256": [
+      "1d4621e2cacb8c697923a9bb702d781f3da4c69a57b83c670b1ee86552ea8828",
+      "c7c6ef5147850ab95b9f2e950457e3087cb740252225b878786f0e94b9dfd412",
+      "3321e0cdc80179fd421c516c9dfdb76a5b01fd94e35e83b4add2004a5ca7db3f"
+    ],
+    "raw_observations": 894,
+    "available_paired_groups": 447,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 315.80195589716664,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -123.91507549837982,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      67.0,
+      567.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 4
+  },
+  {
+    "archives": [
+      "btr_target_001 (10).zip",
+      "btr_target_002 (11).zip",
+      "btr_target_003 (12).zip"
+    ],
+    "sha256": [
+      "b8750ca091c58f90cc4c136ef9aa51dae0444ef7da562ef50ef32098d3116270",
+      "1a6cc02cec5fc127544d6ebc50c00121745010836a75f9b198e6b176094d7ae2",
+      "95981449b6a08152ab3e3736bfdc1dce73b684bd1885fac85e088bd30c64a583"
+    ],
+    "raw_observations": 928,
+    "available_paired_groups": 464,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 321.1367125198883,
+          "speed_kn": 9.363856992170957,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -184.77380160277465,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      46.0,
+      586.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 5
+  },
+  {
+    "archives": [
+      "btr_target_001 (13).zip",
+      "btr_target_002 (14).zip",
+      "btr_target_003 (15).zip"
+    ],
+    "sha256": [
+      "b351951549b8550351c9d8dcf4e416c2a125e5837c5d174db9893f3ec23bb5ea",
+      "c4c0850bb0a91b1f37f39fe17b91691ab29bc96ccca0d8f7c65ac7fd46424dee",
+      "a8e6fa2b642b87e16ac21d9a507e5b851a4a87621967b07e543eb38cdd9f96f9"
+    ],
+    "raw_observations": 920,
+    "available_paired_groups": 460,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 141.8542004684648,
+          "speed_kn": 6.5023059137108286,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -120.72940851608311,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      45.0,
+      553.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 6
+  },
+  {
+    "archives": [
+      "btr_target_001 (16).zip",
+      "btr_target_002 (17).zip",
+      "btr_target_003 (18).zip"
+    ],
+    "sha256": [
+      "e2563f83f37efdfc9008ab8109982a7dc3ba6972ed9bc7404dafeb3d1bd90a67",
+      "32e4becb0548da96a84896c83b69c038389c0f2dec207891aab91a218a8a51e0",
+      "841f871009b2e21bf65ee733ac417dace0b5cecbcbbe6d7c816c16cda3800395"
+    ],
+    "raw_observations": 934,
+    "available_paired_groups": 467,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 297.0906375785012,
+          "speed_kn": 10.963537448679112,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -236.08153336031262,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      20.0,
+      561.0
+    ],
+    "sample_groups_with_geometry": 50,
+    "sample_unavailable_geometry": [],
+    "sample": 7
+  },
+  {
+    "archives": [
+      "btr_target_001 (19).zip",
+      "btr_target_002 (20).zip",
+      "btr_target_003 (21).zip"
+    ],
+    "sha256": [
+      "dc01c27bf0daeeb77c4974ceb000c9641ad6ff66564f90b81d3a8fb6f9255828",
+      "81a08d5c10aecbebdb3eef83ef98324607b4d1e16ce13a92ede9b06803274110",
+      "0a23f99e4719f4aceecabaa2f04322cf9cf80b92001e46976c8f73506764ff55"
+    ],
+    "raw_observations": 924,
+    "available_paired_groups": 462,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 138.0549391909674,
+          "speed_kn": 7.05186083852955,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -188.3318220589151,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      1.0,
+      575.0
+    ],
+    "sample_groups_with_geometry": 45,
+    "sample_unavailable_geometry": [
+      {
+        "unit_id": "U000001",
+        "candidate_ids": [
+          "I01-O00000001",
+          "I01-O00000002"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000006",
+        "candidate_ids": [
+          "I03-O00000009",
+          "I03-O00000010"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000007",
+        "candidate_ids": [
+          "I03-O00000015",
+          "I03-O00000016"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000009",
+        "candidate_ids": [
+          "I03-O00000028",
+          "I03-O00000027"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000010",
+        "candidate_ids": [
+          "I03-O00000036",
+          "I03-O00000035"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      }
+    ],
+    "sample": 8
+  },
+  {
+    "archives": [
+      "btr_target_001 (22).zip",
+      "btr_target_002 (23).zip",
+      "btr_target_003 (24).zip"
+    ],
+    "sha256": [
+      "ddbfc4ce8be3a450fbfd0645478c65a85a2ec1ce6f8d3b3ba5e6526f02f41125",
+      "f643edb03020b05b55a8f0c5aa63fc6ffa64183c529b8ac1f8ad59f2c4daf03f",
+      "8e3a533764064700d9d7ae0997e97a7bf3acc0bea1e3aa94f7321472b6efdd45"
+    ],
+    "raw_observations": 988,
+    "available_paired_groups": 494,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 171.51858461969508,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -198.58597572804922,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      21.0,
+      579.0
+    ],
+    "sample_groups_with_geometry": 48,
+    "sample_unavailable_geometry": [
+      {
+        "unit_id": "U000033",
+        "candidate_ids": [
+          "I01-O00000222",
+          "I01-O00000221"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000034",
+        "candidate_ids": [
+          "I01-O00000228",
+          "I01-O00000227"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      }
+    ],
+    "sample": 9
+  },
+  {
+    "archives": [
+      "btr_target_001 (25).zip",
+      "btr_target_002 (26).zip",
+      "btr_target_003 (27).zip"
+    ],
+    "sha256": [
+      "be08ba267a551cb44550c3f7a23ff92383868a00c206285952cb4ac2cc95d9da",
+      "cc3b4698ec93a85566fd36f3fea8613bb4378e008be80c749e3ce4f72ade6e44",
+      "1f38ad8fb02b6638dc50eec561976950a2074afbac597a123642ed7603b07e16"
+    ],
+    "raw_observations": 966,
+    "available_paired_groups": 483,
+    "sampled_groups": 50,
+    "platform": {
+      "platforms": [
+        {
+          "name": "A",
+          "start_ll": [
+            30.0,
+            122.0
+          ],
+          "heading_deg": 296.2378738517474,
+          "speed_kn": 0.0,
+          "hull_m": [
+            0.0,
+            0.0
+          ],
+          "tow_m": [
+            -106.48367852633807,
+            0.0
+          ]
+        }
+      ],
+      "EARTH_R": 6371000,
+      "platform_motion_model": "constant_heading_constant_speed",
+      "source_file": "dataset.platform_config"
+    },
+    "sample_time_span": [
+      13.0,
+      575.0
+    ],
+    "sample_groups_with_geometry": 48,
+    "sample_unavailable_geometry": [
+      {
+        "unit_id": "U000009",
+        "candidate_ids": [
+          "I01-O00000063",
+          "I01-O00000064"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      },
+      {
+        "unit_id": "U000033",
+        "candidate_ids": [
+          "I02-O00000216",
+          "I02-O00000215"
+        ],
+        "reason": "射线无前向交点、视差不足或距离超过100千米；未补距离"
+      }
+    ],
+    "sample": 10
+  }
+]

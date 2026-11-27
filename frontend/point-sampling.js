@@ -117,6 +117,79 @@
     const linksFor=state=>state.chains.flatMap(chain=>chain.slice(1).map((g,i)=>({from:chain[i].unit_id,to:g.unit_id,basis:'local_provisional',reason:'已处理双阵方位连续性的临时划分；后续数据可撤回，不是模型归属或目标真值'})));
     return {links:beam.length?linksFor(beam[0]):[],alternatives:beam.slice(0,3).map(s=>({cost:s.cost,links:linksFor(s)})),notice:''};
   }
+  function reflectedCandidate(group,doc,config){
+    const selected=group.selected,origin=doc?.origin_lat_lon;
+    const nav=config?.platforms?.find(p=>p.name===selected?.platform_id);
+    if(!selected||!nav||!Array.isArray(origin)||origin.length!==2||!Number.isFinite(group.t))return null;
+    if(![nav.start_ll,nav.hull_m,nav.tow_m].every(v=>Array.isArray(v)&&v.length===2))return null;
+    const values=[...origin,...(nav.start_ll||[]),nav.heading_deg,nav.speed_kn,...(nav.hull_m||[]),...(nav.tow_m||[])];
+    if(values.length!==10||!values.every(Number.isFinite))return null;
+    const heading=nav.heading_deg*Math.PI/180,fx=Math.sin(heading),fy=Math.cos(heading);
+    const east=6371000*Math.cos(origin[0]*Math.PI/180)*(nav.start_ll[1]-origin[1])*Math.PI/180;
+    const north=6371000*(nav.start_ll[0]-origin[0])*Math.PI/180,travel=nav.speed_kn*1852/3600*group.t;
+    const pos=offset=>[east+(travel+offset[0])*fx-offset[1]*fy,north+(travel+offset[0])*fy+offset[1]*fx];
+    const h=pos(nav.hull_m),t=pos(nav.tow_m);let dx=t[0]-h[0],dy=t[1]-h[1];const span=Math.hypot(dx,dy);
+    if(span<1)return null;dx/=span;dy/=span;
+    const q=selected.point,qx=q.x-h[0],qy=q.y-h[1],along=qx*dx+qy*dy;
+    const x=h[0]+2*along*dx-qx,y=h[1]+2*along*dy-qy;
+    // Never fabricate reflected XY. It must already be a valid geometry branch.
+    // Non-collinear arrays need not have a reflection that fits folded bearings.
+    return group.candidates.find(c=>Math.hypot(c.point.x-x,c.point.y-y)<=Math.max(1e-5,Math.hypot(x,y)*1e-9)
+      &&Math.hypot(c.point.x-q.x,c.point.y-q.y)>1e-5)||null;
+  }
+  function targetMirrorPreview(display,doc,options){
+    const targets=new Map(),byUnit=new Map(display.groups.map(g=>[g.unit_id,g]));
+    for(const g of display.groups){
+      const ids=new Set(g.model_assignment.map(m=>m.target_id));
+      if(!g.validated||ids.size!==1||!g.model_assignment[0]?.target_id)continue;
+      const id=g.model_assignment[0].target_id;
+      if(!targets.has(id))targets.set(id,{target_id:id,groups:[],available:0,selected:0,mode:'model',requested_mode:'model',reason:''});
+      const target=targets.get(id);target.groups.push(g.unit_id);g.target_id=id;
+      if(!g.selected)continue;
+      target.selected++;g.model_selected=g.selected;g.model_selection_basis=g.selection_basis;
+      g.mirror_candidate=reflectedCandidate(g,doc,options.platformConfig);
+      if(g.mirror_candidate)target.available++;
+    }
+    const mirrorTracks=[];
+    for(const target of targets.values()){
+      const choice=options.targetMirrorChoices?.[target.target_id];
+      target.requested_mode=['mirror','both'].includes(choice)?choice:'model';
+      target.can_switch=target.selected>0&&target.selected===target.available;
+      if(target.requested_mode!=='model'&&target.can_switch)target.mode=target.requested_mode;
+      if(!target.can_switch)target.reason=target.selected?'部分已显示点无可验证的整轨镜像，保留原分支，不补位置。':'尚无已选位置；不能通过镜像补定位。';
+      for(const uid of target.groups){
+        const g=byUnit.get(uid);g.display_mirror_mode=target.mode;
+        if(!g.selected||target.mode==='model')continue;
+        g.display_preview_notice='人工镜像预览，不改模型归属和原始分支；不是独立侧向证据或定位确认。';
+        if(target.mode==='mirror'){
+          g.selected=g.mirror_candidate;
+          g.selection_basis={...g.model_selection_basis,type:'manual_target_mirror_preview',
+            model_branch:g.model_selected.handedness,display_branch:g.selected.handedness,evidence_resolves_mirror:false,note:g.display_preview_notice};
+        }
+      }
+    }
+    const reflectedPoint=(p,g)=>({...g.mirror_candidate.point,connect_previous:p.connect_previous,
+      selected_handedness:g.mirror_candidate.handedness,selection_basis:{type:'manual_target_mirror_preview',
+        evidence_resolves_mirror:false,model_branch:g.model_selected.handedness,display_branch:g.mirror_candidate.handedness,
+        note:g.display_preview_notice},line_basis:p.line_basis,provisional:true,suspect:p.suspect,
+      model_selected_point:{x:g.model_selected.point.x,y:g.model_selected.point.y,handedness:g.model_selected.handedness},manual_display_override:true});
+    display.tracks=display.tracks.map(track=>{
+      let ghost=false;
+      const points=track.points.map(p=>{
+        const g=byUnit.get(p.unit_id);if(g?.display_mirror_mode==='both')ghost=true;
+        return g?.display_mirror_mode==='mirror'&&g.mirror_candidate?reflectedPoint(p,g):p;
+      });
+      if(ghost){
+        // A ghost never bridges missing/unselected groups, even if source edges exist.
+        const extras=track.points.map(p=>{const g=byUnit.get(p.unit_id);return g?.display_mirror_mode==='both'&&g.mirror_candidate?reflectedPoint(p,g):null;});
+        mirrorTracks.push({...track,id:track.id+':mirror-preview',mirror_preview:true,points:extras.map((p,i)=>p?{...p,connect_previous:p.connect_previous&&i>0&&!!extras[i-1]}:null).filter(Boolean)});
+      }
+      return {...track,points};
+    });
+    display.mirror_targets=[...targets.values()].map(({groups,...target})=>({...target,group_count:groups.length}));
+    display.mirror_tracks=mirrorTracks;
+    return display;
+  }
   function spatialDisplayGroups(doc,units,points=[],options={}){
     const lookup=new Map(points.map(p=>[p.candidate_id,p])),byUnit=new Map(),preference=options.mirrorSide==='left'?-1:1;
     for(const tr of doc?.tracks||[])for(const p of tr.points){
@@ -210,8 +283,8 @@
       g.connection_note=!g.selected?'缺少可用交点，未放置空间点或接线。':g.isolated?`孤立起始假设：${g.model_assignment.every(m=>m.status==='unassigned')?'Agent将本组保留为未归属；':''}当前暂接方案未选择接续边。长缺口、运动残差和其他竞争划分均可能阻止接入，不代表点已删除。`:'连线仅表示当前工作接续假设，不等于目标身份确认。';
     }
     const plotted=groups.filter(g=>g.selected).length,unique=groups.filter(g=>g.status==='position_ready').length;
-    return {groups,tracks:[...streams.values()],plotted,unique,resolved:unique,provisional:plotted-unique,pending:groups.length-plotted,
-      display_links:renderedLinks,alternatives:auto.alternatives,auto_notice:auto.notice};
+    return targetMirrorPreview({groups,tracks:[...streams.values()],plotted,unique,resolved:unique,provisional:plotted-unique,pending:groups.length-plotted,
+      display_links:renderedLinks,alternatives:auto.alternatives,auto_notice:auto.notice},doc,options);
   }
   root.PointSampling={sampleOrdered,groupByPlatformTime,sampleSynchronousGroups,sourcePairGroups,sampleSourcePairs,groupMarkers,groupDetail,inspectQueue,spatialDisplayGroups};
   if(typeof module!=='undefined'&&module.exports)module.exports=root.PointSampling;

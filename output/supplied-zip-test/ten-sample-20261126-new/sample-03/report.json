@@ -1,0 +1,44 @@
+{
+  "processed_groups": 50,
+  "selected_positions": 34,
+  "unassigned_groups": 16,
+  "target_hypotheses": 2,
+  "source_confusion_evaluation_only": {
+    "B000001": {
+      "I03": 18
+    },
+    "None": {
+      "I01": 10,
+      "I02": 2,
+      "I03": 4
+    },
+    "B000002": {
+      "I02": 16
+    }
+  },
+  "cross_source_edges": 0,
+  "edges": 32,
+  "pairwise_precision": 1.0,
+  "pairwise_recall": 0.6363636363636364,
+  "selected_rmse_m": 14939.321892676377,
+  "mirror_aligned_rmse_m_evaluation_only": 16.705603882149884,
+  "reference_nearest_candidate_rmse_m_evaluation_only": 16.797871975069278,
+  "max_apparent_speed_mps": 11.49682555547274,
+  "reference_used_for_inference": false,
+  "mirror_unique": false,
+  "status": "completed_awaiting_review",
+  "real_requests": 51,
+  "last_error": null,
+  "sample": 3,
+  "elapsed_seconds": 8.46,
+  "sampled_groups": 50,
+  "actual_workbench_executor": true,
+  "production_session_modified": false,
+  "model": "qwen3.8-omni-flash",
+  "numeric_candidate_max_coverage": 34,
+  "numeric_uncovered_groups": 11,
+  "sample_geometry_groups": 50,
+  "numeric_cards": 24,
+  "inference_model_input_has_reference": false,
+  "selected_partition": null
+}

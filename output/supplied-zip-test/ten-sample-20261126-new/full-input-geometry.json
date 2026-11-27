@@ -1,0 +1,92 @@
+[
+  {
+    "sample": 1,
+    "all_raw": 958,
+    "all_paired_groups": 479,
+    "all_groups_with_geometry": 479,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 2,
+    "all_raw": 902,
+    "all_paired_groups": 451,
+    "all_groups_with_geometry": 451,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 3,
+    "all_raw": 832,
+    "all_paired_groups": 416,
+    "all_groups_with_geometry": 416,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 4,
+    "all_raw": 894,
+    "all_paired_groups": 447,
+    "all_groups_with_geometry": 447,
+    "all_groups_with_stable_candidate": 204,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 5,
+    "all_raw": 928,
+    "all_paired_groups": 464,
+    "all_groups_with_geometry": 464,
+    "all_groups_with_stable_candidate": 131,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 6,
+    "all_raw": 920,
+    "all_paired_groups": 460,
+    "all_groups_with_geometry": 460,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 7,
+    "all_raw": 934,
+    "all_paired_groups": 467,
+    "all_groups_with_geometry": 467,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 0,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 8,
+    "all_raw": 924,
+    "all_paired_groups": 462,
+    "all_groups_with_geometry": 438,
+    "all_groups_with_stable_candidate": 0,
+    "all_unavailable_groups": 24,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 9,
+    "all_raw": 988,
+    "all_paired_groups": 494,
+    "all_groups_with_geometry": 488,
+    "all_groups_with_stable_candidate": 85,
+    "all_unavailable_groups": 6,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  },
+  {
+    "sample": 10,
+    "all_raw": 966,
+    "all_paired_groups": 483,
+    "all_groups_with_geometry": 475,
+    "all_groups_with_stable_candidate": 78,
+    "all_unavailable_groups": 8,
+    "stability_notice": "default +/-1 degree sensitivity assumption, not calibrated position confidence"
+  }
+]

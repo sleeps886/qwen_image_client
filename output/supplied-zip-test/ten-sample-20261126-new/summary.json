@@ -1,0 +1,17 @@
+{
+  "samples": 10,
+  "all_imported_observations": 9246,
+  "all_paired_groups": 4623,
+  "model_sampled_groups": 500,
+  "model_processed_groups": 500,
+  "selected_positions": 442,
+  "unassigned_groups": 58,
+  "real_model_requests": 510,
+  "cross_source_edges": 0,
+  "status_counts": {
+    "completed_awaiting_review": 10
+  },
+  "reference_used_for_inference": false,
+  "production_sessions_modified": false,
+  "scope": "Full import/geometry diagnostics for 4623 pairs; true model inference of 50 groups/sample, not full inference of all pairs."
+}

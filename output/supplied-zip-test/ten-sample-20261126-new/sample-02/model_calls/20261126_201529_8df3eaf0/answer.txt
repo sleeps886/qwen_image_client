@@ -1,0 +1,5 @@
+{
+"snapshot_version": 0,
+"hypothesis_ref": "L005",
+"reason_code": "competing"
+}

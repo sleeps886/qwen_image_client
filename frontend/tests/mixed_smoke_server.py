@@ -90,7 +90,7 @@ def marker():return {'fake_gateway':True}
 
 @app.get('/api/test-saved-display/{kind}')
 def saved_display_fixture(kind:str):
-    if kind not in ('failed','complete'):raise ValueError('Unknown isolated fixture')
+    if kind not in ('failed','complete','mirror100'):raise ValueError('Unknown isolated fixture')
     path=Path('output/supplied-zip-test/current-incomplete-display')/(kind+'-fixture.json')
     return json.loads(path.read_text(encoding='utf-8'))
 

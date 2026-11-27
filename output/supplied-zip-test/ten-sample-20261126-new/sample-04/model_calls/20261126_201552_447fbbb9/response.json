@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "text": "{\"snapshot_version\":0,\"partition_ref\":\"P001\",\"chain_bindings\":[{\"chain_ref\":\"C01\",\"target_ref\":\"N1\"},{\"chain_ref\":\"C02\",\"target_ref\":\"N2\"},{\"chain_ref\":\"C03\",\"target_ref\":\"N3\"}]}",
+      "type": "text"
+    }
+  ],
+  "id": "msg_c77e38f8-6639-4cd9-a248-23c5d98c06cf",
+  "model": "qwen3.8-omni-flash",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "type": "message",
+  "usage": {
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 21979,
+    "output_tokens": 58,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "cost": "¥0.01774"
+  }
+}
